@@ -67,6 +67,8 @@ An explicit empty ground-truth box list marks a labelled background image. A pre
 
 ## Backend handoff
 
+For YOLO label files, Ultralytics Results, GX10 inference JSON and the FastAPI response envelope, see the [integration handoff](INTEGRATION.md).
+
 For the `kolyan/backend-p0` contract, start from a `DatasetManifest` with `variant="test"` and test-only real sessions. The current Data Engine export can contain auto-labelled frames. Require reviewed annotations, verify their completeness, and confirm the recording sessions are disjoint from training and validation before assembling ground truth. Keep the frame roster from the manifest, including reviewed background frames, and use the corresponding reviewed `AnnotationSet` boxes in pixel coordinates.
 
 Example mapping after the caller has validated the manifest, provenance and inference completion. `reviewed_by_frame` maps frame IDs to shared `Annotation` objects. `inference_by_frame` maps the same IDs to a single model's shared `InferenceResult` objects.

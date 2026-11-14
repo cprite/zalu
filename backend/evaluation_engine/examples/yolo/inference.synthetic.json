@@ -1,0 +1,95 @@
+{
+  "baseline": {
+    "frame-01": {
+      "id": "inf_syn01",
+      "model_id": "model_synthetic_baseline",
+      "width": 64,
+      "height": 32,
+      "latency_ms": 0,
+      "events": [],
+      "detections": [
+        {
+          "cls": "worker",
+          "score": 0.875,
+          "box": [
+            0,
+            0,
+            32,
+            32
+          ]
+        },
+        {
+          "cls": "worker",
+          "score": 0.75,
+          "box": [
+            40,
+            8,
+            56,
+            24
+          ]
+        }
+      ]
+    },
+    "frame-02": {
+      "id": "inf_syn02",
+      "model_id": "model_synthetic_baseline",
+      "width": 80,
+      "height": 40,
+      "latency_ms": 0,
+      "events": [],
+      "detections": [
+        {
+          "cls": "worker",
+          "score": 0.5,
+          "box": [
+            0,
+            0,
+            10,
+            10
+          ]
+        }
+      ]
+    }
+  },
+  "trained": {
+    "frame-01": {
+      "id": "inf_syn03",
+      "model_id": "model_synthetic_trained",
+      "width": 64,
+      "height": 32,
+      "latency_ms": 0,
+      "events": [],
+      "detections": [
+        {
+          "cls": "person",
+          "score": 0.9,
+          "box": [
+            0,
+            0,
+            32,
+            32
+          ]
+        },
+        {
+          "cls": "vest",
+          "score": 0.8,
+          "box": [
+            40,
+            8,
+            56,
+            24
+          ]
+        }
+      ]
+    },
+    "frame-02": {
+      "id": "inf_syn04",
+      "model_id": "model_synthetic_trained",
+      "width": 80,
+      "height": 40,
+      "latency_ms": 0,
+      "events": [],
+      "detections": []
+    }
+  }
+}
