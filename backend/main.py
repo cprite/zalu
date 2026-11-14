@@ -59,6 +59,7 @@ def health():
         "data_root": str(storage.DATA_ROOT),
         "hooks": {
             "task_engine": _hook("backend.task_engine", "create_task_spec") is not None,
+            "claude_cli_subscription": __import__("backend.infrastructure.claude_cli", fromlist=["x"]).available(),
             "data_engine": _hook("backend.data_engine", "process_upload") is not None,
             "evaluation_engine": _hook("backend.evaluation_engine", "evaluate") is not None,
         },
@@ -72,7 +73,19 @@ def create_task(body: dict):
     if not prompt:
         raise HTTPException(422, "prompt is required")
     fn = _hook("backend.task_engine", "create_task_spec")
-    if fn is None:  # MOCK until the connector exists: Kirill's vest example spec, labelled as a mock
+    from backend.infrastructure import claude_cli
+
+    if fn is None and claude_cli.available() and not body.get("mock"):
+        # Kirill's compiler on the owner's Claude subscription (claude CLI), no metered API key
+        from backend.task_engine.compiler import TaskCompilationError, compile_task
+
+        try:
+            spec = compile_task(prompt, llm=claude_cli.claude_cli_backend())
+        except (TaskCompilationError, claude_cli.ClaudeCLIError) as e:
+            raise HTTPException(502, f"task compilation failed: {e}")
+        storage.save("tasks", spec)
+        return spec
+    if fn is None:  # MOCK: Kirill's vest example spec, labelled as a mock (no claude CLI auth, or body.mock)
         import json
 
         ex = json.loads((Path(__file__).parent / "task_engine" / "examples" / "vest.json").read_text())
