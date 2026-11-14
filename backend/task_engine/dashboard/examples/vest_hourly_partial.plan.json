@@ -1,0 +1,94 @@
+{
+  "prompt": "Show me how many people were wearing a vest during each hour of the day.",
+  "status": "partial",
+  "spec": {
+    "version": "1",
+    "title": "Vest Wearing Monitor",
+    "description": "Live view of how many people are wearing a safety vest, with a short-term trend.",
+    "layout": {
+      "columns": 12
+    },
+    "data_sources": [
+      {
+        "id": "live",
+        "type": "inference_session"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "people_with_vest_now",
+        "title": "People wearing a vest (now)",
+        "source_id": "live",
+        "operation": "class_count",
+        "class_name": "person_with_vest"
+      },
+      {
+        "id": "people_without_vest_now",
+        "title": "People without a vest (now)",
+        "source_id": "live",
+        "operation": "class_count",
+        "class_name": "person_without_vest"
+      }
+    ],
+    "widgets": [
+      {
+        "id": "live_view",
+        "type": "live_preview",
+        "title": "Live camera",
+        "source_id": "live",
+        "span": 8,
+        "config": {
+          "show_boxes": true
+        }
+      },
+      {
+        "id": "with_vest_kpi",
+        "type": "kpi",
+        "title": "People wearing a vest (now)",
+        "source_id": "live",
+        "span": 4,
+        "config": {
+          "metric_id": "people_with_vest_now"
+        }
+      },
+      {
+        "id": "with_vest_trend",
+        "type": "time_series",
+        "title": "People wearing a vest (last 10 min)",
+        "source_id": "live",
+        "span": 8,
+        "config": {
+          "metric_id": "people_with_vest_now",
+          "window_seconds": 600
+        }
+      },
+      {
+        "id": "without_vest_kpi",
+        "type": "kpi",
+        "title": "People without a vest (now)",
+        "source_id": "live",
+        "span": 4,
+        "config": {
+          "metric_id": "people_without_vest_now"
+        }
+      },
+      {
+        "id": "vest_breakdown",
+        "type": "class_distribution",
+        "title": "With vs. without vest (now)",
+        "source_id": "live",
+        "span": 12,
+        "config": {}
+      }
+    ]
+  },
+  "ai_generated": true,
+  "generator": "claude:claude-opus-5-5",
+  "limitations": [
+    "Hourly counts across the day are not available: charts cover only the last 10 minutes of the live session and there is no stored history or daily totals.",
+    "Counts are per camera frame (people visible right now), not unique individuals; the same person is counted in every frame they appear in."
+  ],
+  "clarification_questions": [],
+  "rationale": "Hourly history isn't supported, so the closest honest proxy is the live per-frame vest count with a 10-minute trend, plus the without-vest count for context.",
+  "fallback_reason": null
+}

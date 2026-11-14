@@ -1,2 +1,3 @@
 anthropic>=0.80
 pydantic>=2.7
+jsonschema>=4.18,<5   # DashboardSpec v1 validation (shared/dashboard_spec)

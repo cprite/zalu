@@ -1,0 +1,124 @@
+{
+  "status": "ok",
+  "issues": [
+    "Assumption: 'counts over time' means the number of vehicles visible in each frame, plotted over time. That needs only per-frame detection, not identity tracking.",
+    "Counting unique vehicles that enter or leave over time would need multi-frame tracking, which the platform does not support. Only per-frame occupancy counts are provided.",
+    "Assumption: vehicles are split into car, truck/van, and motorcycle. Buses and bicycles are excluded unless requested.",
+    "Pickup trucks and vans may be confused with cars. The car vs truck boundary should be reviewed after auto-labelling."
+  ],
+  "clarification_questions": [],
+  "task_type": "object_detection",
+  "summary": "Detect cars, trucks/vans and motorcycles in a fixed parking-lot camera view so per-frame vehicle counts can be charted over time.",
+  "classes": [
+    {
+      "name": "car",
+      "description": "A passenger car (sedan, hatchback, SUV), parked or moving in the lot."
+    },
+    {
+      "name": "truck",
+      "description": "A larger vehicle such as a pickup truck, van or delivery truck in the lot."
+    },
+    {
+      "name": "motorcycle",
+      "description": "A motorcycle or scooter, parked or ridden in the lot."
+    }
+  ],
+  "target_event": null,
+  "event_rules": [],
+  "visual_conditions": [
+    "Daytime with bright sun and hard shadows",
+    "Overcast and diffuse light",
+    "Night under artificial lot lighting, including headlight glare",
+    "Rain, wet reflective asphalt, and snow-covered vehicles",
+    "Densely packed rows where vehicles partially occlude each other",
+    "Vehicles far from the camera appearing small",
+    "Vehicles in motion as well as parked",
+    "Empty or nearly empty lot as well as a full lot",
+    "Varied vehicle colours, including dark cars at night"
+  ],
+  "requires_tracking": false,
+  "primary_metric": "map50",
+  "secondary_metrics": [
+    "recall",
+    "precision"
+  ],
+  "test_scenarios": [
+    "A separate day's recording at peak occupancy (full lot) with heavy occlusion",
+    "A night recording under lot lights on a different day",
+    "A rainy or wet-weather session",
+    "Early morning with a near-empty lot and long shadows",
+    "A second camera angle or position over the same lot, if available"
+  ],
+  "synthetic_targets": [
+    "Night-time versions of daytime frames with lot lighting and headlight glare",
+    "Rain, snow and fog overlays on parked rows",
+    "Additional motorcycles and trucks inserted to balance rare classes",
+    "Small distant vehicles at the far end of the lot"
+  ],
+  "labeling": {
+    "detector_prompts": [
+      {
+        "key": "car",
+        "text": "car",
+        "alternatives": [
+          "sedan",
+          "SUV",
+          "automobile"
+        ],
+        "min_confidence": 0.3
+      },
+      {
+        "key": "truck",
+        "text": "truck",
+        "alternatives": [
+          "van",
+          "pickup truck",
+          "delivery truck"
+        ],
+        "min_confidence": 0.25
+      },
+      {
+        "key": "motorcycle",
+        "text": "motorcycle",
+        "alternatives": [
+          "motorbike",
+          "scooter"
+        ],
+        "min_confidence": 0.2
+      }
+    ],
+    "rules": [
+      {
+        "kind": "direct",
+        "subject": "car",
+        "attribute": null,
+        "class_if_present": "car",
+        "class_if_absent": null,
+        "min_overlap": 0.5,
+        "subject_padding": 0.0
+      },
+      {
+        "kind": "direct",
+        "subject": "truck",
+        "attribute": null,
+        "class_if_present": "truck",
+        "class_if_absent": null,
+        "min_overlap": 0.5,
+        "subject_padding": 0.0
+      },
+      {
+        "kind": "direct",
+        "subject": "motorcycle",
+        "attribute": null,
+        "class_if_present": "motorcycle",
+        "class_if_absent": null,
+        "min_overlap": 0.5,
+        "subject_padding": 0.0
+      }
+    ]
+  },
+  "spec_version": "1.0",
+  "task_id": "task_15eef96acc13",
+  "prompt": "Detect vehicles in my parking lot and show their counts over time.",
+  "compiler": "claude:claude-opus-5-5"
+}
