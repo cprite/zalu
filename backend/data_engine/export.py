@@ -119,6 +119,7 @@ def export_dataset(
     held_out_sessions: Sequence[str] = (),
     val_fraction: float = 0.2,
     include_synthetic: bool = True,
+    dataset_id: Optional[str] = None,
 ) -> DatasetManifest:
     """Write a YOLO train/val dataset. `frames` (FrameCollection or Frame list, real
     and synthetic) is optional but needed for provenance and synthetic parent checks."""
@@ -191,6 +192,7 @@ def export_dataset(
 
     warnings += _quality_warnings(splits, usable, class_names)
     manifest = DatasetManifest(
+        **({"dataset_id": dataset_id} if dataset_id else {}),
         task_id=task.task_id, variant="real_plus_synthetic" if synth_used else "real_only",
         root=str(root), data_yaml=str(data_yaml), class_names=class_names, splits=splits,
         split_strategy=strategy, excluded_sessions=sorted(held), images=images, warnings=warnings,
@@ -201,7 +203,7 @@ def export_dataset(
 
 
 def export_test_set(annotations: AnnotationSet, task, out_dir, sessions: Sequence[str],
-                    frames: Optional[Iterable] = None) -> DatasetManifest:
+                    frames: Optional[Iterable] = None, dataset_id: Optional[str] = None) -> DatasetManifest:
     """Export independent test sessions for the Evaluation Engine (Damir).
 
     Only real frames from `sessions`. data.yaml's `train` points to a sentinel
@@ -234,6 +236,7 @@ def export_test_set(annotations: AnnotationSet, task, out_dir, sessions: Sequenc
     if len(items) < 50:
         warnings.append(f"only {len(items)} test images: metrics will have wide uncertainty")
     manifest = DatasetManifest(
+        **({"dataset_id": dataset_id} if dataset_id else {}),
         task_id=task.task_id, variant="test", root=str(root), data_yaml=str(data_yaml),
         class_names=class_names, splits=splits, split_strategy="independent_sessions",
         images=images, warnings=warnings, annotator=annotations.annotator,

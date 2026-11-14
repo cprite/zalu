@@ -49,6 +49,7 @@ def _detector(args):
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    logging.getLogger("httpx").setLevel(logging.WARNING)  # fal polls its queue many times per request
     ap = argparse.ArgumentParser(prog="python -m backend.data_engine")
     sub = ap.add_subparsers(dest="cmd", required=True)
 

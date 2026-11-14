@@ -5,9 +5,11 @@ from .export import ExportError, export_dataset, export_test_set
 from .ingest import process_media
 from .schema import (Annotation, AnnotationSet, BoxLabel, DatasetManifest, Frame, FrameCollection,
                      LabelCorrection)
+from .service import get_annotations, process_test_upload, process_upload, save_corrections
 from .validate import ValidationReport, check_leakage, validate_dataset
 
 __all__ = [
+    "process_upload", "process_test_upload", "save_corrections", "get_annotations",
     "process_media", "auto_annotate", "apply_rules", "YoloWorldDetector", "apply_corrections",
     "export_dataset", "export_test_set", "validate_dataset", "check_leakage",
     "Frame", "FrameCollection", "Annotation", "AnnotationSet", "BoxLabel", "LabelCorrection",
