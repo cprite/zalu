@@ -1,5 +1,16 @@
 # Backend (owner: Kolyan)
 
+## Where things run (2026-11-14, owner's decision)
+- **nikopi5**: the app (`backend/main.py`, systemd user unit `zalu-api`, 127.0.0.1:9100, public via Tailscale Funnel
+  `https://nikopi5.tail4aaac7.ts.net:10000`). API, auth, metadata (`~/zalu-app/data`), Task Engine on the owner's
+  Claude subscription through the local `claude` CLI (no API key). Keys (`ZALU_TOKEN`, `FAL_KEY`) only here.
+  Install/restart: `backend/run_nikopi5.sh`.
+- **GX10 = external GPU only**: `backend/gpu_worker.py` in Docker `zalu-gpu` (127.0.0.1:9200), reached through the
+  `zalu-tunnel` ssh tunnel. Runs everything that needs the GPU or the image files: Data Engine ingestion +
+  auto-labelling, training, validation, inference, file downloads. No public port, no LLM, no keys.
+  Install/restart: `backend/run_gx10.sh` on the GX10.
+- End-to-end test (public URL): `ZALU_API=... ZALU_TOKEN=... python3 tests/e2e_backend.py --footage video.mp4`.
+
 FastAPI monolith: Orchestration, Training and Deployment engines, with hooks for the Task/Data Engine (Kirill)
 and the Evaluation Engine (Damir).
 
@@ -26,15 +37,17 @@ two of train/val/test. Failing datasets get HTTP 422 / CLI exit code 2.
 
 ## Training CLI (no API needed)
 ```bash
-docker exec -w /data zalu-backend /opt/comfyui-env/bin/python -m backend.training_engine.cli --data coco8.yaml --epochs 10
-docker exec -w /data zalu-backend /opt/comfyui-env/bin/python -m backend.training_engine.cli --data X/data.yaml --baseline-only
+docker exec -w /data zalu-gpu /opt/comfyui-env/bin/python -m backend.training_engine.cli --data coco8.yaml --epochs 10
+docker exec -w /data zalu-gpu /opt/comfyui-env/bin/python -m backend.training_engine.cli --data X/data.yaml --baseline-only
 ```
 Prints `ZALU_RESULT {json}`: split check, baseline (pretrained, no fine-tuning) metrics, fine-tuned metrics,
 train_seconds, ONNX check, paths. Benchmarks: `backend/BENCHMARK.md`.
 
-## API keys for Kirill's engines
-Put `ANTHROPIC_API_KEY=...` and `FAL_KEY=...` in `~/.zalu_env` on the GX10 (`chmod 600`); `run_gx10.sh` passes the
-file with `--env-file` when it exists. Never commit keys.
+## Keys (nikopi5 only: `~/.openclaw/credentials/hackathons/imperial-ai-hack-2026/zalu_api.env`, chmod 600; never commit)
+- `ZALU_TOKEN` (API bearer), `FAL_KEY` (synthetic images).
+- **No Anthropic API key**: the Task Engine runs on the owner's Claude subscription through the `claude` CLI already
+  logged in on nikopi5. `backend/infrastructure/claude_cli.py` is a drop-in `LLMBackend` for `compile_task(prompt, llm=...)`.
+  Tested: "Detect workers without safety vests" → valid spec in ~16 s.
 
 ## API (all except /api/health need `Authorization: Bearer $ZALU_TOKEN`)
 | Method | Path | Notes |
@@ -55,10 +68,10 @@ file with `--env-file` when it exists. Never commit keys.
 
 One GPU job at a time; each training runs in a child process, logs in `/data/runs/<job_id>.log`.
 
-## Run on the GX10
+## Deploy
 ```bash
-rsync -a --exclude .git ./ gx10:zalu/ && ssh gx10 'cd zalu && ZALU_TOKEN=... ./backend/run_gx10.sh'
-docker exec -e ZALU_TOKEN=... zalu-backend /opt/comfyui-env/bin/python -m tests.e2e_backend
+rsync -a --exclude .git ./ gx10:zalu/ && ssh gx10 'cd zalu && ./backend/run_gx10.sh'   # GPU worker
+./backend/run_nikopi5.sh                                                               # app on nikopi5
 ```
 
 ## Measured on the GX10 (2026-11-14, coco8 smoke test, not a benchmark of our task)
