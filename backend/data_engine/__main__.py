@@ -89,7 +89,10 @@ def main() -> int:
     p.add_argument("--frames", required=True); p.add_argument("--annotations", required=True)
     p.add_argument("--out", required=True); p.add_argument("--max-images", type=int, default=20)
     p.add_argument("--exclude-sessions", nargs="*", default=[], help="Validation and test sessions (never edited)")
-    p.add_argument("--conditions", nargs="*", help="Default: TaskSpec.synthetic_targets")
+    p.add_argument("--conditions", nargs="*", help="Appearance edits. Default: TaskSpec.synthetic_targets")
+    p.add_argument("--counterfactual", action="store_true",
+                   help="Label-flipping edits from the TaskSpec rules (e.g. remove the vest)")
+    p.add_argument("--verify", action="store_true", help="Claude vision check of every kept edit (ANTHROPIC_API_KEY)")
     p = sub.add_parser("run", help="ingest + annotate + export in one go"); task_args(p); ingest_args(p); det_args(p)
     p.add_argument("--out", required=True); p.add_argument("--held-out", nargs="*", default=[])
     p.add_argument("--val-sessions", nargs="*")
@@ -128,12 +131,19 @@ def main() -> int:
         task = _load_task(a)
         fc = FrameCollection.model_validate_json(Path(a.frames).read_text())
         aset = AnnotationSet.model_validate_json(Path(a.annotations).read_text())
+        verifier = None
+        if a.verify:
+            from .synthetic import ClaudeEditVerifier
+            verifier = ClaudeEditVerifier()
         syn = generate_synthetic(aset, fc.frames, task, a.out, detector=_detector(a), conditions=a.conditions,
-                                 exclude_sessions=a.exclude_sessions, max_images=a.max_images)
+                                 exclude_sessions=a.exclude_sessions, max_images=a.max_images,
+                                 counterfactual=a.counterfactual, verifier=verifier)
         merged_frames = fc.model_copy(update={"frames": fc.frames + syn.frames})
         Path(a.out, "frames_merged.json").write_text(merged_frames.model_dump_json(indent=2))
         Path(a.out, "annotations_merged.json").write_text(merge(aset, syn).model_dump_json(indent=2))
-        print(json.dumps({"kept": len(syn.frames), "rejected": [r.model_dump() for r in syn.rejected],
+        print(json.dumps({"kept": [{"frame_id": f.frame_id, "condition": f.generation["condition"],
+                                    "verifier": f.generation.get("verifier")} for f in syn.frames],
+                          "stats": syn.annotations.stats, "rejected": [r.model_dump() for r in syn.rejected],
                           "next": f"export --frames {a.out}/frames_merged.json --annotations {a.out}/annotations_merged.json"},
                          indent=2))
     elif a.cmd == "validate":

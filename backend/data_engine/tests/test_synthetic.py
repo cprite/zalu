@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import cv2
 import numpy as np
 import pytest
@@ -37,6 +39,11 @@ class FakeEditor:
             img = cv2.convertScaleAbs(img, alpha=0.6, beta=0)
         elif "boom" in prompt:
             raise RuntimeError("provider down")
+        elif "Remove the vest" in prompt:
+            if "fail" not in path:
+                hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+                img[cv2.inRange(hsv, (5, 120, 60), (20, 255, 255)) > 0] = (0, 200, 0)  # vest painted as shirt
+            img = cv2.convertScaleAbs(img, alpha=0.95, beta=8)  # re-render noise
         return cv2.imencode(".jpg", img)[1].tobytes()
 
 
@@ -67,8 +74,8 @@ def test_generate_filter_and_export(tmp_path, vest_task):
 
     reasons = {r.condition: r.reason for r in syn.rejected}
     assert "editor error" in reasons["boom"]
-    assert "no matching" in reasons["mirror world"] or "count" in reasons["mirror world"]
-    assert reasons["identical"] == "edit made no visible change"
+    assert "expected" in reasons["mirror world"] or "count" in reasons["mirror world"]
+    assert reasons["identical"].startswith("edit made no visible change")
     assert syn.frames and all(f.generation["condition"] == "dim light" for f in syn.frames)
     assert all(f.session_id != "s_val" and f.synthetic and f.parent_frame_id for f in syn.frames)
     assert all(f.generation["seed"] is not None and "Keep the camera" in f.generation["prompt"] for f in syn.frames)
@@ -124,3 +131,60 @@ def test_output_resized_to_parent(tmp_path, vest_task):
     syn = generate_synthetic(real, frames, vest_task, tmp_path / "syn", editor=BigEditor(), detector=det,
                              conditions=["dim"], max_images=2)
     assert syn.frames and all((f.width, f.height) == (320, 240) for f in syn.frames)
+
+
+def test_counterfactual_edits_from_rules(vest_task):
+    from backend.data_engine.synthetic import counterfactual_edits
+    edits = counterfactual_edits(vest_task)
+    assert [e.condition for e in edits] == ["remove vest", "add vest"]  # target-event producer first
+    assert edits[0].class_map == {"person_with_vest": "person_without_vest"}
+    assert edits[0].source_class == "person_with_vest"
+    assert "without" not in edits[0].prompt.split("so that")[0]
+
+
+def test_counterfactual_kept_only_when_flip_confirmed(tmp_path, vest_task):
+    from backend.data_engine.synthetic import counterfactual_edits
+    frames = _frames(tmp_path)
+    # make one with-vest parent "fail": the fake editor leaves its vest in place
+    bad = next(f for f in frames if f.frame_id == "s_b_0")
+    newp = Path(bad.path).with_name("fail_s_b_0.jpg"); Path(bad.path).rename(newp); bad.path = str(newp)
+    det = ColourBoxDetector()
+    real = auto_annotate(frames, vest_task, detector=det, calibrate=False)
+    remove = counterfactual_edits(vest_task)[:1]
+    syn = generate_synthetic(real, frames, vest_task, tmp_path / "syn", editor=FakeEditor(), detector=det,
+                             edits=remove, max_images=6)
+    assert syn.frames, syn.rejected
+    for f, a in zip(syn.frames, syn.annotations.annotations):
+        assert [b.class_name for b in a.boxes] == ["person_without_vest"]
+        assert f.generation["kind"] == "counterfactual"
+    fail = [r for r in syn.rejected if r.parent_frame_id == "s_b_0"]
+    assert fail and "expected person_without_vest" in fail[0].reason
+
+
+def test_verifier_can_reject(tmp_path, vest_task):
+    from backend.data_engine.synthetic import Verdict
+    frames = _frames(tmp_path)
+    det = ColourBoxDetector()
+    real = auto_annotate(frames, vest_task, detector=det, calibrate=False)
+
+    class NoVerifier:
+        name = "strict"
+        def verify(self, parent, edit, spec):
+            return Verdict(ok=False, reason="requested change not visible")
+
+    syn = generate_synthetic(real, frames, vest_task, tmp_path / "syn", editor=FakeEditor(), detector=det,
+                             conditions=["dim light"], max_images=2, verifier=NoVerifier())
+    assert not syn.frames
+    assert all(r.reason.startswith("verifier:") for r in syn.rejected)
+
+
+def test_plan_reports_edits_without_parents(tmp_path, vest_task):
+    from backend.data_engine.synthetic import counterfactual_edits
+    frames = _frames(tmp_path)
+    det = ColourBoxDetector()
+    real = auto_annotate(frames, vest_task, detector=det, calibrate=False)
+    for a in real.annotations:  # no frames without a vest -> "add vest" has no parents... and vice versa
+        a.boxes = [b for b in a.boxes if b.class_name == "person_with_vest"]
+    syn = generate_synthetic(real, frames, vest_task, tmp_path / "syn", editor=FakeEditor(), detector=det,
+                             edits=counterfactual_edits(vest_task), max_images=2)
+    assert any("no eligible parent frame containing person_without_vest" in r.reason for r in syn.rejected)
