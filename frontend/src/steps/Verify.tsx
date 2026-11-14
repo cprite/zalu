@@ -114,7 +114,8 @@ export function Verify() {
             </>
           )}
           <div className="actions-center">
-            <button className="btn ghost" onClick={() => set({ report: null, testFiles: [], testDataset: null })}>Test other footage</button>
+            <button className="btn ghost" onClick={() => set({ step: 3 })}>← Training</button>
+            <button className="btn ghost" onClick={() => set({ report: null, testDataset: null })}>Test other footage</button>
             <button className="btn primary" onClick={() => set({ step: 5, deployModelId: selected })}>Deploy this model →</button>
           </div>
         </>

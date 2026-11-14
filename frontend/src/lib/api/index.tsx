@@ -15,8 +15,8 @@ export interface ApiConfig {
 
 const KEY = "zalu.api";
 const envDefault: ApiConfig = {
-  baseUrl: process.env.NEXT_PUBLIC_ZALU_API ?? "",
-  token: process.env.NEXT_PUBLIC_ZALU_TOKEN ?? "",
+  baseUrl: "",
+  token: "",
 };
 
 const Ctx = createContext<{ api: ZaluApi; config: ApiConfig; setConfig: (c: ApiConfig) => void } | null>(null);
@@ -27,12 +27,15 @@ export function ApiProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(KEY);
-      if (saved) setConfigState(JSON.parse(saved));
+      if (saved) {
+        const { baseUrl } = JSON.parse(saved);
+        if (typeof baseUrl === "string") localStorage.setItem(KEY, JSON.stringify({ baseUrl }));
+      }
     } catch { /* ignore */ }
   }, []);
   const setConfig = (c: ApiConfig) => {
     setConfigState(c);
-    localStorage.setItem(KEY, JSON.stringify(c));
+    localStorage.setItem(KEY, JSON.stringify({ baseUrl: c.baseUrl }));
   };
   const api = useMemo(() => (config.baseUrl ? createLiveApi(config.baseUrl, config.token) : mockSingleton), [config]);
   return <Ctx.Provider value={{ api, config, setConfig }}>{children}</Ctx.Provider>;

@@ -102,6 +102,7 @@ export function Train() {
         <div className="actions-center">
           {done ? (
             <>
+              <button className="btn ghost" onClick={() => set({ step: 2 })}>← Labels</button>
               <button className="btn ghost" disabled={busy || nothingPicked} onClick={train}>Train again</button>
               <button className="btn primary" onClick={() => set({ step: 4 })}>Test on new footage →</button>
             </>

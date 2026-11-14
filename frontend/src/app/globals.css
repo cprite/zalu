@@ -223,3 +223,8 @@
   .hint { text-align: center; font-size: 13px; color: var(--color-muted); }
   .toggle { background: none; border: 0; color: var(--color-brand-ink); font-weight: 600; cursor: pointer; padding: 4px 0; font-size: 14px; }
 }
+
+.deploy-tools { justify-content: flex-start; flex-wrap: wrap; margin-block: 16px; }
+.deploy-tools label:focus-within { outline: 2px solid #2463eb; outline-offset: 3px; }
+.dash-refine { display: grid; gap: 6px; margin-block: 12px 24px; max-width: 680px; }
+.dash-refine .input { flex: 1; min-width: 0; }

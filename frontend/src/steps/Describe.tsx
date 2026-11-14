@@ -25,8 +25,19 @@ export function Describe() {
     setErr(null);
     setClarify(null);
     try {
+      if (s.task?.prompt === prompt.trim() && (!s.task.status || s.task.status === "ok")) {
+        if (s.trainDataset || !s.trainFiles.length) {
+          set({ step: s.trainDataset ? 2 : 1 });
+        } else {
+          setBusy("upload");
+          const ds = await api.createDataset(s.task.id, s.trainFiles, { session_id: s.trainSession, role: "train" });
+          set({ trainDataset: ds, step: 2 });
+        }
+        return;
+      }
       const task = await api.createTask(prompt.trim());
-      set({ task, trainDataset: null, labels: [], frames: [], jobs: [], models: [], report: null, testDataset: null });
+      set({ task, trainDataset: null, labels: [], frames: [], labelsSaved: false, annotationsLoaded: false, annotationsDirty: false, jobs: [], models: [],
+        report: null, testDataset: null, deployModelId: null, dashboardPlans: {} });
       if (task.status && task.status !== "ok") {
         setClarify([...(task.issues ?? []), ...(task.clarification_questions ?? [])]);
         return;
@@ -51,7 +62,8 @@ export function Describe() {
         <h1>What should your camera detect?</h1>
         <p>Describe it in one sentence and add a few minutes of footage. ZALU labels it, trains a small model and tests it for you.</p>
       </div>
-      <Composer value={prompt} onChange={setPrompt} files={s.trainFiles} onFiles={(trainFiles) => set({ trainFiles })}
+      <Composer value={prompt} onChange={setPrompt} files={s.trainFiles} onFiles={(trainFiles) => set({ trainFiles, trainDataset: null, frames: [], labels: [], labelsSaved: false, annotationsLoaded: false, annotationsDirty: false,
+          jobs: [], models: [], report: null, deployModelId: null, dashboardPlans: {} })}
         onSubmit={go} canSubmit={!!prompt.trim()} busy={!!busy} autoFocus
         placeholder="e.g. Find people without safety goggles" submitLabel="Create task" />
       {busy && <p className="hint" role="status">{busy === "task" ? "Understanding the task…" : "Uploading and labelling your footage. Longer videos take a few minutes."}</p>}

@@ -10,10 +10,16 @@ export function Topbar() {
   const { reset } = useFlow();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(config);
+  const { s } = useFlow();
   const [health, setHealth] = useState<Health | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
-  useEffect(() => { setDraft(config); }, [config]);
+  useEffect(() => {
+    try {
+      const remembered = JSON.parse(localStorage.getItem("zalu.api") ?? "{}").baseUrl;
+      setDraft(config.baseUrl ? config : { ...config, baseUrl: remembered || process.env.NEXT_PUBLIC_ZALU_API || "" });
+    } catch { setDraft(config); }
+  }, [config]);
   useEffect(() => {
     let live = true;
     setHealth(null);
@@ -22,7 +28,12 @@ export function Topbar() {
     return () => { live = false; };
   }, [api]);
 
-  const switchTo = (c: typeof config) => { setConfig(c); reset(); setOpen(false); };
+  const switchTo = (c: typeof config) => {
+    if ((s.task || s.trainFiles.length) && !window.confirm("Switch data source and start a new session?")) return;
+    setConfig(c);
+    reset();
+    setOpen(false);
+  };
 
   return (
     <header className="topbar">

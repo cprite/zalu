@@ -1,3 +1,4 @@
+import type { DashboardPlan } from "../../dashboard/samplePlan";
 import type { Frame } from "../frames";
 import type {
   Annotation, DatasetManifest, EvaluationReport, EvaluationRequest, Health, InferenceResult, ModelArtifact,
@@ -23,6 +24,8 @@ export interface ZaluApi {
   getModel(modelId: string): Promise<ModelArtifact>;
   createEvaluation(req: EvaluationRequest): Promise<EvaluationReport>;
   getReport(reportId: string): Promise<EvaluationReport>;
+  createDashboard(prompt: string, taskId: string, modelId: string): Promise<DashboardPlan>;
+  refineDashboard(id: string, instruction: string): Promise<DashboardPlan>;
   inference(modelId: string, image: Blob, opts?: { conf?: number; targetEvent?: string | null }): Promise<InferenceResult>;
 }
 

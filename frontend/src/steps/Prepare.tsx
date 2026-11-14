@@ -18,16 +18,19 @@ export function Prepare() {
   const classes = s.task?.classes.length ? s.task.classes : ds.classes;
 
   useEffect(() => {
-    if (!ds || (s.labels.length && s.frames.length)) return;
+    if (!ds || s.annotationsLoaded) return;
+    let active = true;
     setLoading(true);
     Promise.all([api.getLabels(ds.id), api.listFrames(ds.id)])
       .then(([labels, frames]) => {
-        set({ labels, frames });
+        if (!active) return;
+        set({ labels, frames, annotationsLoaded: true });
         const firstLabelled = frames.findIndex((f) => labels.some((l) => l.image === f.name));
         if (firstLabelled > 0) setCur(firstLabelled);  // open on a frame that has something to check
       })
       .catch(setErr)
-      .finally(() => setLoading(false));
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ds?.id]);
 
@@ -37,10 +40,10 @@ export function Prepare() {
     return m;
   }, [s.labels]);
   const frame = s.frames[cur];
-  const edited = s.labels.some((l) => l.source === "human");
+  const edited = s.annotationsDirty;
 
   const setImageLabels = (img: string, next: Annotation[]) =>
-    set((p) => ({ labels: [...p.labels.filter((l) => l.image !== img), ...next], labelsSaved: false }));
+    set((p) => ({ labels: [...p.labels.filter((l) => l.image !== img), ...next], labelsSaved: false, annotationsDirty: true }));
 
   /** Corrections are saved automatically when the user moves on. */
   async function next() {
@@ -49,7 +52,7 @@ export function Prepare() {
       setSaving(true);
       try {
         await api.saveLabels(ds.id, s.labels);
-        set({ labelsSaved: true });
+        set({ labelsSaved: true, annotationsDirty: false });
       } catch (e) {
         setErr(e);
         setSaving(false);
@@ -105,7 +108,7 @@ export function Prepare() {
       )}
 
       <div className="actions-center" style={{ marginTop: 8 }}>
-        <button className="btn ghost" onClick={() => set({ step: 1 })}>← Footage</button>
+        <button className="btn ghost" onClick={() => set({ step: 1 })}>← Change footage</button>
         <button className="btn primary" disabled={saving || loading} onClick={next}>{saving && <Spinner />}{edited && !s.labelsSaved ? "Save and train →" : "Looks good, train →"}</button>
       </div>
     </div>

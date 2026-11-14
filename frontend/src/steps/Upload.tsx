@@ -17,11 +17,15 @@ export function Upload() {
 
   async function submit() {
     if (!s.task) return;
+    if (s.trainDataset) {
+      set({ step: 2 });
+      return;
+    }
     setBusy(true);
     setErr(null);
     try {
       const ds = await api.createDataset(s.task.id, s.trainFiles, { session_id: s.trainSession, role: "train" });
-      set({ trainDataset: ds, frames: [], labels: [], labelsSaved: false, step: 2 });
+      set({ trainDataset: ds, frames: [], labels: [], labelsSaved: false, annotationsLoaded: false, annotationsDirty: false, step: 2 });
     } catch (e) {
       setErr(e);
     } finally {
@@ -35,7 +39,8 @@ export function Upload() {
         <h1>Add footage from your camera</h1>
         <p>A few minutes from the place where the camera will run, including moments where there is nothing to detect.</p>
       </div>
-      <Composer textless files={s.trainFiles} onFiles={(trainFiles) => set({ trainFiles })} onSubmit={submit}
+      <Composer textless files={s.trainFiles} onFiles={(trainFiles) => set({ trainFiles, trainDataset: null, frames: [], labels: [], labelsSaved: false, annotationsLoaded: false, annotationsDirty: false,
+          jobs: [], models: [], report: null, deployModelId: null, dashboardPlans: {} })} onSubmit={submit}
         canSubmit={s.trainFiles.length > 0} busy={busy} submitLabel="Upload and label" />
       {busy && <p className="hint" role="status">Uploading and labelling your footage. Longer videos take a few minutes.</p>}
       {!busy && (
@@ -46,7 +51,8 @@ export function Upload() {
           )}
         </div>
       )}
-      {camera && <CameraCapture sessionId={s.trainSession} onFrames={(fs) => set({ trainFiles: [...s.trainFiles, ...fs] })} />}
+      {camera && <CameraCapture sessionId={s.trainSession} onFrames={(fs) => set({ trainFiles: [...s.trainFiles, ...fs], trainDataset: null, frames: [], labels: [],
+        labelsSaved: false, annotationsLoaded: false, annotationsDirty: false, jobs: [], models: [], report: null, deployModelId: null, dashboardPlans: {} })} />}
       <ErrorBox error={err} />
       <div className="actions-center"><button className="btn ghost sm" onClick={() => set({ step: 0 })}>← Change the task</button></div>
     </div>

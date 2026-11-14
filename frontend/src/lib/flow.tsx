@@ -1,6 +1,7 @@
 "use client";
 // Shared state of the Describe -> Upload -> Prepare -> Train -> Verify -> Deploy journey.
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import type { DashboardPlan } from "../dashboard/samplePlan";
 import type { Frame } from "./frames";
 import type { Annotation, DatasetManifest, EvaluationReport, ModelArtifact, TaskSpec, TrainingJob } from "./types";
 
@@ -20,12 +21,15 @@ export interface FlowState {
   testDataset: DatasetManifest | null;
   report: EvaluationReport | null;
   deployModelId: string | null;
+  dashboardPlans: Record<string, DashboardPlan>;
+  annotationsLoaded: boolean;
+  annotationsDirty: boolean;
 }
 
 const initial: FlowState = {
   step: 0, task: null, trainSession: "session_1", trainFiles: [], frames: [], trainDataset: null, labels: [],
   labelsSaved: false, jobs: [], models: [], testSession: "test_session_1", testFiles: [], testDataset: null,
-  report: null, deployModelId: null,
+  report: null, deployModelId: null, dashboardPlans: {}, annotationsLoaded: false, annotationsDirty: false,
 };
 
 export const STEPS = [
