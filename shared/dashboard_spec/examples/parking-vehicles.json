@@ -1,0 +1,81 @@
+{
+  "version": "1",
+  "layout": {
+    "columns": 12
+  },
+  "data_sources": [
+    {
+      "id": "session",
+      "type": "inference_session"
+    }
+  ],
+  "title": "Parking and vehicle detection",
+  "description": "Monitor detected vehicles in the latest parking camera frame and during this session.",
+  "metrics": [
+    {
+      "id": "vehicle_detections",
+      "title": "Detections in the latest frame",
+      "source_id": "session",
+      "operation": "detection_count"
+    },
+    {
+      "id": "cars",
+      "title": "Cars detected",
+      "source_id": "session",
+      "operation": "class_count",
+      "class_name": "car"
+    }
+  ],
+  "widgets": [
+    {
+      "id": "count",
+      "type": "kpi",
+      "title": "Vehicle detections",
+      "source_id": "session",
+      "span": 4,
+      "config": {
+        "metric_id": "vehicle_detections"
+      }
+    },
+    {
+      "id": "distribution",
+      "type": "class_distribution",
+      "title": "Vehicles by detected class",
+      "source_id": "session",
+      "span": 8,
+      "config": {}
+    },
+    {
+      "id": "camera",
+      "type": "live_preview",
+      "title": "Parking entrance",
+      "source_id": "session",
+      "span": 7,
+      "config": {
+        "show_boxes": true
+      }
+    },
+    {
+      "id": "detail",
+      "type": "detection_table",
+      "title": "Latest vehicle detections",
+      "source_id": "session",
+      "span": 5,
+      "config": {
+        "rows": "detections",
+        "max_rows": 20
+      }
+    },
+    {
+      "id": "cars_over_time",
+      "type": "time_series",
+      "title": "Cars per sampled frame",
+      "source_id": "session",
+      "span": 12,
+      "config": {
+        "metric_id": "cars",
+        "window_seconds": 120
+      }
+    }
+  ]
+}

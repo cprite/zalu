@@ -1,0 +1,73 @@
+{
+  "version": "1",
+  "layout": {
+    "columns": 12
+  },
+  "data_sources": [
+    {
+      "id": "session",
+      "type": "inference_session"
+    }
+  ],
+  "title": "Workplace safety",
+  "description": "Review safety-vest detections on the current camera feed.",
+  "metrics": [
+    {
+      "id": "vest_alert_count",
+      "title": "People detected without a vest",
+      "source_id": "session",
+      "operation": "class_count",
+      "class_name": "person_without_vest"
+    },
+    {
+      "id": "latency",
+      "title": "Inference latency",
+      "source_id": "session",
+      "operation": "inference_latency_ms"
+    }
+  ],
+  "widgets": [
+    {
+      "id": "camera",
+      "type": "live_preview",
+      "title": "Work area",
+      "source_id": "session",
+      "span": 8,
+      "config": {
+        "show_boxes": true
+      }
+    },
+    {
+      "id": "alerts",
+      "type": "kpi",
+      "title": "People detected without a vest",
+      "source_id": "session",
+      "span": 4,
+      "config": {
+        "metric_id": "vest_alert_count"
+      }
+    },
+    {
+      "id": "timeline",
+      "type": "time_series",
+      "title": "Vest alerts per sampled frame",
+      "source_id": "session",
+      "span": 7,
+      "config": {
+        "metric_id": "vest_alert_count",
+        "window_seconds": 60
+      }
+    },
+    {
+      "id": "event_log",
+      "type": "detection_table",
+      "title": "Events on the latest frame",
+      "source_id": "session",
+      "span": 5,
+      "config": {
+        "rows": "events",
+        "max_rows": 10
+      }
+    }
+  ]
+}
