@@ -40,6 +40,18 @@ python -m backend.data_engine validate ds
 yolo detect train data=ds/data.yaml model=yolov8n.pt
 ```
 
+## Backend hooks (called by `backend/main.py`)
+
+| Hook | Route | Notes |
+|---|---|---|
+| `task_engine.create_task_spec(prompt)` | `POST /api/tasks` | Wraps `compile_task`; an unusable LLM answer becomes a `needs_clarification` spec instead of a 500 |
+| `data_engine.process_upload(task, files, held_out_sessions=(), val_sessions=None)` | `POST /api/datasets` | One uploaded file = one session; returns a train/val manifest |
+| `data_engine.save_corrections(ds, labels)` | `POST /api/datasets/{id}/labels` | Rebuilds the YOLO files in place (same `dataset_id`); returns `{"dataset_id", "applied", "manifest"}`, and **the caller must re-save `manifest`** |
+| `data_engine.get_annotations(ds)` | *(no route yet)* | AnnotationSet for the review screen |
+| `data_engine.process_test_upload(task, files)` | *(no route yet)* | Independent test set (`variant="test"`) for evaluation |
+
+Files live under `$ZALU_DATA/dataset_files/<dataset_id>/{work,dataset}`. Verified with `tests/test_api_integration.py` (fakes for Claude/YOLO-World) and once live on the Mac: task 12 s, 2-video dataset 30 s including model load.
+
 ## Python API (integration contract)
 
 | Function | Returns | Notes |
