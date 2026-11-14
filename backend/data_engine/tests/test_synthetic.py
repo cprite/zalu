@@ -101,3 +101,26 @@ def test_fal_editor_requires_key(monkeypatch):
     monkeypatch.delenv("FAL_KEY", raising=False)
     with pytest.raises(RuntimeError, match="FAL_KEY"):
         FalImageEditor()
+
+
+def test_nearest_aspect():
+    from backend.data_engine.synthetic import nearest_aspect
+    assert nearest_aspect(1280, 720) == "16:9"
+    assert nearest_aspect(768, 432) == "16:9"
+    assert nearest_aspect(640, 480) == "4:3"
+    assert nearest_aspect(720, 1280) == "9:16"
+
+
+def test_output_resized_to_parent(tmp_path, vest_task):
+    frames = _frames(tmp_path)
+    det = ColourBoxDetector()
+    real = auto_annotate(frames, vest_task, detector=det, calibrate=False)
+
+    class BigEditor(FakeEditor):
+        def edit(self, path, prompt, seed):
+            img = cv2.convertScaleAbs(cv2.imread(path), alpha=0.6)
+            return cv2.imencode(".jpg", cv2.resize(img, (348, 188)))[1].tobytes()
+
+    syn = generate_synthetic(real, frames, vest_task, tmp_path / "syn", editor=BigEditor(), detector=det,
+                             conditions=["dim"], max_images=2)
+    assert syn.frames and all((f.width, f.height) == (320, 240) for f in syn.frames)

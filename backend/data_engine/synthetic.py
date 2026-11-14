@@ -31,7 +31,15 @@ log = logging.getLogger(__name__)
 
 DEFAULT_FAL_MODEL = os.environ.get("VF_FAL_MODEL", "fal-ai/flux-pro/kontext")
 PRESERVE = ("Keep the camera position, framing, scene layout and every person, their pose, clothing "
-            "and safety equipment exactly the same. Photorealistic CCTV frame.")
+            "and safety equipment exactly the same. Do not add any text, timestamps, logos or overlays.")
+# Aspect ratios accepted by fal-ai/flux-pro/kontext.
+ASPECTS = {"21:9": 21 / 9, "16:9": 16 / 9, "4:3": 4 / 3, "3:2": 3 / 2, "1:1": 1.0,
+           "2:3": 2 / 3, "3:4": 3 / 4, "9:16": 9 / 16, "9:21": 9 / 21}
+
+
+def nearest_aspect(width: int, height: int) -> str:
+    r = width / height
+    return min(ASPECTS, key=lambda k: abs(ASPECTS[k] - r))
 DEFAULT_CONDITIONS = ["dim evening lighting", "harsh direct sunlight with strong shadows", "overcast flat light"]
 
 
@@ -55,9 +63,11 @@ class FalImageEditor:
         self.name = f"fal:{model}"
 
     def edit(self, image_path: str, prompt: str, seed: int) -> bytes:
+        img = cv2.imread(image_path)
         url = self._fal.upload_file(image_path)
         res = self._fal.subscribe(self.model, arguments={
             "prompt": prompt, "image_url": url, "seed": seed, "num_images": 1, "output_format": "jpeg",
+            "aspect_ratio": nearest_aspect(img.shape[1], img.shape[0]),
         }, client_timeout=self.timeout)
         if any(res.get("has_nsfw_concepts") or []):
             raise RuntimeError("fal flagged the output as unsafe")
@@ -166,6 +176,9 @@ def generate_synthetic(
         if img is None:
             rejected.append(SyntheticRejection(parent_frame_id=pf.frame_id, condition=cond, reason="undecodable image"))
             continue
+        if (img.shape[1], img.shape[0]) != (pf.width, pf.height):
+            # Editors return their own resolution; keep the parent's so frames are interchangeable.
+            img = cv2.resize(img, (pf.width, pf.height), interpolation=cv2.INTER_AREA)
         ph = cv2.imread(pf.path)
         h = dhash(img)
         if ph is not None and hamming(h, dhash(cv2.resize(ph, (img.shape[1], img.shape[0])))) <= 1:
