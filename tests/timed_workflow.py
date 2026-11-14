@@ -21,6 +21,10 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--footage", required=True)
 ap.add_argument("--prompt", default="Alert me when a worker is not wearing a hi-vis safety vest")
 ap.add_argument("--epochs", type=int, default=40)
+ap.add_argument("--fps", type=float, default=1.0)
+ap.add_argument("--max-frames", type=int, default=200)
+ap.add_argument("--imgsz", type=int, default=640)
+ap.add_argument("--fast", action="store_true", help="demo mode: no baseline val, no ONNX check")
 a = ap.parse_args()
 T, t_all = {}, time.time()
 
@@ -31,13 +35,14 @@ print("task", task["task_id"], task["status"], [c["name"] for c in task["classes
 
 t = time.time()
 with open(a.footage, "rb") as fh:
-    ds = ok(requests.post(f"{API}/api/datasets", headers=H, data={"task_id": task["task_id"]},
+    ds = ok(requests.post(f"{API}/api/datasets", headers=H, data={"task_id": task["task_id"], "fps": a.fps, "max_frames": a.max_frames},
                           files={"files": (os.path.basename(a.footage), fh, "video/mp4")}, timeout=1800))
 T["2_dataset_upload_frames_autolabel"] = time.time() - t
 print("dataset", ds["dataset_id"], {k: (v["images"], v["per_class"]) for k, v in ds["splits"].items()}, flush=True)
 
 t = time.time()
-job = ok(requests.post(f"{API}/api/training", headers=H, json={"dataset_id": ds["dataset_id"], "epochs": a.epochs, "batch": 16}))
+job = ok(requests.post(f"{API}/api/training", headers=H, json={"dataset_id": ds["dataset_id"], "epochs": a.epochs, "batch": 16, "imgsz": a.imgsz,
+                                                              "baseline": not a.fast, "verify_export": not a.fast}))
 while job["status"] not in ("succeeded", "failed"):
     time.sleep(2)
     job = ok(requests.get(f"{API}/api/jobs/{job['id']}", headers=H))

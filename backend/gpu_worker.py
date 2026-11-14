@@ -71,11 +71,12 @@ async def datasets_process(body: dict):
     task = schemas.TaskSpec(**body["task"])
     files = body["files"]
     try:
+        fps, mx = float(body.get("fps", 1.0)), int(body.get("max_frames", 200))
         if body.get("kind") == "test":
-            m = await run_in_threadpool(process_test_upload, task, files)
+            m = await run_in_threadpool(process_test_upload, task, files, fps, mx)
         else:
             m = await run_in_threadpool(process_upload, task, files, body.get("held_out_sessions") or (),
-                                        body.get("val_sessions"))
+                                        body.get("val_sessions"), fps, mx)
     except (ValueError, FileExistsError) as e:
         raise HTTPException(422, str(e))
     check = check_splits(m.data_yaml)

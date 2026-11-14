@@ -1,0 +1,1 @@
+base-short {'n': 30, 'parse': 0.967, 'schema_valid': 0.0, 'validator_clean': 0.0, 'status_agree': 0.0, 'class_set_agree(ok)': 0.0, 'target_event_agree(ok)': 0.0, 'median_latency_s': 21.41}

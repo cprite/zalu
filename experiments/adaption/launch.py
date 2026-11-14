@@ -20,9 +20,12 @@ while True:
 if "--dry" in sys.argv:
     print(c.autoscientist.recommend_hyperparams(dataset_id=st["dataset_id"], model=BASE_MODEL)); sys.exit()
 if not st.get("run_id"):
+    rows = st.get("row_count") or 0
+    aug = max(0, 1050 - rows)   # Adaption minimum for this model is 1,000 effective rows (own + augmentation)
     run = c.autoscientist.create(dataset_id=st["dataset_id"], model=BASE_MODEL, training_method="instruction",
-                                 data_format="instruction", column_mapping={"prompt": "prompt", "completion": "completion"},
+                                 augmentation_domain_rows=aug or None,
+                                 data_format="instruction",
                                  idempotency_key="zalu-taskspec-v1")
-    save_state(run_id=run.id, model=run.model, launched_at=time.time(), max_iterations=run.max_iterations,
+    save_state(augmentation_domain_rows=aug, run_id=run.id, model=run.model, launched_at=time.time(), max_iterations=run.max_iterations,
                target_win_rate=run.target_win_rate)
     print("run", run.id, run.status, run.model, "max_iter", run.max_iterations, "target", run.target_win_rate)

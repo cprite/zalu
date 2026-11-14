@@ -1,0 +1,11 @@
+{
+ "dataset_id": "f0f64f43-cf5c-4271-b3b9-af456adec573",
+ "uploaded_at": 1794679237.2979302,
+ "row_count": 576,
+ "augmentation_domain_rows": 474,
+ "run_id": "2a46e27f-bf64-4425-a923-d4f2957e76bc",
+ "model": "Qwen/Qwen3.5-4B",
+ "launched_at": 1794679256.9791148,
+ "max_iterations": 3.0,
+ "target_win_rate": 0.7
+}
