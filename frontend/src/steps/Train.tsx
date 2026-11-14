@@ -39,13 +39,26 @@ export function Train() {
   const running = s.jobs.some((j) => j.status === "queued" || j.status === "running");
   useEffect(() => {
     if (!running) return;
-    const t = setInterval(async () => {
-      const jobs = await Promise.all(s.jobs.map((j) => (j.status === "succeeded" || j.status === "failed" ? j : api.getJob(j.id).catch(() => j))));
-      const newModels = await Promise.all(jobs.filter((j) => j.status === "succeeded" && j.result_id && !s.models.some((m) => m.id === j.result_id))
-        .map((j) => api.getModel(j.result_id!)));
-      set((p) => ({ jobs, models: [...p.models, ...newModels.filter((m) => !p.models.some((x) => x.id === m.id))] }));
+    let active = true;
+    const t = setTimeout(async () => {
+      try {
+        const jobs = await Promise.all(s.jobs.map((job) =>
+          job.status === "succeeded" || job.status === "failed" ? job : api.getJob(job.id)));
+        const newModels = await Promise.all(jobs.filter((job) => job.status === "succeeded" && job.result_id
+          && !s.models.some((model) => model.id === job.result_id)).map((job) => api.getModel(job.result_id!)));
+        if (active) {
+          setErr(null);
+          set((current) => ({ jobs, models: [...current.models,
+            ...newModels.filter((model) => !current.models.some((item) => item.id === model.id))] }));
+        }
+      } catch (error) {
+        if (active) {
+          setErr(error);
+          set((current) => ({ jobs: [...current.jobs] }));
+        }
+      }
     }, 1500);
-    return () => clearInterval(t);
+    return () => { active = false; clearTimeout(t); };
   }, [running, s.jobs, s.models, api, set]);
 
   async function train() {

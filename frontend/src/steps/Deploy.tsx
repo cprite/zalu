@@ -37,7 +37,9 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
   const sampleMode = api.mode === "mock";
   const activeTarget = classes.includes(target) ? target : "";
   const evalEntry = s.report?.per_model[modelId];
-  const measured = s.report?.mock || evalEntry?.readiness?.verdict === "invalid_test_set" ? undefined : evalEntry?.overall;
+  const evaluationInvalid = evalEntry?.readiness?.verdict === "invalid_test_set"
+    || (evalEntry?.test?.split != null && evalEntry.test.split !== "test");
+  const measured = s.report?.mock || evaluationInvalid ? undefined : evalEntry?.overall;
   const plan = s.dashboardPlans[modelId];
   const [planning, setPlanning] = useState(!plan);
   const [planError, setPlanError] = useState<unknown>(null);
@@ -119,6 +121,14 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
             event.target.value = "";
           }} />
         </label>}
+        <button className="btn" onClick={async () => {
+          try {
+            const { downloadDashboard } = await import("@/dashboard/exportDashboard");
+            downloadDashboard(plan.spec, classes, activeTarget, evalEntry?.settings?.conf_threshold ?? 0.25);
+          } catch (error) {
+            setPlanError(error);
+          }
+        }}>Export dashboard</button>
         {!sampleMode && !plan.ai_generated && <span className="small muted">Default layout · planner fallback</span>}
         {measured && <span className="small muted">
           {sampleMode ? "Sample evaluation" : "Test evaluation"} · precision {pct(measured.precision)} · recall {pct(measured.recall)}

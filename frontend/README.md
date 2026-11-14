@@ -34,3 +34,19 @@ Routes that a teammate has not merged yet (HTTP 501) show a clear "not connected
 | `src/components/Shell.tsx` | top bar, data-source switch, Stories-style 3-stage progress |
 | `src/components/Composer.tsx` | message-box input: text + image/video attachments + send |
 | `src/app/globals.css` | design tokens (`@theme` → Tailwind utilities) and semantic component classes |
+
+## Personalized dashboard and export
+
+After evaluation, open Deploy. The live adapter requests a DashboardSpec for the current prompt,
+task and selected model. Refine it in place using the planner. In Sample mode, ZALU selects and
+adapts a shared fixture to your prompt and model classes. The sample refinement input supports
+renaming and showing or hiding the camera widget.
+
+Start the camera or submit a single image in Live mode. The dashboard derives counts and charts
+from the inference response and the current browser session. Precision and recall come from the
+evaluation report when available.
+
+Choose **Export dashboard** to download the current configuration as a standalone React project.
+Unzip it, run `npm install` and `npm run dev`, then open `http://localhost:3000`. The project defaults
+to sample data and includes an optional Live connection form. Export packages the shared renderer,
+styles and configuration. It contains no uploaded frames, inference history or credentials.
