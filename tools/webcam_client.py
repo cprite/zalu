@@ -56,10 +56,13 @@ def main():
     ap.add_argument("--api")
     ap.add_argument("--model")
     ap.add_argument("--conf", type=float, default=0.25)
+    ap.add_argument("--video", help="read a video file instead of the camera")
+    ap.add_argument("--headless", action="store_true", help="no window; print FPS/latency summary at the end")
+    ap.add_argument("--frames", type=int, default=0, help="stop after N frames (0 = until the end / q)")
     a = ap.parse_args()
-    cap = cv2.VideoCapture(a.cam)
+    cap = cv2.VideoCapture(a.video if a.video else a.cam)
     if not cap.isOpened():
-        raise SystemExit(f"cannot open camera {a.cam}")
+        raise SystemExit(f"cannot open {'video ' + a.video if a.video else 'camera ' + str(a.cam)}")
     names = a.names.split(",") if a.names else []
     if a.onnx:
         sess, iname, size = onnx_session(a.onnx)
@@ -68,10 +71,12 @@ def main():
 
         hdr = {"Authorization": f"Bearer {os.environ['ZALU_TOKEN']}"} if os.environ.get("ZALU_TOKEN") else {}
     t_last, fps = time.time(), 0.0
+    lat, n, t_start, counts = [], 0, time.time(), {}
     while True:
         ok, frame = cap.read()
         if not ok:
             break
+        t_inf = time.perf_counter()
         if a.onnx:
             dets = [(names[c] if c < len(names) else str(c), s, b) for c, s, b in onnx_predict(sess, iname, size, frame, a.conf)]
         else:
@@ -80,6 +85,14 @@ def main():
                               data={"model_id": a.model, "conf": a.conf}, files={"image": ("f.jpg", jpg.tobytes(), "image/jpeg")})
             r.raise_for_status()
             dets = [(d["cls"], d["score"], d["box"]) for d in r.json()["detections"]]
+        lat.append((time.perf_counter() - t_inf) * 1000)
+        n += 1
+        for c, _, _ in dets:
+            counts[c] = counts.get(c, 0) + 1
+        if a.headless:
+            if a.frames and n >= a.frames:
+                break
+            continue
         for c, s, b in dets:
             x1, y1, x2, y2 = map(int, b)
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 220, 0), 2)
@@ -89,8 +102,14 @@ def main():
         t_last = now
         cv2.putText(frame, f"{fps:.1f} FPS  {'local ONNX' if a.onnx else 'backend'}", (10, 25), 0, 0.7, (0, 0, 255), 2)
         cv2.imshow("ZALU", frame)
-        if cv2.waitKey(1) & 0xFF in (27, ord("q")):
+        if cv2.waitKey(1) & 0xFF in (27, ord("q")) or (a.frames and n >= a.frames):
             break
+    if lat:
+        lat_sorted = sorted(lat)
+        el = time.time() - t_start
+        print(f"frames={n} fps={n / el:.1f} latency_ms p50={lat_sorted[len(lat)//2]:.1f} "
+              f"p95={lat_sorted[int(len(lat)*0.95)-1]:.1f} mode={'onnx-local' if a.onnx else 'backend'} "
+              f"detections_per_class={counts}")
 
 
 if __name__ == "__main__":

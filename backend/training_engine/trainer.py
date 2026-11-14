@@ -58,6 +58,10 @@ def train(
     )
     out_dir = storage.path("runs", art.id, "x").parent
 
+    if progress:
+        progress(0.01, "baseline: pretrained model on val split")
+    art.baseline_metrics = baseline_val(req.base_model, dataset.data_yaml, dataset.classes, req.imgsz)
+
     model = YOLO(req.base_model)
 
     def on_epoch_end(trainer):  # Ultralytics callback
@@ -93,8 +97,56 @@ def train(
             progress(0.97, "exporting ONNX")
         onnx_path = YOLO(str(weights)).export(format="onnx", imgsz=req.imgsz)
         art.onnx = str(onnx_path)
+        art.export_check = verify_onnx(str(weights), art.onnx, dataset.data_yaml, req.imgsz)
 
     return art
+
+
+def _val_image(data_yaml: str) -> Optional[str]:
+    from backend.training_engine.splits import _images, resolve
+
+    cfg = resolve(data_yaml)
+    root = Path(cfg.get("path") or Path(data_yaml).parent)
+    imgs = _images(root, cfg.get("val"))
+    return str(imgs[0]) if imgs else None
+
+
+def baseline_val(base_model: str, data_yaml: str, classes: list[str], imgsz: int = 640) -> dict[str, float]:
+    """Pretrained model, no fine-tuning, on the same val split. Only meaningful when the dataset's class names
+    are a subset of the base model's classes (e.g. COCO 'person'); otherwise returns {} and the open-vocabulary
+    zero-shot artifact is the baseline instead."""
+    from ultralytics import YOLO
+
+    m = YOLO(base_model)
+    names = list(m.names.values()) if isinstance(m.names, dict) else list(m.names)
+    if not set(classes) <= set(names) or list(names[: len(classes)]) != list(classes):
+        return {}
+    r = m.val(data=data_yaml, imgsz=imgsz, device=0, plots=False, verbose=False, split="val")
+    return {"precision": round(float(r.box.mp), 4), "recall": round(float(r.box.mr), 4),
+            "map50": round(float(r.box.map50), 4), "map50_95": round(float(r.box.map), 4)}
+
+
+def verify_onnx(pt: str, onnx: str, data_yaml: str, imgsz: int = 640) -> dict:
+    """Run the exported ONNX and the .pt on one val image; they must find the same number of objects."""
+    import time as _t
+
+    from ultralytics import YOLO
+
+    img = _val_image(data_yaml)
+    if img is None:
+        return {"ok": False, "error": "no val image to test with"}
+    try:
+        a = YOLO(pt).predict(img, imgsz=imgsz, conf=0.25, device=0, verbose=False)[0]
+        mo = YOLO(onnx, task="detect")
+        mo.predict(img, imgsz=imgsz, conf=0.25, verbose=False)  # warm-up
+        t0 = _t.perf_counter()
+        b = mo.predict(img, imgsz=imgsz, conf=0.25, verbose=False)[0]
+        ms = (_t.perf_counter() - t0) * 1000
+        na, nb = len(a.boxes), len(b.boxes)
+        return {"ok": abs(na - nb) <= 1, "pt_detections": na, "onnx_detections": nb,
+                "onnx_cpu_ms": round(ms, 1), "image": Path(img).name}
+    except Exception as e:  # report, don't fail the whole training job
+        return {"ok": False, "error": f"{type(e).__name__}: {e}"}
 
 
 def zero_shot_artifact(classes: list[str], base_model: str = "yoloe-11l-seg.pt") -> schemas.ModelArtifact:

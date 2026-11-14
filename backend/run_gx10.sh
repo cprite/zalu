@@ -6,6 +6,6 @@ set -euo pipefail
 mkdir -p "$HOME/zalu-data"
 docker build -f backend/Dockerfile -t zalu-backend:dev .
 docker rm -f zalu-backend >/dev/null 2>&1 || true
-docker run -d --name zalu-backend --gpus all --memory 24g --restart unless-stopped \
+docker run -d --name zalu-backend --gpus all --memory 24g --shm-size 8g --restart unless-stopped \
   -p 127.0.0.1:9100:9100 -e ZALU_TOKEN="$ZALU_TOKEN" -v "$HOME/zalu-data:/data" zalu-backend:dev
 echo "started; health: curl -s localhost:9100/api/health"

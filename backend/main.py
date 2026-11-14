@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend import orchestrator, schemas
 from backend.infrastructure import storage
+from backend.training_engine.splits import check_splits
 
 TOKEN = os.environ.get("ZALU_TOKEN", "")
 
@@ -87,8 +88,6 @@ def get_task(task_id: str):
 @app.post("/api/datasets", response_model=schemas.DatasetManifest, dependencies=[Depends(auth)])
 async def create_dataset(task_id: str = Form(...), files: list[UploadFile] = File(...)):
     fn = _hook("backend.data_engine", "process_upload")
-    if fn is None:
-        raise HTTPException(501, "Data Engine not merged yet (Kirill). Use POST /api/datasets/register for now.")
     task = _get("tasks", task_id, schemas.TaskSpec)
     upload_dir = storage.path("uploads", task_id, "x").parent
     saved = []
@@ -96,9 +95,25 @@ async def create_dataset(task_id: str = Form(...), files: list[UploadFile] = Fil
         p = upload_dir / Path(f.filename or "upload.bin").name
         p.write_bytes(await f.read())
         saved.append(str(p))
-    manifest = fn(task, saved)
+    if fn is None:  # MOCK until Kirill's Data Engine lands: uploads are stored, the sample dataset is returned
+        manifest = _mock_dataset(task.id, note=f"MOCK: {len(saved)} upload(s) stored in {upload_dir}, not processed")
+    else:
+        manifest = fn(task, saved)
+    manifest.split_check = check_splits(manifest.data_yaml)
+    if not manifest.split_check["ok"]:
+        raise HTTPException(422, f"dataset split check failed: {manifest.split_check['errors']}")
     storage.save("datasets", manifest)
     return manifest
+
+
+def _mock_dataset(task_id: Optional[str], note: str) -> schemas.DatasetManifest:
+    from ultralytics.data.utils import check_det_dataset
+
+    d = check_det_dataset("coco8.yaml")
+    names = d["names"]
+    return schemas.DatasetManifest(task_id=task_id, root=str(d["path"]), data_yaml=str(d["yaml_file"]),
+                                   classes=[names[i] for i in sorted(names)], counts={"train": 4, "val": 4},
+                                   source_ids=["coco8"], mock=True, notes=note)
 
 
 @app.post("/api/datasets/register", response_model=schemas.DatasetManifest, dependencies=[Depends(auth)])
@@ -106,6 +121,9 @@ def register_dataset(m: schemas.DatasetManifest):
     """Register an existing YOLO dataset folder (dev/testing, or output of the Data Engine)."""
     if not Path(m.data_yaml).exists():
         raise HTTPException(422, f"data_yaml not found on the training host: {m.data_yaml}")
+    m.split_check = check_splits(m.data_yaml)
+    if not m.split_check["ok"]:
+        raise HTTPException(422, f"dataset split check failed: {m.split_check['errors']}")
     storage.save("datasets", m)
     return m
 
@@ -183,11 +201,18 @@ def download_onnx(model_id: str):
 @app.post("/api/evaluations", response_model=schemas.EvaluationReport, dependencies=[Depends(auth)])
 def evaluate(req: schemas.EvaluationRequest):
     fn = _hook("backend.evaluation_engine", "evaluate")
-    if fn is None:
-        raise HTTPException(501, "Evaluation Engine not merged yet (Damir)")
     models = [_get("models", i, schemas.ModelArtifact) for i in req.model_ids]
     test = _get("datasets", req.test_dataset_id, schemas.DatasetManifest)
-    rep = fn(req, models, test)
+    if fn is None:  # MOCK until Damir's Evaluation Engine lands. No invented numbers: copies val-split metrics.
+        rep = schemas.EvaluationReport(
+            request=req, mock=True,
+            per_model={m.id: {"kind": m.kind, "variant": m.variant, "val_metrics": m.metrics,
+                              "baseline_val_metrics": m.baseline_metrics, "train_seconds": m.train_seconds}
+                       for m in models},
+            notes=["MOCK report: Evaluation Engine (Damir) not merged.",
+                   "Numbers are the training run's VAL-split metrics, not an independent test-set evaluation."])
+    else:
+        rep = fn(req, models, test)
     storage.save("reports", rep)
     return rep
 

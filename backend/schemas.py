@@ -53,6 +53,9 @@ class DatasetManifest(BaseModel):
     variant: Literal["real_only", "real_plus_synthetic"] = "real_only"
     counts: dict[str, int] = {}               # {"train": n, "val": n, "synthetic": n}
     source_ids: list[str] = []                # recording sessions used (split by session, not by frame)
+    split_check: dict[str, Any] = {}          # filled by the backend: counts per split + overlap errors
+    mock: bool = False                        # True when produced by a placeholder, not the real Data Engine
+    notes: Optional[str] = None
     created_at: float = Field(default_factory=now)
 
 
@@ -97,6 +100,8 @@ class ModelArtifact(BaseModel):
     weights: Optional[str] = None             # .pt path
     onnx: Optional[str] = None
     metrics: dict[str, float] = {}            # on the dataset's val split: precision, recall, map50, map50_95
+    baseline_metrics: dict[str, float] = {}   # base model on the same val split BEFORE fine-tuning (if classes match)
+    export_check: dict[str, Any] = {}         # ONNX vs .pt on one val image: detections, latency, ok
     train_seconds: Optional[float] = None
     epochs: Optional[int] = None
     imgsz: Optional[int] = None
@@ -115,6 +120,7 @@ class EvaluationReport(BaseModel):
     request: EvaluationRequest
     per_model: dict[str, dict[str, Any]] = {} # model_id -> {precision, recall, f1, fp, fn, fps, ...}
     notes: list[str] = []
+    mock: bool = False                        # True until Damir's Evaluation Engine is merged
     created_at: float = Field(default_factory=now)
 
 
