@@ -143,3 +143,4 @@ class DatasetManifest(BaseModel):
     images: List[ManifestImage]
     warnings: List[str] = []
     annotator: Optional[str] = None
+    timings: Dict[str, float] = Field(default={}, description="Seconds per Data Engine stage (measured, wall clock)")

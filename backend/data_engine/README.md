@@ -48,7 +48,13 @@ yolo detect train data=ds/data.yaml model=yolov8n.pt
 | `data_engine.process_upload(task, files, held_out_sessions=(), val_sessions=None)` | `POST /api/datasets` | One uploaded file = one session; returns a train/val manifest |
 | `data_engine.save_corrections(ds, labels)` | `POST /api/datasets/{id}/labels` | Rebuilds the YOLO files in place (same `dataset_id`); returns `{"dataset_id", "applied", "manifest"}`, and **the caller must re-save `manifest`** |
 | `data_engine.get_annotations(ds)` | *(no route yet)* | AnnotationSet for the review screen |
-| `data_engine.process_test_upload(task, files)` | *(no route yet)* | Independent test set (`variant="test"`) for evaluation |
+| `data_engine.process_test_upload(task, files)` | `POST /api/datasets` with `kind=test` | Independent test set (`variant="test"`). **Blocked** until `splits.check_splits` accepts test-only datasets (see xfail test) |
+| `data_engine.add_synthetic(ds, synthetic_dirs=None)` | *(no route yet)* | A/B experiment: new `real_plus_synthetic` dataset with the **same** real frames, labels and val split as `ds`, plus kept synthetic images (train only) |
+| `synthetic.generate_synthetic(..., counterfactual=True, verifier=ClaudeEditVerifier())` | `POST /api/datasets/{id}/synthesize` | Label-flipping edits (remove/add vest) verified by re-detection; optional Claude vision check that the edit really happened |
+
+Every manifest from `process_upload` / `process_test_upload` carries `timings` (seconds per stage: ingest,
+detector_load, auto_label, previews, export, total), which feeds the 15-minute end-to-end measurement.
+Recording instructions for the team: `RECORDING.md`.
 
 Files live under `$ZALU_DATA/dataset_files/<dataset_id>/{work,dataset}`. Verified with `tests/test_api_integration.py` (fakes for Claude/YOLO-World) and once live on the Mac: task 12 s, 2-video dataset 30 s including model load.
 
@@ -71,7 +77,7 @@ Sample payloads: `backend/task_engine/examples/*.json`, `backend/data_engine/exa
 
 - Train/val split is **by recording session**. With a single session the fallback is a contiguous time block with one boundary frame dropped, plus a warning.
 - `held_out_sessions` never enter the training dataset; the validator and `check_leakage` (session ids plus near-identical images) verify it.
-- Synthetic images inherit their parent's session and go to **train only**, and only when the parent is a train session. `--no-synthetic` / `include_synthetic=False` gives the real-only variant for A/B comparison.
+- Synthetic images go to **train only**, and only when their exact parent frame is in train (checked via provenance; without provenance, single-session datasets reject synthetic images entirely). `--no-synthetic` / `include_synthetic=False` gives the real-only variant for A/B comparison.
 
 ## Known limitations (measured, not assumed)
 
@@ -79,4 +85,4 @@ Sample payloads: `backend/task_engine/examples/*.json`, `backend/data_engine/exa
 - YOLO-World misses small or low-resolution people (confidence about 0.2–0.3). Those frames are flagged `possible unlabelled person` and need review in the UI before training.
 - A person cut off at the frame edge with no visible vest is labelled `without_vest` and flagged for review.
 - `image_classification` TaskSpecs compile, but auto-labelling supports detection only.
-- The fal path is tested only with a fake editor. It has not been run against the live API (no `FAL_KEY` yet).
+- fal (`fal-ai/flux-pro/kontext`) tested live: ~16 s per edit. In one run, 1 of 2 "remove vest" edits passed re-detection, and the Claude verifier rejected weak lighting edits (haze, backlight) as not visibly applied, so expect a yield of roughly 50%.
