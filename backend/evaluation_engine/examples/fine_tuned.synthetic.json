@@ -1,0 +1,61 @@
+{
+  "model_id": "synthetic-fine_tuned",
+  "variant": "fine_tuned",
+  "images": [
+    {
+      "image_id": "synthetic-01",
+      "boxes": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "confidence": 0.9
+        },
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20,
+            0,
+            30,
+            10
+          ],
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-02",
+      "boxes": [
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20,
+            0,
+            30,
+            10
+          ],
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-04",
+      "boxes": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "confidence": 0.8
+        }
+      ]
+    }
+  ]
+}

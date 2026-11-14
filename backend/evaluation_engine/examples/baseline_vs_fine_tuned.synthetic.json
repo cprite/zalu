@@ -1,0 +1,233 @@
+{
+  "schema_version": "1.0",
+  "dataset": {
+    "id": "synthetic-fixture-1",
+    "split": "test",
+    "source": "synthetic_fixture",
+    "class_names": [
+      "person",
+      "vest"
+    ],
+    "fingerprint": "6004433c2f22b36e2a028724cdde1f37cbdd1c4409371c030c9e9920c1392f4e",
+    "image_count": 4,
+    "background_image_count": 1,
+    "ground_truth_count": 4
+  },
+  "models": {
+    "a": {
+      "id": "synthetic-pretrained_baseline",
+      "variant": "pretrained_baseline",
+      "confidence_threshold": 0.5,
+      "readiness_status": "ineligible"
+    },
+    "b": {
+      "id": "synthetic-fine_tuned",
+      "variant": "fine_tuned",
+      "confidence_threshold": 0.5,
+      "readiness_status": "ineligible"
+    }
+  },
+  "iou_threshold": 0.5,
+  "summary_delta": {
+    "tp": 3,
+    "fp": -4,
+    "fn": -3,
+    "precision": 0.8,
+    "recall": 0.75,
+    "f1": 0.7777777777777778
+  },
+  "per_class_delta": {
+    "person": {
+      "tp": 1,
+      "fp": -2,
+      "fn": -1,
+      "precision": 0.6666666666666667,
+      "recall": 0.5,
+      "f1": 0.6
+    },
+    "unknown": {
+      "tp": 0,
+      "fp": -1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "vest": {
+      "tp": 2,
+      "fp": -1,
+      "fn": -2,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "improved_classes": [
+    "person",
+    "vest"
+  ],
+  "regressed_classes": [],
+  "failures": {
+    "a": [
+      {
+        "image_id": "synthetic-01",
+        "ground_truth": [
+          {
+            "class_name": "person",
+            "xyxy": [
+              0.0,
+              0.0,
+              10.0,
+              10.0
+            ]
+          },
+          {
+            "class_name": "vest",
+            "xyxy": [
+              20.0,
+              0.0,
+              30.0,
+              10.0
+            ]
+          }
+        ],
+        "predictions": [
+          {
+            "class_name": "person",
+            "xyxy": [
+              0.0,
+              0.0,
+              10.0,
+              10.0
+            ],
+            "confidence": 0.9
+          },
+          {
+            "class_name": "person",
+            "xyxy": [
+              20.0,
+              0.0,
+              30.0,
+              10.0
+            ],
+            "confidence": 0.85
+          },
+          {
+            "class_name": "person",
+            "xyxy": [
+              0.0,
+              0.0,
+              10.0,
+              10.0
+            ],
+            "confidence": 0.8
+          }
+        ],
+        "errors": [
+          {
+            "type": "class_mismatch",
+            "ground_truth_index": 1,
+            "prediction_index": 1,
+            "iou": 1.0
+          },
+          {
+            "type": "duplicate",
+            "ground_truth_index": 0,
+            "prediction_index": 2,
+            "iou": 1.0
+          }
+        ],
+        "width": 40,
+        "height": 40
+      },
+      {
+        "image_id": "synthetic-02",
+        "ground_truth": [
+          {
+            "class_name": "vest",
+            "xyxy": [
+              20.0,
+              0.0,
+              30.0,
+              10.0
+            ]
+          }
+        ],
+        "predictions": [
+          {
+            "class_name": "vest",
+            "xyxy": [
+              20.0,
+              0.0,
+              30.0,
+              4.0
+            ],
+            "confidence": 0.7
+          }
+        ],
+        "errors": [
+          {
+            "type": "localization",
+            "ground_truth_index": 0,
+            "prediction_index": 0,
+            "iou": 0.4
+          },
+          {
+            "type": "missed",
+            "ground_truth_index": 0,
+            "prediction_index": null,
+            "iou": null
+          }
+        ]
+      },
+      {
+        "image_id": "synthetic-03",
+        "ground_truth": [],
+        "predictions": [
+          {
+            "class_name": "unknown",
+            "xyxy": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "confidence": 0.6
+          }
+        ],
+        "errors": [
+          {
+            "type": "background",
+            "ground_truth_index": null,
+            "prediction_index": 0,
+            "iou": null
+          }
+        ]
+      },
+      {
+        "image_id": "synthetic-04",
+        "ground_truth": [
+          {
+            "class_name": "person",
+            "xyxy": [
+              0.0,
+              0.0,
+              10.0,
+              10.0
+            ]
+          }
+        ],
+        "predictions": [],
+        "errors": [
+          {
+            "type": "missed",
+            "ground_truth_index": 0,
+            "prediction_index": null,
+            "iou": null
+          }
+        ]
+      }
+    ],
+    "b": []
+  }
+}

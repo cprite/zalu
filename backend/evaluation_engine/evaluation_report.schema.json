@@ -1,0 +1,549 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ZALU EvaluationReport",
+  "description": "Object detection report, version 1.0.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_type": {
+      "const": "object_detection"
+    },
+    "dataset": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/name"
+        },
+        "split": {
+          "enum": [
+            "validation",
+            "test"
+          ]
+        },
+        "source": {
+          "enum": [
+            "independently_labelled_real",
+            "synthetic_fixture"
+          ]
+        },
+        "class_names": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/name"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "image_count": {
+          "$ref": "#/$defs/count"
+        },
+        "background_image_count": {
+          "$ref": "#/$defs/count"
+        },
+        "ground_truth_count": {
+          "$ref": "#/$defs/count"
+        }
+      },
+      "required": [
+        "id",
+        "split",
+        "source",
+        "class_names",
+        "fingerprint",
+        "image_count",
+        "background_image_count",
+        "ground_truth_count"
+      ],
+      "additionalProperties": false
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/name"
+        },
+        "variant": {
+          "enum": [
+            "pretrained_baseline",
+            "fine_tuned",
+            "real_only",
+            "real_plus_synthetic",
+            "unspecified"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "variant"
+      ],
+      "additionalProperties": false
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "iou_threshold": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "confidence_threshold": {
+          "$ref": "#/$defs/probability"
+        }
+      },
+      "required": [
+        "iou_threshold",
+        "confidence_threshold"
+      ],
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "tp": {
+          "$ref": "#/$defs/count"
+        },
+        "fp": {
+          "$ref": "#/$defs/count"
+        },
+        "fn": {
+          "$ref": "#/$defs/count"
+        },
+        "support": {
+          "$ref": "#/$defs/count"
+        },
+        "precision": {
+          "$ref": "#/$defs/probability"
+        },
+        "recall": {
+          "$ref": "#/$defs/probability"
+        },
+        "f1": {
+          "$ref": "#/$defs/probability"
+        },
+        "predictions_below_threshold": {
+          "$ref": "#/$defs/count"
+        },
+        "images_without_prediction_rows": {
+          "$ref": "#/$defs/count"
+        },
+        "failure_image_count": {
+          "$ref": "#/$defs/count"
+        }
+      },
+      "required": [
+        "tp",
+        "fp",
+        "fn",
+        "support",
+        "precision",
+        "recall",
+        "f1",
+        "predictions_below_threshold",
+        "images_without_prediction_rows",
+        "failure_image_count"
+      ],
+      "additionalProperties": false
+    },
+    "per_class": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/name"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/metrics"
+      }
+    },
+    "confusion": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "actual": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/name"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "predicted": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/name"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "actual",
+          "predicted",
+          "count"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "error_counts": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/error_type"
+      },
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "image_id": {
+            "$ref": "#/$defs/name"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "ground_truth": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/box"
+            }
+          },
+          "predictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/prediction"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/error"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "image_id",
+          "ground_truth",
+          "predictions",
+          "errors"
+        ],
+        "additionalProperties": false,
+        "dependentRequired": {
+          "width": [
+            "height"
+          ],
+          "height": [
+            "width"
+          ]
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "not_configured",
+            "ineligible",
+            "passed",
+            "failed"
+          ]
+        },
+        "thresholds": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "min_precision": {
+                  "$ref": "#/$defs/probability"
+                },
+                "min_recall": {
+                  "$ref": "#/$defs/probability"
+                },
+                "min_f1": {
+                  "$ref": "#/$defs/probability"
+                },
+                "min_images": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "min_ground_truth": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "min_class_support": {
+                  "type": "object",
+                  "propertyNames": {
+                    "$ref": "#/$defs/name"
+                  },
+                  "additionalProperties": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              },
+              "required": [
+                "min_precision",
+                "min_recall",
+                "min_f1",
+                "min_images",
+                "min_ground_truth",
+                "min_class_support"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "metric": {
+                "enum": [
+                  "image_count",
+                  "ground_truth_count",
+                  "precision",
+                  "recall",
+                  "f1",
+                  "support"
+                ]
+              },
+              "class_name": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/name"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "actual": {
+                "type": "number",
+                "minimum": 0
+              },
+              "minimum": {
+                "type": "number",
+                "minimum": 0
+              },
+              "passed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "metric",
+              "class_name",
+              "actual",
+              "minimum",
+              "passed"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "status",
+        "thresholds",
+        "checks"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_type",
+    "dataset",
+    "model",
+    "config",
+    "summary",
+    "per_class",
+    "confusion",
+    "error_counts",
+    "failures",
+    "readiness"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "probability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "tp": {
+          "$ref": "#/$defs/count"
+        },
+        "fp": {
+          "$ref": "#/$defs/count"
+        },
+        "fn": {
+          "$ref": "#/$defs/count"
+        },
+        "support": {
+          "$ref": "#/$defs/count"
+        },
+        "precision": {
+          "$ref": "#/$defs/probability"
+        },
+        "recall": {
+          "$ref": "#/$defs/probability"
+        },
+        "f1": {
+          "$ref": "#/$defs/probability"
+        }
+      },
+      "required": [
+        "tp",
+        "fp",
+        "fn",
+        "support",
+        "precision",
+        "recall",
+        "f1"
+      ],
+      "additionalProperties": false
+    },
+    "box": {
+      "type": "object",
+      "properties": {
+        "class_name": {
+          "$ref": "#/$defs/name"
+        },
+        "xyxy": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1e+100
+          }
+        }
+      },
+      "required": [
+        "class_name",
+        "xyxy"
+      ],
+      "additionalProperties": false
+    },
+    "prediction": {
+      "type": "object",
+      "properties": {
+        "class_name": {
+          "$ref": "#/$defs/name"
+        },
+        "xyxy": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1e+100
+          }
+        },
+        "confidence": {
+          "$ref": "#/$defs/probability"
+        }
+      },
+      "required": [
+        "class_name",
+        "xyxy",
+        "confidence"
+      ],
+      "additionalProperties": false
+    },
+    "error_type": {
+      "enum": [
+        "class_mismatch",
+        "duplicate",
+        "localization",
+        "unpaired_overlap",
+        "background",
+        "missed"
+      ]
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/error_type"
+        },
+        "ground_truth_index": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/count"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prediction_index": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/count"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "iou": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/probability"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "ground_truth_index",
+        "prediction_index",
+        "iou"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

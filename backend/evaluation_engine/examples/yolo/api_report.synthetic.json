@@ -1,0 +1,363 @@
+{
+  "id": "rep_synthetic_yolo",
+  "request": {
+    "model_ids": [
+      "model_synthetic_baseline",
+      "model_synthetic_trained"
+    ],
+    "test_dataset_id": "ds_synthetic_yolo"
+  },
+  "per_model": {
+    "model_synthetic_baseline": {
+      "schema_version": "1.0",
+      "task_type": "object_detection",
+      "dataset": {
+        "id": "ds_synthetic_yolo",
+        "split": "test",
+        "source": "synthetic_fixture",
+        "class_names": [
+          "person",
+          "vest"
+        ],
+        "fingerprint": "fd42dcfac57df8c8587003031751a654b1e2359af9869c2db71bee44e1f89b14",
+        "image_count": 2,
+        "background_image_count": 1,
+        "ground_truth_count": 2
+      },
+      "model": {
+        "id": "model_synthetic_baseline",
+        "variant": "pretrained_baseline"
+      },
+      "config": {
+        "iou_threshold": 0.5,
+        "confidence_threshold": 0.5
+      },
+      "summary": {
+        "tp": 1,
+        "fp": 2,
+        "fn": 1,
+        "support": 2,
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
+        "predictions_below_threshold": 0,
+        "images_without_prediction_rows": 0,
+        "failure_image_count": 2
+      },
+      "per_class": {
+        "person": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 0,
+          "support": 1,
+          "precision": 0.3333333333333333,
+          "recall": 1.0,
+          "f1": 0.5
+        },
+        "vest": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "support": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "confusion": [
+        {
+          "actual": null,
+          "predicted": "person",
+          "count": 1
+        },
+        {
+          "actual": "person",
+          "predicted": "person",
+          "count": 1
+        },
+        {
+          "actual": "vest",
+          "predicted": "person",
+          "count": 1
+        }
+      ],
+      "error_counts": {
+        "background": 1,
+        "class_mismatch": 1
+      },
+      "failures": [
+        {
+          "image_id": "frame-01",
+          "ground_truth": [
+            {
+              "class_name": "person",
+              "xyxy": [
+                0.0,
+                0.0,
+                32.0,
+                32.0
+              ]
+            },
+            {
+              "class_name": "vest",
+              "xyxy": [
+                40.0,
+                8.0,
+                56.0,
+                24.0
+              ]
+            }
+          ],
+          "predictions": [
+            {
+              "class_name": "person",
+              "xyxy": [
+                0.0,
+                0.0,
+                32.0,
+                32.0
+              ],
+              "confidence": 0.875
+            },
+            {
+              "class_name": "person",
+              "xyxy": [
+                40.0,
+                8.0,
+                56.0,
+                24.0
+              ],
+              "confidence": 0.75
+            }
+          ],
+          "errors": [
+            {
+              "type": "class_mismatch",
+              "ground_truth_index": 1,
+              "prediction_index": 1,
+              "iou": 1.0
+            }
+          ],
+          "width": 64,
+          "height": 32
+        },
+        {
+          "image_id": "frame-02",
+          "ground_truth": [],
+          "predictions": [
+            {
+              "class_name": "person",
+              "xyxy": [
+                0.0,
+                0.0,
+                10.0,
+                10.0
+              ],
+              "confidence": 0.5
+            }
+          ],
+          "errors": [
+            {
+              "type": "background",
+              "ground_truth_index": null,
+              "prediction_index": 0,
+              "iou": null
+            }
+          ],
+          "width": 80,
+          "height": 40
+        }
+      ],
+      "readiness": {
+        "status": "ineligible",
+        "thresholds": {
+          "min_precision": 0.8,
+          "min_recall": 0.8,
+          "min_f1": 0.8,
+          "min_images": 2,
+          "min_ground_truth": 2,
+          "min_class_support": {
+            "vest": 1
+          }
+        },
+        "checks": [
+          {
+            "metric": "image_count",
+            "class_name": null,
+            "actual": 2,
+            "minimum": 2,
+            "passed": true
+          },
+          {
+            "metric": "ground_truth_count",
+            "class_name": null,
+            "actual": 2,
+            "minimum": 2,
+            "passed": true
+          },
+          {
+            "metric": "precision",
+            "class_name": null,
+            "actual": 0.3333333333333333,
+            "minimum": 0.8,
+            "passed": false
+          },
+          {
+            "metric": "recall",
+            "class_name": null,
+            "actual": 0.5,
+            "minimum": 0.8,
+            "passed": false
+          },
+          {
+            "metric": "f1",
+            "class_name": null,
+            "actual": 0.4,
+            "minimum": 0.8,
+            "passed": false
+          },
+          {
+            "metric": "support",
+            "class_name": "vest",
+            "actual": 1,
+            "minimum": 1,
+            "passed": true
+          }
+        ]
+      }
+    },
+    "model_synthetic_trained": {
+      "schema_version": "1.0",
+      "task_type": "object_detection",
+      "dataset": {
+        "id": "ds_synthetic_yolo",
+        "split": "test",
+        "source": "synthetic_fixture",
+        "class_names": [
+          "person",
+          "vest"
+        ],
+        "fingerprint": "fd42dcfac57df8c8587003031751a654b1e2359af9869c2db71bee44e1f89b14",
+        "image_count": 2,
+        "background_image_count": 1,
+        "ground_truth_count": 2
+      },
+      "model": {
+        "id": "model_synthetic_trained",
+        "variant": "real_only"
+      },
+      "config": {
+        "iou_threshold": 0.5,
+        "confidence_threshold": 0.5
+      },
+      "summary": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "support": 2,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "predictions_below_threshold": 0,
+        "images_without_prediction_rows": 0,
+        "failure_image_count": 0
+      },
+      "per_class": {
+        "person": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "support": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "vest": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "support": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "confusion": [
+        {
+          "actual": "person",
+          "predicted": "person",
+          "count": 1
+        },
+        {
+          "actual": "vest",
+          "predicted": "vest",
+          "count": 1
+        }
+      ],
+      "error_counts": {},
+      "failures": [],
+      "readiness": {
+        "status": "ineligible",
+        "thresholds": {
+          "min_precision": 0.8,
+          "min_recall": 0.8,
+          "min_f1": 0.8,
+          "min_images": 2,
+          "min_ground_truth": 2,
+          "min_class_support": {
+            "vest": 1
+          }
+        },
+        "checks": [
+          {
+            "metric": "image_count",
+            "class_name": null,
+            "actual": 2,
+            "minimum": 2,
+            "passed": true
+          },
+          {
+            "metric": "ground_truth_count",
+            "class_name": null,
+            "actual": 2,
+            "minimum": 2,
+            "passed": true
+          },
+          {
+            "metric": "precision",
+            "class_name": null,
+            "actual": 1.0,
+            "minimum": 0.8,
+            "passed": true
+          },
+          {
+            "metric": "recall",
+            "class_name": null,
+            "actual": 1.0,
+            "minimum": 0.8,
+            "passed": true
+          },
+          {
+            "metric": "f1",
+            "class_name": null,
+            "actual": 1.0,
+            "minimum": 0.8,
+            "passed": true
+          },
+          {
+            "metric": "support",
+            "class_name": "vest",
+            "actual": 1,
+            "minimum": 1,
+            "passed": true
+          }
+        ]
+      }
+    }
+  },
+  "notes": [
+    "Synthetic adapter fixture. Scores are illustrative only."
+  ],
+  "mock": true,
+  "created_at": 0.0
+}

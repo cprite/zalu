@@ -1,0 +1,23 @@
+{
+  "dataset_id": "ds_synthetic_yolo",
+  "split": "test",
+  "source": "synthetic_fixture",
+  "class_names": [
+    "person",
+    "vest"
+  ],
+  "images": [
+    {
+      "image_id": "frame-01",
+      "label_path": "labels/frame-01.txt",
+      "width": 64,
+      "height": 32
+    },
+    {
+      "image_id": "frame-02",
+      "label_path": "labels/frame-02.txt",
+      "width": 80,
+      "height": 40
+    }
+  ]
+}

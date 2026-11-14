@@ -1,0 +1,68 @@
+{
+  "dataset_id": "synthetic-fixture-1",
+  "split": "test",
+  "source": "synthetic_fixture",
+  "class_names": [
+    "person",
+    "vest"
+  ],
+  "images": [
+    {
+      "image_id": "synthetic-01",
+      "boxes": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ]
+        },
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20,
+            0,
+            30,
+            10
+          ]
+        }
+      ],
+      "width": 40,
+      "height": 40
+    },
+    {
+      "image_id": "synthetic-02",
+      "boxes": [
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20,
+            0,
+            30,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-03",
+      "boxes": []
+    },
+    {
+      "image_id": "synthetic-04",
+      "boxes": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ]
+        }
+      ]
+    }
+  ]
+}
