@@ -24,7 +24,9 @@ def path(*parts: str) -> Path:
 
 def save(kind: str, obj: BaseModel) -> None:
     assert kind in KINDS, kind
-    p = path(kind, f"{obj.id}.json")
+    from backend.schemas import obj_id
+
+    p = path(kind, f"{obj_id(obj)}.json")
     tmp = p.with_suffix(".tmp")
     with _lock:
         tmp.write_text(obj.model_dump_json(indent=1))
@@ -45,8 +47,13 @@ def list_all(kind: str, model: Type[T]) -> list[T]:
     d = DATA_ROOT / kind
     if not d.exists():
         return []
-    out = [model.model_validate_json(p.read_text()) for p in d.glob("*.json")]
-    return sorted(out, key=lambda o: getattr(o, "created_at", 0), reverse=True)
+    out = []
+    for p in d.glob("*.json"):
+        try:
+            out.append(model.model_validate_json(p.read_text()))
+        except Exception:  # files written by an older schema version are skipped, not fatal
+            continue
+    return sorted(out, key=lambda o: str(getattr(o, "created_at", "")), reverse=True)
 
 
 def write_json(p: Path, data: dict) -> None:

@@ -1,4 +1,5 @@
-"""Shared data contracts (PROPOSAL by Kolyan, to be agreed by all three before integration).
+"""Shared data contracts. TaskSpec / Annotation / DatasetManifest come from Kirill's engines (agreed);
+TrainingJob / ModelArtifact / InferenceResult are Kolyan's; EvaluationReport is a placeholder for Damir.
 
 Every id is a short string with a type prefix: task_, ds_, job_, model_, rep_, inf_.
 Boxes are in pixels of the original image: [x1, y1, x2, y2].
@@ -21,42 +22,22 @@ def now() -> float:
     return round(time.time(), 3)
 
 
-# ---------- Task Engine (Kirill) ----------
-class TaskSpec(BaseModel):
-    id: str = Field(default_factory=lambda: new_id("task"))
-    prompt: str
-    task_type: Literal["object_detection"] = "object_detection"
-    classes: list[str]
-    target_event: Optional[str] = None
-    negative_classes: list[str] = []          # look-alikes to suppress (e.g. "lamp" vs "table")
-    requires_tracking: bool = False
-    primary_metric: str = "recall"
-    notes: Optional[str] = None
-    created_at: float = Field(default_factory=now)
+# ---------- Task Engine + Data Engine (Kirill) ----------
+# AGREED 2026-11-14: Kirill's contracts are the shared source of truth for these objects.
+# The backend re-exports them; do not redefine them here.
+from backend.task_engine.schema import TaskSpec  # noqa: E402,F401  (id field: task_id)
+from backend.data_engine.schema import (  # noqa: E402,F401  (id field: dataset_id)
+    Annotation, AnnotationSet, BoxLabel, DatasetManifest, LabelCorrection, SplitStats,
+)
 
 
-# ---------- Data Engine (Kirill) ----------
-class Annotation(BaseModel):
-    image: str                                # path relative to the dataset root
-    cls: str
-    box: list[float]                          # [x1, y1, x2, y2] px
-    score: Optional[float] = None             # None = human-confirmed
-    source: Literal["auto", "human", "synthetic"] = "auto"
-
-
-class DatasetManifest(BaseModel):
-    id: str = Field(default_factory=lambda: new_id("ds"))
-    task_id: Optional[str] = None
-    root: str                                 # absolute path on the training host
-    data_yaml: str                            # YOLO data.yaml (train/val paths + names)
-    classes: list[str]
-    variant: Literal["real_only", "real_plus_synthetic"] = "real_only"
-    counts: dict[str, int] = {}               # {"train": n, "val": n, "synthetic": n}
-    source_ids: list[str] = []                # recording sessions used (split by session, not by frame)
-    split_check: dict[str, Any] = {}          # filled by the backend: counts per split + overlap errors
-    mock: bool = False                        # True when produced by a placeholder, not the real Data Engine
-    notes: Optional[str] = None
-    created_at: float = Field(default_factory=now)
+def obj_id(obj: BaseModel) -> str:
+    """Storage key for any shared object (Kirill's use task_id / dataset_id, the backend's use id)."""
+    for f in ("id", "dataset_id", "task_id", "annotation_set_id"):
+        v = getattr(obj, f, None)
+        if v:
+            return v
+    raise ValueError(f"{type(obj).__name__} has no id field")
 
 
 # ---------- Training Engine (Kolyan) ----------

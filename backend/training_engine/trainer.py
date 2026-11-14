@@ -49,9 +49,9 @@ def train(
     device = torch.cuda.get_device_name(0)
     art = schemas.ModelArtifact(
         base_model=req.base_model,
-        dataset_id=dataset.id,
+        dataset_id=dataset.dataset_id,
         variant=dataset.variant,
-        classes=dataset.classes,
+        classes=dataset.class_names,
         epochs=req.epochs,
         imgsz=req.imgsz,
         device=device,
@@ -60,7 +60,7 @@ def train(
 
     if progress:
         progress(0.01, "baseline: pretrained model on val split")
-    art.baseline_metrics = baseline_val(req.base_model, dataset.data_yaml, dataset.classes, req.imgsz)
+    art.baseline_metrics = baseline_val(req.base_model, dataset.data_yaml, dataset.class_names, req.imgsz)
 
     model = YOLO(req.base_model)
 

@@ -18,6 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend import orchestrator, schemas
 from backend.infrastructure import storage
 from backend.training_engine.splits import check_splits
+from backend.infrastructure.datasets import manifest_from_yaml
 
 TOKEN = os.environ.get("ZALU_TOKEN", "")
 
@@ -71,8 +72,13 @@ def create_task(body: dict):
     if not prompt:
         raise HTTPException(422, "prompt is required")
     fn = _hook("backend.task_engine", "create_task_spec")
-    if fn is None:  # MOCK until Kirill's Task Engine lands
-        spec = schemas.TaskSpec(prompt=prompt, classes=body.get("classes") or ["person"], notes="MOCK task spec")
+    if fn is None:  # MOCK until the connector exists: Kirill's vest example spec, labelled as a mock
+        import json
+
+        ex = json.loads((Path(__file__).parent / "task_engine" / "examples" / "vest.json").read_text())
+        for k in ("prompt", "task_id", "compiler"):
+            ex.pop(k, None)
+        spec = schemas.TaskSpec(**ex, prompt=prompt, compiler="MOCK:task_engine/examples/vest.json")
     else:
         spec = fn(prompt)
     storage.save("tasks", spec)
@@ -95,41 +101,38 @@ async def create_dataset(task_id: str = Form(...), files: list[UploadFile] = Fil
         p = upload_dir / Path(f.filename or "upload.bin").name
         p.write_bytes(await f.read())
         saved.append(str(p))
-    if fn is None:  # MOCK until Kirill's Data Engine lands: uploads are stored, the sample dataset is returned
-        manifest = _mock_dataset(task.id, note=f"MOCK: {len(saved)} upload(s) stored in {upload_dir}, not processed")
+    if fn is None:  # MOCK until Kirill's connector lands: uploads are stored, the sample dataset is returned
+        manifest, check = manifest_from_yaml("coco8.yaml", task_id=task.task_id,
+                                             note=f"MOCK: {len(saved)} upload(s) stored in {upload_dir}, not processed")
     else:
         manifest = fn(task, saved)
-    manifest.split_check = check_splits(manifest.data_yaml)
-    if not manifest.split_check["ok"]:
-        raise HTTPException(422, f"dataset split check failed: {manifest.split_check['errors']}")
+        check = check_splits(manifest.data_yaml)
+    if not check["ok"]:
+        raise HTTPException(422, f"dataset split check failed: {check['errors']}")
     storage.save("datasets", manifest)
     return manifest
 
 
-def _mock_dataset(task_id: Optional[str], note: str) -> schemas.DatasetManifest:
-    from ultralytics.data.utils import check_det_dataset
-
-    d = check_det_dataset("coco8.yaml")
-    names = d["names"]
-    return schemas.DatasetManifest(task_id=task_id, root=str(d["path"]), data_yaml=str(d["yaml_file"]),
-                                   classes=[names[i] for i in sorted(names)], counts={"train": 4, "val": 4},
-                                   source_ids=["coco8"], mock=True, notes=note)
-
-
 @app.post("/api/datasets/register", response_model=schemas.DatasetManifest, dependencies=[Depends(auth)])
-def register_dataset(m: schemas.DatasetManifest):
-    """Register an existing YOLO dataset folder (dev/testing, or output of the Data Engine)."""
-    if not Path(m.data_yaml).exists():
-        raise HTTPException(422, f"data_yaml not found on the training host: {m.data_yaml}")
-    m.split_check = check_splits(m.data_yaml)
-    if not m.split_check["ok"]:
-        raise HTTPException(422, f"dataset split check failed: {m.split_check['errors']}")
+def register_dataset(body: dict):
+    """Register a YOLO dataset already on the training host.
+    Body: either a full DatasetManifest (from the Data Engine) or {"data_yaml": ..., "task_id"?, "variant"?}."""
+    if "class_names" in body and "splits" in body:
+        m = schemas.DatasetManifest(**body)
+        check = check_splits(m.data_yaml)
+    else:
+        if not body.get("data_yaml") or not Path(body["data_yaml"]).exists():
+            raise HTTPException(422, f"data_yaml not found on the training host: {body.get('data_yaml')}")
+        m, check = manifest_from_yaml(body["data_yaml"], body.get("task_id"), body.get("variant", "real_only"),
+                                      note="registered via /api/datasets/register")
+    if not check["ok"]:
+        raise HTTPException(422, f"dataset split check failed: {check['errors']}")
     storage.save("datasets", m)
     return m
 
 
 @app.post("/api/datasets/{dataset_id}/labels", dependencies=[Depends(auth)])
-def save_labels(dataset_id: str, labels: list[schemas.Annotation]):
+def save_labels(dataset_id: str, labels: list[schemas.LabelCorrection]):
     fn = _hook("backend.data_engine", "save_corrections")
     if fn is None:
         raise HTTPException(501, "label corrections live in the Data Engine (Kirill)")

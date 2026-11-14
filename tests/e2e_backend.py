@@ -17,10 +17,8 @@ def ok(r):
 
 print("health", ok(requests.get(f"{API}/api/health")))
 d = check_det_dataset("coco8.yaml")                      # downloads 8 images
-ds = ok(requests.post(f"{API}/api/datasets/register", headers=H, json={
-    "root": str(d["path"]), "data_yaml": str(d["yaml_file"]), "classes": list(d["names"].values()),
-    "counts": {"train": 4, "val": 4}, "source_ids": ["coco8"]}))
-job = ok(requests.post(f"{API}/api/training", headers=H, json={"dataset_id": ds["id"], "epochs": 10, "batch": 8}))
+ds = ok(requests.post(f"{API}/api/datasets/register", headers=H, json={"data_yaml": str(d["yaml_file"])}))
+job = ok(requests.post(f"{API}/api/training", headers=H, json={"dataset_id": ds["dataset_id"], "epochs": 10, "batch": 8}))
 t0 = time.time()
 while True:
     job = ok(requests.get(f"{API}/api/jobs/{job['id']}", headers=H))

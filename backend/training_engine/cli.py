@@ -56,11 +56,11 @@ def main(argv=None) -> int:
         print("ZALU_RESULT " + json.dumps(out), flush=True)
         return 0
 
-    ds = schemas.DatasetManifest(root=str(Path(yaml_file).parent), data_yaml=yaml_file, classes=names,
-                                 variant=a.variant, split_check=split, counts=split["counts"],
-                                 source_ids=[Path(a.data).stem], notes="registered by training CLI")
+    from backend.infrastructure.datasets import manifest_from_yaml
+
+    ds, _ = manifest_from_yaml(yaml_file, variant=a.variant, note="registered by training CLI")
     storage.save("datasets", ds)
-    req = schemas.TrainingRequest(dataset_id=ds.id, base_model=a.model, epochs=a.epochs, imgsz=a.imgsz,
+    req = schemas.TrainingRequest(dataset_id=ds.dataset_id, base_model=a.model, epochs=a.epochs, imgsz=a.imgsz,
                                   batch=a.batch, export_onnx=not a.no_onnx)
 
     def progress(p: float, msg: str) -> None:
@@ -68,7 +68,7 @@ def main(argv=None) -> int:
 
     art = trainer.train(req, ds, progress)
     storage.save("models", art)
-    out.update({"dataset_id": ds.id, "model_id": art.id, "base_model": art.base_model, "epochs": art.epochs,
+    out.update({"dataset_id": ds.dataset_id, "model_id": art.id, "base_model": art.base_model, "epochs": art.epochs,
                 "train_seconds": art.train_seconds, "baseline_metrics": art.baseline_metrics,
                 "metrics": art.metrics, "weights": art.weights, "onnx": art.onnx,
                 "export_check": art.export_check, "device": art.device})
