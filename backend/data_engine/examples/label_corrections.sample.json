@@ -1,0 +1,21 @@
+[
+  {
+    "frame_id": "f_4dcf7e126451",
+    "status": "reviewed",
+    "boxes": [
+      {
+        "class_name": "person_with_vest",
+        "xyxy": [
+          236.0,
+          150.0,
+          418.0,
+          570.0
+        ]
+      }
+    ]
+  },
+  {
+    "frame_id": "f_7cf50ca72ebc",
+    "status": "rejected"
+  }
+]

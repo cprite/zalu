@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "collection_id": "frames_f9faca9643a6",
+  "created_at": "2026-11-14T15:51:09+00:00",
+  "root": "/private/tmp/vf_run/work",
+  "frames": [
+    {
+      "frame_id": "f_ba9a5774f4c7",
+      "path": "/private/tmp/vf_run/work/frames/s_worker_zone_detection_1e16d1/f_ba9a5774f4c7.jpg",
+      "session_id": "s_worker_zone_detection_1e16d1",
+      "source_file": "/tmp/vf_media/worker-zone-detection.mp4",
+      "source_frame_index": 0,
+      "timestamp_s": 0.0,
+      "width": 1280,
+      "height": 720,
+      "sharpness": 253.5,
+      "dhash": "b9ded792901a1f5f",
+      "synthetic": false,
+      "parent_frame_id": null,
+      "generation": null
+    },
+    {
+      "frame_id": "f_4dcf7e126451",
+      "path": "/private/tmp/vf_run/work/frames/s_worker_zone_detection_1e16d1/f_4dcf7e126451.jpg",
+      "session_id": "s_worker_zone_detection_1e16d1",
+      "source_file": "/tmp/vf_media/worker-zone-detection.mp4",
+      "source_frame_index": 180,
+      "timestamp_s": 3.003,
+      "width": 1280,
+      "height": 720,
+      "sharpness": 279.2,
+      "dhash": "b9ded79298181959",
+      "synthetic": false,
+      "parent_frame_id": null,
+      "generation": null
+    }
+  ],
+  "rejected": [
+    {
+      "source_file": "/tmp/vf_media/worker-zone-detection.mp4",
+      "source_frame_index": 60,
+      "reason": "near_duplicate",
+      "detail": "hamming 0 <= 5"
+    },
+    {
+      "source_file": "/tmp/vf_media/worker-zone-detection.mp4",
+      "source_frame_index": 120,
+      "reason": "near_duplicate",
+      "detail": "hamming 0 <= 5"
+    }
+  ],
+  "sessions": {
+    "s_worker_zone_detection_1e16d1": [
+      "/tmp/vf_media/worker-zone-detection.mp4"
+    ],
+    "s_people_detection_9dbb22": [
+      "/tmp/vf_media/people-detection.mp4"
+    ]
+  },
+  "settings": {
+    "fps": 1.0,
+    "max_frames": 120,
+    "min_sharpness": 25.0,
+    "dedup_distance": 5,
+    "min_side": 160,
+    "max_side": 1280
+  }
+}

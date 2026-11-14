@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "ds_d4de8e8330d3",
+  "created_at": "2026-11-14T15:51:28+00:00",
+  "task_id": "task_e5be16b5dd4f",
+  "variant": "real_only",
+  "root": "/private/tmp/vf_run/dataset",
+  "data_yaml": "/private/tmp/vf_run/dataset/data.yaml",
+  "class_names": [
+    "person_with_vest",
+    "person_without_vest"
+  ],
+  "splits": {
+    "train": {
+      "images": 26,
+      "background_images": 2,
+      "boxes": 29,
+      "per_class": {
+        "person_with_vest": 28,
+        "person_without_vest": 1
+      },
+      "sessions": [
+        "s_worker_zone_detection_1e16d1"
+      ],
+      "synthetic_images": 0
+    },
+    "val": {
+      "images": 10,
+      "background_images": 2,
+      "boxes": 11,
+      "per_class": {
+        "person_with_vest": 0,
+        "person_without_vest": 11
+      },
+      "sessions": [
+        "s_people_detection_9dbb22"
+      ],
+      "synthetic_images": 0
+    }
+  },
+  "split_strategy": "by_session(auto)",
+  "excluded_sessions": [],
+  "images": [
+    {
+      "frame_id": "f_ba9a5774f4c7",
+      "split": "train",
+      "image": "images/train/f_ba9a5774f4c7.jpg",
+      "label": "labels/train/f_ba9a5774f4c7.txt",
+      "session_id": "s_worker_zone_detection_1e16d1",
+      "source_file": "/tmp/vf_media/worker-zone-detection.mp4",
+      "synthetic": false,
+      "parent_frame_id": null,
+      "review_status": "auto"
+    },
+    {
+      "frame_id": "f_4dcf7e126451",
+      "split": "train",
+      "image": "images/train/f_4dcf7e126451.jpg",
+      "label": "labels/train/f_4dcf7e126451.txt",
+      "session_id": "s_worker_zone_detection_1e16d1",
+      "source_file": "/tmp/vf_media/worker-zone-detection.mp4",
+      "synthetic": false,
+      "parent_frame_id": null,
+      "review_status": "auto"
+    }
+  ],
+  "warnings": [
+    "class 'person_with_vest' does not appear in validation",
+    "class 'person_without_vest' has only 1 training boxes",
+    "16/36 frames flagged for review were not reviewed"
+  ],
+  "annotator": "yolo-world:yolov8s-worldv2.pt"
+}

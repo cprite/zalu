@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "annotation_set_id": "ann_08738ee18c71",
+  "created_at": "2026-11-14T15:51:27+00:00",
+  "task_id": "task_e5be16b5dd4f",
+  "class_names": [
+    "person_with_vest",
+    "person_without_vest"
+  ],
+  "annotator": "yolo-world:yolov8s-worldv2.pt",
+  "annotations": [
+    {
+      "frame_id": "f_4dcf7e126451",
+      "image_path": "/private/tmp/vf_run/work/frames/s_worker_zone_detection_1e16d1/f_4dcf7e126451.jpg",
+      "width": 1280,
+      "height": 720,
+      "session_id": "s_worker_zone_detection_1e16d1",
+      "synthetic": false,
+      "boxes": [
+        {
+          "class_name": "person_with_vest",
+          "xyxy": [
+            651.6,
+            417.8,
+            932.5,
+            720.0
+          ],
+          "confidence": 0.6794,
+          "source": "auto",
+          "evidence": {
+            "subject": "person",
+            "subject_conf": 0.6794,
+            "attribute": "vest",
+            "attribute_overlap": 1.0,
+            "attribute_conf": 0.3622
+          }
+        }
+      ],
+      "status": "auto",
+      "needs_review": false,
+      "review_reasons": []
+    },
+    {
+      "frame_id": "f_7cf50ca72ebc",
+      "image_path": "/private/tmp/vf_run/work/frames/s_worker_zone_detection_1e16d1/f_7cf50ca72ebc.jpg",
+      "width": 1280,
+      "height": 720,
+      "session_id": "s_worker_zone_detection_1e16d1",
+      "synthetic": false,
+      "boxes": [
+        {
+          "class_name": "person_without_vest",
+          "xyxy": [
+            1106.0,
+            474.9,
+            1280.0,
+            720.0
+          ],
+          "confidence": 0.5633,
+          "source": "auto",
+          "evidence": {
+            "subject": "person",
+            "subject_conf": 0.5633,
+            "attribute": "vest",
+            "attribute_overlap": 0.0,
+            "attribute_conf": null
+          }
+        }
+      ],
+      "status": "auto",
+      "needs_review": true,
+      "review_reasons": [
+        "person cut off at image edge; vest may be out of frame -> person_without_vest",
+        "possible unlabelled person (1 below threshold, max 0.16)"
+      ]
+    }
+  ],
+  "stats": {
+    "frames": 36,
+    "boxes": 40,
+    "per_class": {
+      "person_with_vest": 28,
+      "person_without_vest": 12
+    },
+    "empty_frames": 4,
+    "needs_review": 16,
+    "detector_prompts": {
+      "person": "person",
+      "vest": "vest"
+    },
+    "prompt_calibration": {
+      "person": {
+        "chosen": "person",
+        "original": "person",
+        "scores": {
+          "person": 0.7447,
+          "worker": 0.0117,
+          "man": 0.2982,
+          "pedestrian": 0.2776
+        },
+        "sample_frames": 16
+      },
+      "vest": {
+        "chosen": "vest",
+        "original": "vest",
+        "scores": {
+          "vest": 0.4547,
+          "safety vest": 0.0288,
+          "hi-vis vest": 0.1495,
+          "reflective vest": 0.1607
+        },
+        "sample_frames": 16
+      }
+    }
+  }
+}
