@@ -37,12 +37,23 @@ def _render(messages: List[dict]) -> str:
     return "\n\n".join(parts)
 
 
-def claude_cli_backend(model: str | None = None):
+def claude_cli_backend(model: str | None = None, output_model=None, error_cls=None):
+    """output_model: pydantic class to return (default TaskSpecDraft; DashboardDraft for the dashboard planner).
+    error_cls: exception type to raise on CLI failure (e.g. the planner's PlannerUnavailable -> its fallback)."""
     from backend.task_engine.schema import TaskSpecDraft
 
-    schema = json.dumps(TaskSpecDraft.model_json_schema())
+    output_model = output_model or TaskSpecDraft
+    schema = json.dumps(output_model.model_json_schema())
 
     def call(system: str, messages: List[dict]):
+        try:
+            return _call(system, messages)
+        except (ClaudeCLIError, ValueError) as e:  # ValueError covers pydantic ValidationError
+            if error_cls:
+                raise error_cls(str(e)) from e
+            raise
+
+    def _call(system: str, messages: List[dict]):
         cmd = [CLAUDE_BIN, "-p", "--output-format", "json", "--json-schema", schema, "--system-prompt", system]
         if model:
             cmd += ["--model", model]
@@ -61,7 +72,7 @@ def claude_cli_backend(model: str | None = None):
         data = out.get("structured_output")
         if data is None:
             raise ClaudeCLIError("claude CLI returned no structured_output")
-        return TaskSpecDraft.model_validate(data)
+        return output_model.model_validate(data)
 
     call.name = f"claude-cli:{model or 'default'}"  # type: ignore[attr-defined]
     return call
