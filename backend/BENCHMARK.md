@@ -17,3 +17,20 @@ Gotchas found:
 - Docker's default /dev/shm (64 MB) deadlocks the PyTorch dataloader (GPU 0 %, CPU 0 %): run with `--shm-size 8g` (in run_gx10.sh).
 - Ultralytics' sample `coco128.yaml` uses the SAME 128 images for train and val; our split check rejects it, so the benchmark uses a 96/32 split.
 - Laptop numbers will differ: the demo laptop's CPU, and the network hop to the Funnel URL, are not measured here.
+
+## Timed user workflow through the public URL (2026-11-14 ~17:40 UTC, `tests/timed_workflow.py`)
+Prompt "Alert me when a worker is not wearing a hi-vis safety vest", footage = Intel `worker-zone-detection.mp4` (76 s, CC-BY-4.0),
+yolo11n 40 epochs. nikopi5 was busy (load ~20) generating Adaption data at the same time.
+
+| Stage | Wall time |
+|---|---|
+| 1. TaskSpec (Claude CLI on subscription, nikopi5) | 19.6 s |
+| 2. Upload 12 MB video → frames → YOLO-World auto-labels → session-split dataset (GX10) | 35.2 s |
+| 3. Training incl. pretrained baseline + ONNX export + ONNX check (GX10) | 94.3 s |
+| 4. ONNX download (10.7 MB) | 1.4 s |
+| **Total, prompt → deployable model** | **153.9 s (~2.6 min)** |
+| Inference round trip laptop-side via Funnel (median of 5) | 328 ms (GPU part ~5 ms; the rest is network) |
+
+Val metrics of that model (precision 0.99, recall 1.0, mAP50 0.995) are NOT evidence of quality: one recording session,
+val = later time block of the same video, and `person_without_vest` has 1 train box / 0 val boxes. Independent test
+footage (Damir) is required before quoting accuracy.
