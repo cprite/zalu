@@ -1,0 +1,1 @@
+{"run_id":"run_1fd4cbba89","supported":true,"events":[],"rules":[{"trigger_class":"person_without_vest","min_consecutive_frames":5,"description":"Alert when a person without a hi-vis vest is visible in the camera view."}],"note":"min_consecutive_frames is applied to SAMPLED frames (fps_sampled), not every video frame."}

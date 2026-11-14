@@ -287,3 +287,78 @@ async def inference(model_id: str = Form(...), image: UploadFile = File(...), co
         data["target_event"] = target_event
     files = {"image": (image.filename or "frame.jpg", await image.read(), image.content_type or "image/jpeg")}
     return _gpu(gpu_client.post, "/infer", data=data, files=files, timeout=60)
+
+
+# ---------- dashboard data (Kolyan): video runs + aggregations ----------
+from backend import dashboard  # noqa: E402
+
+
+@app.get("/api/dashboard/sources", dependencies=[Depends(auth)])
+def dashboard_sources():
+    """Catalog of dashboard data sources: supported / needs_processing / unavailable, with endpoints."""
+    return {"version": "zalu-dashboard-data/1", "sources": dashboard.SOURCES}
+
+
+@app.post("/api/runs", response_model=schemas.VideoRun, dependencies=[Depends(auth)])
+async def create_run(model_id: str = Form(...), file: UploadFile = File(...), fps: float = Form(2.0),
+                     conf: float = Form(0.25), task_id: Optional[str] = Form(None)):
+    """Apply a model to a video (sampled at `fps`) on the GX10 and store every frame's detections."""
+    art = _get("models", model_id, schemas.ModelArtifact)
+    if not 0.1 <= fps <= 30:
+        raise HTTPException(422, "fps must be 0.1..30")
+    up = _gpu(gpu_client.post, "/upload", data={"subdir": f"runs/{model_id}"},
+              files=[("files", (Path(file.filename or "video.mp4").name, await file.read(), file.content_type or "video/mp4"))],
+              timeout=600)
+    path = up["paths"][0]
+    res = _gpu(gpu_client.post, "/video_infer", json={"model": art.model_dump(), "path": path, "fps": fps, "conf": conf},
+               timeout=1800)
+    run = schemas.VideoRun(model_id=model_id, task_id=task_id, source_name=Path(path).name, source_path=path,
+                           fps_sampled=fps, conf=conf, duration_s=res["duration_s"], width=res["width"],
+                           height=res["height"], frames=res["frames"], gpu_ms_median=res["gpu_ms_median"],
+                           wall_s=res["wall_s"])
+    storage.save("runs", run)
+    return run
+
+
+@app.get("/api/runs", dependencies=[Depends(auth)])
+def list_runs(model_id: Optional[str] = None):
+    runs = [r for r in storage.list_all("runs", schemas.VideoRun) if not model_id or r.model_id == model_id]
+    return [{k: getattr(r, k) for k in ("id", "model_id", "task_id", "source_name", "fps_sampled", "duration_s",
+                                         "created_at", "wall_s")} | {"sampled_frames": len(r.frames)} for r in runs]
+
+
+@app.get("/api/runs/{run_id}", response_model=schemas.VideoRun, dependencies=[Depends(auth)])
+def get_run(run_id: str):
+    return _get("runs", run_id, schemas.VideoRun)
+
+
+@app.get("/api/runs/{run_id}/summary", dependencies=[Depends(auth)])
+def run_summary(run_id: str):
+    return dashboard.summary(_get("runs", run_id, schemas.VideoRun))
+
+
+@app.get("/api/runs/{run_id}/timeseries", dependencies=[Depends(auth)])
+def run_timeseries(run_id: str, bucket_s: float = 1.0):
+    if not 0.1 <= bucket_s <= 3600:
+        raise HTTPException(422, "bucket_s must be 0.1..3600")
+    return dashboard.timeseries(_get("runs", run_id, schemas.VideoRun), bucket_s)
+
+
+@app.get("/api/runs/{run_id}/events", dependencies=[Depends(auth)])
+def run_events(run_id: str):
+    run = _get("runs", run_id, schemas.VideoRun)
+    task = storage.load("tasks", run.task_id, schemas.TaskSpec) if run.task_id else None
+    return dashboard.events(run, task)
+
+
+@app.get("/api/dashboard/models/{model_id}/status", dependencies=[Depends(auth)])
+def model_status(model_id: str):
+    art = _get("models", model_id, schemas.ModelArtifact)
+    runs = [r for r in storage.list_all("runs", schemas.VideoRun) if r.model_id == model_id]
+    reports = [r for r in storage.list_all("reports", schemas.EvaluationReport) if model_id in r.request.model_ids]
+    return {"model_id": model_id, "kind": art.kind, "classes": art.classes,
+            "deployable": bool(art.onnx or art.weights or art.kind == "zero_shot"), "onnx": bool(art.onnx),
+            "val_metrics": art.metrics, "train_seconds": art.train_seconds,
+            "runs": len(runs), "last_run_at": max((r.created_at for r in runs), default=None),
+            "latest_report_id": reports[0].id if reports else None,
+            "note": "'deployable' means weights exist; there is no persistent live-camera deployment registry yet."}

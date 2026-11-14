@@ -183,3 +183,44 @@ async def infer(model: str = Form(...), image: UploadFile = File(...), conf: flo
     if frame is None:
         raise HTTPException(422, "could not decode the image (send JPEG or PNG)")
     return (await run_in_threadpool(inf.predict, art, frame, conf, target_event)).model_dump()
+
+
+# ---------- video inference (dashboard data) ----------
+@app.post("/video_infer")
+def video_infer(body: dict):
+    """body: {model: ModelArtifact, path: video on the GX10, fps: frames per second to sample, conf}.
+    Runs the model on sampled frames; returns per-frame detections with video timestamps."""
+    import cv2
+    import statistics
+
+    from backend.deployment_engine import inference as inf
+
+    art = schemas.ModelArtifact(**body["model"])
+    p = Path(body["path"]).resolve()
+    if storage.DATA_ROOT not in p.parents or not p.is_file():
+        raise HTTPException(404, "video not found under the data root")
+    cap = cv2.VideoCapture(str(p))
+    if not cap.isOpened():
+        raise HTTPException(422, "cannot open the video")
+    vfps = cap.get(cv2.CAP_PROP_FPS) or 25.0
+    n = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+    step = max(1, round(vfps / float(body.get("fps", 2.0))))
+    conf = float(body.get("conf", 0.25))
+    frames, lat, i, t0 = [], [], 0, time.time()
+    w = h = None
+    while True:
+        ok = cap.grab()
+        if not ok:
+            break
+        if i % step == 0:
+            ok, f = cap.retrieve()
+            if ok:
+                h, w = f.shape[:2]
+                r = inf.predict(art, f, conf)
+                lat.append(r.latency_ms)
+                frames.append({"frame_index": i, "t_s": round(i / vfps, 3),
+                               "detections": [d.model_dump() for d in r.detections]})
+        i += 1
+    return {"frames": frames, "duration_s": round((n or i) / vfps, 2), "width": w, "height": h,
+            "video_fps": vfps, "gpu_ms_median": round(statistics.median(lat), 1) if lat else None,
+            "wall_s": round(time.time() - t0, 2)}

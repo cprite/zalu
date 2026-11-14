@@ -122,3 +122,27 @@ class InferenceResult(BaseModel):
     detections: list[Detection]
     latency_ms: float
     events: list[str] = []                    # e.g. ["person_without_vest"] when target_event fires
+
+
+# ---------- Dashboard data (Kolyan): video runs = a model applied to a video, frame by frame ----------
+class FrameDetections(BaseModel):
+    frame_index: int                          # index in the source video
+    t_s: float                                # video timestamp in seconds (NOT wall-clock time)
+    detections: list[Detection]
+
+
+class VideoRun(BaseModel):
+    id: str = Field(default_factory=lambda: new_id("run"))
+    model_id: str
+    task_id: Optional[str] = None
+    source_name: str                          # uploaded file name
+    source_path: Optional[str] = None         # path on the GX10 (for /api/files)
+    fps_sampled: float
+    conf: float
+    duration_s: Optional[float] = None
+    width: Optional[int] = None
+    height: Optional[int] = None
+    frames: list[FrameDetections] = []
+    gpu_ms_median: Optional[float] = None
+    wall_s: Optional[float] = None
+    created_at: float = Field(default_factory=now)

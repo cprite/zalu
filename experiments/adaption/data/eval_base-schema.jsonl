@@ -1,0 +1,73 @@
+{"prompt": "Please detect vehicles on the service road that are not in the airport fleet colour, yellow.", "latency": 37.233121156692505, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Monitor the apron and tell me about problems.", "latency": 19.36882257461548, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Detect liquid spills on the terminal floor.", "latency": 39.746758222579956, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": true}
+{"prompt": "Any employee wearing outdoor jackets inside the kitchen", "latency": 48.82618808746338, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "I want to know when the fridge door is left open", "latency": 41.351906538009644, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "find unlabelled containers in the walk-in fridge", "latency": 44.120734214782715, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "show me when a person enters the restricted area behind the check-in desks", "latency": 19.82760763168335, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect pets in carriers vs pets running free in the terminal.", "latency": 51.42975568771362, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "Spot kids in the kitchen", "latency": 33.922208070755005, "parsed": true, "schema": true, "clean": true, "status_ok": false}
+{"prompt": "Tell me when a bus is waiting at the plane door with no passengers loading.", "latency": 50.5372998714447, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect wheelchairs left unattended in the corridor.", "latency": 42.033390283584595, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": true}
+{"prompt": "Identify any person carrying a backpack in the sterile zone without going through the scanner.", "latency": 45.04574680328369, "parsed": true, "schema": true, "clean": true, "status_ok": false}
+{"prompt": "Detect people entering the airside door without scanning badge, only if the door is open.", "latency": 25.245991945266724, "parsed": true, "schema": true, "clean": true, "status_ok": false}
+{"prompt": "Tell me when the conveyor belt at baggage claim is empty.", "latency": 57.135756731033325, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": true}
+{"prompt": "Help me find stuff in the airport.", "latency": 19.2916738986969, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "I want to know when someone climbs over the fence at the perimeter.", "latency": 62.62204885482788, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect missing wheel chocks under parked aircraft.", "latency": 36.1817672252655, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "find out who stole the cheese", "latency": 17.38886260986328, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Find any car parked on the taxiway shoulder.", "latency": 48.297826290130615, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "tell me the temperature inside the cooked chicken", "latency": 13.130850315093994, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "find chefs touching their face", "latency": 59.630918979644775, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "people not using tongs to handle bread at the bakery counter", "latency": 41.233418226242065, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "people using the sink for washing food and dishes at the same time", "latency": 21.861639499664307, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "knives left in the sink", "latency": 34.61372995376587, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "people in the prep area without aprons", "latency": 46.6201868057251, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": true}
+{"prompt": "detect cutlery piled on a damp tea towel", "latency": 45.08552646636963, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect a cutting board that is not the right colour for the raw meat zone", "latency": 48.73967361450195, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": true}
+{"prompt": "detect anyone using a mobile phone while wearing gloves", "latency": 50.477314472198486, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect people who are about to miss their flight.", "latency": 16.519014358520508, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Detect cooks not wearing hairnets in the kitchen", "latency": 53.45784592628479, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect passengers using the exit lane in the wrong direction.", "latency": 20.22788429260254, "parsed": true, "schema": true, "clean": true, "status_ok": false}
+{"prompt": "spot anyone touching ready-to-eat food with bare hands", "latency": 70.29773378372192, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect whether a passenger is lying at passport control.", "latency": 15.530890226364136, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "unattended bag in the departure hall", "latency": 55.85018825531006, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "something to check the food is ok", "latency": 20.305920839309692, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Detect passengers who look angry at the airline desk.", "latency": 15.420801877975464, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Hey, can you spot any baggage trolleys outside the trolley parking bay?", "latency": 145.65385675430298, "error": "JSONDecodeError: Expecting ',' delimiter: line 322 column 6 (char 10268)"}
+{"prompt": "Identify the name of every person walking through arrivals.", "latency": 14.082306861877441, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "predict which food will spoil tomorrow", "latency": 15.340492486953735, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Spot people crossing the apron outside the marked walkway.", "latency": 60.3877854347229, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Find tourists with selfie sticks in the baggage claim.", "latency": 38.31117820739746, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": true, "event_ok": true}
+{"prompt": "detect open flames left unattended", "latency": 21.327388763427734, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "find pots left on the floor", "latency": 33.89055776596069, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": true}
+{"prompt": "Find trolleys blocking the emergency exit.", "latency": 61.49788308143616, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect chickens not stored in the chiller", "latency": 27.4079692363739, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "identify gloved hands vs ungloved hands", "latency": 39.827656984329224, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": true, "event_ok": false}
+{"prompt": "Find cars stopped at the drop-off curb for too long.", "latency": 36.71539258956909, "parsed": true, "schema": true, "clean": true, "status_ok": false}
+{"prompt": "Find cleaning staff who are not wearing a uniform in the washroom area.", "latency": 47.51349472999573, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": true}
+{"prompt": "alert me when someone handles food without gloves", "latency": 41.940274238586426, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": true}
+{"prompt": "can you tell me when a person is standing in the red danger zone near the fryer", "latency": 22.105668783187866, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect more than one person going through the e-gate at the same time.", "latency": 15.821522235870361, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "Find people sitting on the floor near power outlets.", "latency": 46.35007882118225, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "Find open cargo hold doors with nobody working nearby.", "latency": 45.57181978225708, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "detect if the food tastes good", "latency": 15.57321047782898, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "detect cooks with long hair not tied back", "latency": 53.33456230163574, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "detect passengers without boarding pass in hand at gate", "latency": 62.299171686172485, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "food waste bins without lids", "latency": 48.61056637763977, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "kitchen monitoring pls", "latency": 19.96653389930725, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "People in the baggage claim area without a trolley.", "latency": 46.000054359436035, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": true, "event_ok": true}
+{"prompt": "Find ground power units still connected to a plane that is moving away.", "latency": 30.635271310806274, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Read the thoughts of passengers who look nervous at security.", "latency": 15.959502935409546, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "detect bacteria on the chopping board", "latency": 16.672042846679688, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Detect people washing hands at the hand sink", "latency": 36.28747487068176, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "raw meat stored above vegetables in the fridge", "latency": 22.423306703567505, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "identify which cook is John from the video", "latency": 12.927659034729004, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "I want a camera that watches the gate and knows what is happening.", "latency": 23.740791082382202, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "detect salmonella in the raw eggs", "latency": 15.491665124893188, "parsed": true, "schema": true, "clean": true, "status_ok": true}
+{"prompt": "Detect staff using a phone while driving a tug on the apron.", "latency": 59.96518063545227, "parsed": true, "schema": true, "clean": true, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Detect snow piles blocking the taxiway markings.", "latency": 53.43800973892212, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "detect smoke or fire in the baggage hall", "latency": 15.568047761917114, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "detect delivery boxes on the floor of the kitchen", "latency": 41.75336194038391, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
+{"prompt": "Count passengers standing in the security queue so I know when it is longer than 30 people.", "latency": 14.895064353942871, "parsed": true, "schema": true, "clean": true, "status_ok": false, "classes_ok": false, "event_ok": false}
+{"prompt": "find opened cans stored in the fridge", "latency": 51.11610293388367, "parsed": true, "schema": true, "clean": false, "status_ok": true, "classes_ok": false, "event_ok": false}
