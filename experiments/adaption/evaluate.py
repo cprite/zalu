@@ -2,7 +2,8 @@
 
 Variants (all temperature 0, same vLLM server on the GX10):
   base-short  : base model, the training prompt format (what AutoScientist compares against)
-  base-full   : base model with Kirill's full system prompt + request (the fairest strong baseline)
+  base-full   : base model with Kirill's full system prompt + request
+  base-schema : base-full + vLLM structured output constrained to the TaskSpecDraft JSON schema (strongest baseline)
   finetuned   : base + Adaption LoRA, training prompt format
 Metrics per variant: JSON parse rate, TaskSpecDraft schema-valid rate, Kirill-validator-clean rate,
 status agreement with gold, exact class-set agreement (status=ok), target_event agreement, median latency.
@@ -26,6 +27,9 @@ if a.limit: test = test[: a.limit]
 def run(variant, prompt):
     if variant == "finetuned":
         return generate(make_prompt(prompt), model="zalu-taskspec")
+    if variant == "base-schema":   # strongest baseline: full system prompt + decoding constrained to the schema
+        return generate(SYSTEM_PROMPT + "\n\n" + user_message(prompt) + "\n\nReply with the TaskSpec JSON only.",
+                        model=BASE_MODEL, json_schema=TaskSpecDraft.model_json_schema(), max_tokens=3000)
     if variant == "base-short":
         return generate(make_prompt(prompt), model=BASE_MODEL)
     return generate(SYSTEM_PROMPT + "\n\n" + user_message(prompt) + "\n\nReply with the TaskSpec JSON only.", model=BASE_MODEL)

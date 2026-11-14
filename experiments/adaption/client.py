@@ -28,11 +28,13 @@ def _json(text: str) -> dict:
     return json.loads(m.group(0))
 
 
-def generate(prompt_text: str, model: str = MODEL, url: str = URL, max_tokens: int = 2048) -> str:
-    r = requests.post(f"{url}/chat/completions", timeout=120, json={
-        "model": model, "max_tokens": max_tokens, "temperature": 0,
-        "messages": [{"role": "user", "content": prompt_text}],
-        "chat_template_kwargs": {"enable_thinking": False}})
+def generate(prompt_text: str, model: str = MODEL, url: str = URL, max_tokens: int = 2048, json_schema: dict = None) -> str:
+    body = {"model": model, "max_tokens": max_tokens, "temperature": 0,
+            "messages": [{"role": "user", "content": prompt_text}],
+            "chat_template_kwargs": {"enable_thinking": False}}
+    if json_schema:  # vLLM structured outputs: decoding constrained to the schema
+        body["response_format"] = {"type": "json_schema", "json_schema": {"name": "TaskSpecDraft", "schema": json_schema}}
+    r = requests.post(f"{url}/chat/completions", timeout=300, json=body)
     r.raise_for_status()
     return r.json()["choices"][0]["message"]["content"]
 
