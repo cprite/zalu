@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useApi } from "@/lib/api";
 import { BRAND } from "@/lib/explain";
-import { STEPS, unlocked, useFlow } from "@/lib/flow";
+import { STAGES, stageFill, stageOf, unlocked, useFlow } from "@/lib/flow";
 import type { Health } from "@/lib/types";
 
 export function Topbar() {
@@ -32,7 +32,6 @@ export function Topbar() {
         </div>
         {BRAND}
       </div>
-      <span className="muted small hidden md:inline">Describe it. Train it. Prove it works.</span>
       <div className="spacer" />
       <div style={{ position: "relative" }}>
         <button className="btn sm" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="source-pop"
@@ -72,21 +71,25 @@ export function Topbar() {
   );
 }
 
-export function Stepper() {
+/** Stories-style progress: one thin segment per stage, filled by progress inside the stage. */
+export function StoryProgress() {
   const { s, set } = useFlow();
   const open = unlocked(s);
+  const cur = stageOf(s.step);
+  const fill = stageFill(s.step);
   return (
-    <nav aria-label="Progress">
-      <ol className="stepper">
-        {STEPS.map((st, i) => {
-          const done = i < s.step && open[i];
-          const state = i === s.step ? "current step" : done ? "completed" : open[i] ? "available" : "locked";
+    <nav aria-label="Progress" className="story">
+      <ol className="story-bar">
+        {STAGES.map((st, i) => {
+          const first = st.steps[0];
+          const reachable = open[first] && i !== cur;
+          const state = i === cur ? "current stage" : i < cur ? "completed" : open[first] ? "available" : "not started";
           return (
-            <li key={st.key}>
-              <button className={`step ${i === s.step ? "active" : ""} ${done ? "done" : ""}`} disabled={!open[i]}
-                onClick={() => set({ step: i })} aria-current={i === s.step ? "step" : undefined} title={`${st.label}: ${st.sub}`}>
-                <span className="num" aria-hidden>{done ? "✓" : i + 1}</span>
-                <span><span className="lbl block">{st.label}</span><span className="sub block">{st.sub}</span></span>
+            <li key={st.label}>
+              <button className={`story-seg ${i === cur ? "active" : ""}`} disabled={!reachable} onClick={() => set({ step: first })}
+                aria-current={i === cur ? "step" : undefined}>
+                <span className="track" aria-hidden><span style={{ width: `${Math.round(fill[i] * 100)}%` }} /></span>
+                <span className="story-label">{st.label}</span>
                 <span className="sr-only">, {state}</span>
               </button>
             </li>
@@ -94,43 +97,5 @@ export function Stepper() {
         })}
       </ol>
     </nav>
-  );
-}
-
-/** P2: make clear which parts are working, experimental or mocked. */
-export function StatusFooter() {
-  const { api } = useApi();
-  const [engines, setEngines] = useState<Record<string, string>>({});
-  const [gpuOk, setGpuOk] = useState(false);
-  useEffect(() => {
-    api.health().then((h) => { setEngines(h.engines ?? {}); setGpuOk(!!h.gpu_worker?.ok); }).catch(() => { setEngines({}); setGpuOk(false); });
-  }, [api]);
-  const mock = api.mode === "mock";
-  // live: an engine string containing "MOCK" means the backend answers with clearly labelled mock data
-  const eng = (k: string): [string, string] => {
-    const v = engines[k];
-    if (!v) return ["warn", "unknown"];
-    return /mock/i.test(v) ? ["sample", v] : ["live", v];
-  };
-  const gpu: [string, string] = gpuOk ? ["live", "GX10 worker"] : ["warn", "GPU worker unreachable"];
-  const pick = (sample: string, live: [string, string]): [string, string] => (mock ? ["sample", sample] : live);
-  const rows: [string, string, string][] = [
-    ["Task planner", ...pick("rule-based sample", eng("task_engine"))],
-    ["Upload & auto-label", ...pick("sample labels", eng("data_engine"))],
-    ["Training (GPU)", ...pick("simulated progress", gpu)],
-    ["Evaluation engine", ...pick("real engine, sample predictions", eng("evaluation_engine"))],
-    ["Live inference", ...pick("simulated boxes", gpu)],
-    ["Data coach", "exp", "rule-based on your frames"],
-  ];
-  const label: Record<string, string> = { sample: "Sample", live: "Working", exp: "Experimental", warn: "Not connected" };
-  return (
-    <footer className="status card flat">
-      <div className="row" style={{ marginBottom: 8 }}><h4>What is real in this demo</h4><span className="muted small">updates from the backend health check</span></div>
-      <div className="row" style={{ gap: 18 }}>
-        {rows.map(([n, k, d]) => (
-          <div key={n} className="small"><span className={`badge ${k === "warn" ? "warn" : k}`}>{label[k]}</span> <b>{n}</b> <span className="muted">· {d}</span></div>
-        ))}
-      </div>
-    </footer>
   );
 }

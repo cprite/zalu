@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { METRIC_HELP, REASONS, VERDICT, pct, variantLabel } from "@/lib/explain";
 import type { Check, ModelEvaluation } from "@/lib/types";
 import { CiBar, Kpi, SampleBadge } from "./ui";
@@ -10,17 +11,15 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
   const target = (n: string) => r.criteria.find((c) => c.name.startsWith(n))?.target;
   const v = VERDICT[r.verdict] ?? VERDICT.not_ready;
   const ci = (c: [number, number] | null) => (c ? `95% range ${pct(c[0])}–${pct(c[1])}` : "not measurable");
+  const [details, setDetails] = useState(false);
 
   return (
     <div className="card col fade-in" style={{ gap: 18 }}>
       <div className="row">
-        <div className="col" style={{ gap: 2 }}>
-          <div className="row"><h3>Model report card</h3><SampleBadge show={e.sample_data} /></div>
-          <div className="small ink2">{variantLabel(e.model?.kind, e.model?.variant)} · base <code>{e.model?.base_model}</code></div>
-          <div className="tiny muted mono">version {e.model?.id} · tested on {e.test.dataset_id} ({e.test.split ?? "test"} split)</div>
-        </div>
+        <h3>{variantLabel(e.model?.kind, e.model?.variant)}</h3>
+        <SampleBadge show={e.sample_data} />
         <div className="spacer" />
-        {onDownload && <button className="btn sm" onClick={onDownload}>Download JSON</button>}
+        <span className="small muted">{e.test.n_images} new frames</span>
       </div>
 
       <div className={`verdict ${r.verdict}`}>
@@ -32,11 +31,18 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
       </div>
 
       <div className="kpis">
-        <Kpi k="Recall · objects found" v={pct(o.recall)} ci={ci(o.recall_ci95)} help={METRIC_HELP.recall} />
-        <Kpi k="Precision · alerts that are real" v={pct(o.precision)} ci={ci(o.precision_ci95)} help={METRIC_HELP.precision} />
-        <Kpi k="F1 · balance" v={pct(o.f1)} help={METRIC_HELP.f1} />
-        <Kpi k="Speed" v={e.performance?.fps ? `${e.performance.fps} FPS` : "—"} ci={e.performance ? `${e.performance.latency_ms_median} ms per frame` : "not measured"} />
+        <Kpi k="Objects found" v={pct(o.recall)} ci={ci(o.recall_ci95)} />
+        <Kpi k="Alerts that are real" v={pct(o.precision)} ci={ci(o.precision_ci95)} />
+        <Kpi k="Missed" v={o.fn} ci={`${o.fp} false alarms`} />
+        <Kpi k="Speed" v={e.performance?.fps ? `${Math.round(e.performance.fps)} FPS` : "—"} ci={e.performance ? `${e.performance.latency_ms_median} ms per frame` : "not measured"} />
       </div>
+
+      <div className="actions-center">
+        <button className="toggle" aria-expanded={details} onClick={() => setDetails(!details)}>{details ? "Hide details" : "Show details"}</button>
+      </div>
+      {details && (<>
+      <div className="tiny muted mono" style={{ textAlign: "center" }}>version {e.model?.id} · base {e.model?.base_model} · tested on {e.test.dataset_id} ({e.test.split ?? "test"} split)
+        {onDownload && <> · <button className="toggle tiny" onClick={onDownload}>Download JSON</button></>}</div>
 
       <div className="grid2">
         <div className="col">
@@ -88,6 +94,7 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
           )}
         </div>
       </div>
+      </>)}
     </div>
   );
 }

@@ -42,7 +42,7 @@ export function MediaInput({ files, onFiles, sessionId }: { files: File[]; onFil
   );
 }
 
-function CameraCapture({ onFrames, sessionId }: { onFrames: (f: File[]) => void; sessionId: string }) {
+export function CameraCapture({ onFrames, sessionId }: { onFrames: (f: File[]) => void; sessionId: string }) {
   const video = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [err, setErr] = useState<string | null>(null);

@@ -71,16 +71,3 @@ export function Progress({ value, label }: { value: number; label: string }) {
     </div>
   );
 }
-
-export function SectionHead({ title, sub, right }: { title: string; sub?: ReactNode; right?: ReactNode }) {
-  return (
-    <div className="section-head">
-      <div className="col" style={{ gap: 4 }}>
-        <h1>{title}</h1>
-        {sub && <p>{sub}</p>}
-      </div>
-      <div className="spacer" />
-      {right}
-    </div>
-  );
-}

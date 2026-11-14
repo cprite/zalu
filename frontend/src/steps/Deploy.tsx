@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { classColor } from "@/components/Annotator";
-import { Banner, SampleBadge, SectionHead } from "@/components/ui";
+import { Banner, SampleBadge } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { VERDICT, pct, variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
@@ -79,84 +79,63 @@ export function Deploy() {
   const readiness = evalEntry?.readiness;
 
   return (
-    <div className="fade-in">
-      <SectionHead title="Run it on your camera" sub="Live detections from the trained model. The same model is exported to ONNX to run fully offline on a laptop or edge device." />
-      <div className="split">
-        <div className="col">
-          <div className="stage" style={{ aspectRatio: "16/9", outline: firing ? "4px solid var(--color-error)" : undefined }}>
-            <video ref={video} muted playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            {res && on && (
-              <svg className="overlay" viewBox={`0 0 ${res.width} ${res.height}`} preserveAspectRatio="xMidYMid slice">
-                {res.detections.map((d, i) => (
-                  <g key={i}>
-                    <rect x={d.box[0]} y={d.box[1]} width={d.box[2] - d.box[0]} height={d.box[3] - d.box[1]} fill="none" stroke={classColor(classes, d.cls)} strokeWidth={res.width / 260} />
-                    <text x={d.box[0] + 6} y={d.box[1] - 8} className="box-label" style={{ fontSize: res.width / 45 }}>{d.cls} {Math.round(d.score * 100)}%</text>
-                  </g>
-                ))}
-              </svg>
-            )}
-            {!on && <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}><button className="btn primary" disabled={!modelId} onClick={start}>▶ Start live detection</button></div>}
-            {on && <div style={{ position: "absolute", left: 12, top: 12 }} className="row">
-              <span className="badge live">● LIVE</span>
-              <span className="badge" style={{ background: "rgba(0,0,0,.6)", color: "#fff" }}>{fps.toFixed(1)} FPS end-to-end</span>
-              {res && <span className="badge" style={{ background: "rgba(0,0,0,.6)", color: "#fff" }}>model {res.latency_ms} ms</span>}
-              <SampleBadge show={api.mode === "mock"} label="Simulated" />
-            </div>}
-          </div>
-          {firing && <Banner kind="bad"><b>Alert: {res!.events.join(", ")} detected</b></Banner>}
-          {camErr && <Banner kind={api.mode === "mock" ? "sample" : "bad"}><span className="small">{camErr}</span></Banner>}
-          {loopErr && <Banner kind="bad"><span className="small">Inference error: {loopErr}</span></Banner>}
-          <div className="card row">
-            <label className="field" style={{ flex: 1 }}>Alert on
-              <select className="select" value={target} onChange={(e) => setTarget(e.target.value)}>
-                <option value="">No alerts</option>
-                {classes.map((c) => <option key={c}>{c}</option>)}
-              </select>
-            </label>
-            <label className="field" style={{ flex: 1 }}>Confidence threshold: {Math.round(conf * 100)}%
-              <input type="range" min={0.05} max={0.95} step={0.05} value={conf} onChange={(e) => setConf(Number(e.target.value))} />
-            </label>
-            {on && <button className="btn" onClick={stop}>■ Stop</button>}
-          </div>
-          {evalEntry && conf !== evalEntry.settings.conf_threshold && (
-            <div className="tiny muted">The report card was measured at {Math.round(evalEntry.settings.conf_threshold * 100)}%. Changing the threshold changes precision and recall.</div>
-          )}
-        </div>
-
-        <div className="col">
-          <div className="card col">
-            <h4>Model</h4>
-            <select className="select" value={modelId ?? ""} onChange={(e) => { stop(); set({ deployModelId: e.target.value }); }}>
-              {s.models.map((m) => <option key={m.id} value={m.id}>{variantLabel(m.kind, m.variant)} · {m.id}</option>)}
-            </select>
-            {model && (
-              <div className="small ink2 col" style={{ gap: 2 }}>
-                <div>Version <code>{model.id}</code></div>
-                <div>Base <code>{model.base_model}</code>{model.epochs ? ` · ${model.epochs} epochs` : ""}{model.train_seconds ? ` · trained in ${model.train_seconds}s` : ""}</div>
-                <div>Classes: {model.classes.join(", ")}</div>
-                {model.onnx && <div>ONNX: <code className="tiny">{model.onnx}</code></div>}
-                {model.device && <div className="tiny muted">Trained on {model.device}</div>}
-              </div>
-            )}
-            {readiness ? (
-              <div className={`verdict ${readiness.verdict}`} style={{ padding: 10 }}>
-                <div className="icon" style={{ width: 32, height: 32, fontSize: 16 }}>{VERDICT[readiness.verdict].icon}</div>
-                <div className="small"><b>{VERDICT[readiness.verdict].label}</b><div>recall {pct(evalEntry!.overall.recall)} · precision {pct(evalEntry!.overall.precision)} on independent test</div></div>
-              </div>
-            ) : (
-              <Banner kind="warn"><span className="small">Not verified yet. Run the independent test before relying on this model.</span></Banner>
-            )}
-            <div className="small muted">Alerts this session: <b>{alerts}</b></div>
-          </div>
-          <div className="card flat col small">
-            <h4>Run offline on a laptop</h4>
-            <div className="ink2">Download the ONNX file and run the camera client, no network needed:</div>
-            <code className="tiny" style={{ background: "var(--color-surface-2)", padding: 8, borderRadius: 8, wordBreak: "break-all" }}>
-              python tools/webcam_client.py --onnx best.onnx --names {classes.join(",")}
-            </code>
-          </div>
-        </div>
+    <div className="center-col fade-in" style={{ maxWidth: 880 }}>
+      <div className="hero compact">
+        <h1>Run it on your camera</h1>
+        <p>Live detections from your model{readiness ? "" : ". It has not been tested on new footage yet"}.</p>
+        {readiness && (
+          <span className={`badge ${readiness.verdict === "ready" ? "good" : readiness.verdict === "insufficient_data" ? "warn" : "bad"}`}>
+            {VERDICT[readiness.verdict].icon} {VERDICT[readiness.verdict].label} · recall {pct(evalEntry!.overall.recall)} · precision {pct(evalEntry!.overall.precision)}
+          </span>
+        )}
       </div>
+
+      <div className="stage" style={{ aspectRatio: "16/9", outline: firing ? "4px solid var(--color-error)" : undefined }}>
+        <video ref={video} muted playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        {res && on && (
+          <svg className="overlay" viewBox={`0 0 ${res.width} ${res.height}`} preserveAspectRatio="xMidYMid slice">
+            {res.detections.map((d, i) => (
+              <g key={i}>
+                <rect x={d.box[0]} y={d.box[1]} width={d.box[2] - d.box[0]} height={d.box[3] - d.box[1]} fill="none" stroke={classColor(classes, d.cls)} strokeWidth={res.width / 260} />
+                <text x={d.box[0] + 6} y={d.box[1] - 8} className="box-label" style={{ fontSize: res.width / 45 }}>{d.cls} {Math.round(d.score * 100)}%</text>
+              </g>
+            ))}
+          </svg>
+        )}
+        {!on && <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}><button className="btn primary" disabled={!modelId} onClick={start}>▶ Start camera</button></div>}
+        {on && <div style={{ position: "absolute", left: 12, top: 12 }} className="row">
+          <span className="badge live">● LIVE</span>
+          <span className="badge" style={{ background: "rgba(0,0,0,.6)", color: "#fff" }}>{fps.toFixed(1)} FPS</span>
+          <SampleBadge show={api.mode === "mock"} label="Simulated" />
+        </div>}
+      </div>
+      {firing && <Banner kind="bad"><b>Alert: {res!.events.join(", ")} detected</b></Banner>}
+      {camErr && <Banner kind={api.mode === "mock" ? "sample" : "bad"}>{camErr}</Banner>}
+      {loopErr && <Banner kind="bad">Inference error: {loopErr}</Banner>}
+
+      <div className="row" style={{ justifyContent: "center", gap: 24 }}>
+        <label className="field" style={{ minWidth: 200 }}>Alert on
+          <select className="select" value={target} onChange={(e) => setTarget(e.target.value)}>
+            <option value="">No alerts</option>
+            {classes.map((c) => <option key={c}>{c}</option>)}
+          </select>
+        </label>
+        <label className="field" style={{ minWidth: 220 }}>Sensitivity: {Math.round(conf * 100)}% confidence
+          <input type="range" min={0.05} max={0.95} step={0.05} value={conf} onChange={(e) => setConf(Number(e.target.value))} />
+        </label>
+        {s.models.length > 1 && (
+          <label className="field" style={{ minWidth: 220 }}>Model
+            <select className="select" value={modelId ?? ""} onChange={(e) => { stop(); set({ deployModelId: e.target.value }); }}>
+              {s.models.map((m) => <option key={m.id} value={m.id}>{variantLabel(m.kind, m.variant)}</option>)}
+            </select>
+          </label>
+        )}
+      </div>
+      <div className="actions-center">
+        {on && <button className="btn" onClick={stop}>■ Stop</button>}
+        {alerts > 0 && <span className="small muted">{alerts} alert(s) this session</span>}
+      </div>
+      {model?.onnx && <p className="hint">Works offline too: <code>python tools/webcam_client.py --onnx best.onnx --names {classes.join(",")}</code></p>}
     </div>
   );
 }

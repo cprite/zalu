@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ErrorBox, Progress, SectionHead, Spinner } from "@/components/ui";
+import { ErrorBox, Progress, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
-import { pct, variantLabel } from "@/lib/explain";
+import { variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
 import type { DatasetManifest } from "@/lib/types";
 
@@ -21,6 +21,7 @@ export function Train() {
   const [epochs, setEpochs] = useState(30);
   const [err, setErr] = useState<unknown>(null);
   const [busy, setBusy] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const ds = s.trainDataset!;
   const classes = s.task?.classes ?? ds.classes;
 
@@ -64,75 +65,27 @@ export function Train() {
   const done = s.models.some((m) => m.kind === "trained") && !running;
   const nothingPicked = !zeroShot && !datasets.some((d) => pick[d.id]);
 
+  const overall = s.jobs.length ? s.jobs.reduce((t, j) => t + (j.status === "failed" ? 0 : j.progress), 0) / s.jobs.length : 0;
+
   return (
-    <div className="fade-in">
-      <SectionHead title="Train a small, fast model" sub="We fine-tune a compact detector on your labelled frames. It runs on a GPU and takes a few minutes." />
-      <div className="card col" style={{ gap: 24 }}>
-        <div className="grid2">
-          <fieldset className="col" style={{ border: 0, padding: 0, margin: 0 }}>
-            <legend className="text-[15px] font-semibold" style={{ marginBottom: 8 }}>What to train</legend>
-            {datasets.map((d) => (
-              <label key={d.id} className="flex gap-2 items-start small">
-                <input type="checkbox" checked={!!pick[d.id]} onChange={(e) => setPick({ ...pick, [d.id]: e.target.checked })} />
-                <span><b>{variantLabel("trained", d.variant)}</b> <span className="muted">· {Object.entries(d.counts).map(([k, v]) => `${v} ${k}`).join(", ")}</span></span>
-              </label>
-            ))}
-            <label className="flex gap-2 items-start small">
-              <input type="checkbox" checked={zeroShot} onChange={(e) => setZeroShot(e.target.checked)} />
-              <span><b>Zero-shot baseline</b> <span className="muted">· the large open-vocabulary model without training, to compare against</span></span>
-            </label>
-            {datasets.length > 1 && <p className="tiny muted">Training both variants lets ZALU check honestly whether synthetic examples help.</p>}
-          </fieldset>
-          <div className="col">
-            <h4 id="time-label">Training time</h4>
-            <div className="tabs" role="radiogroup" aria-labelledby="time-label">
-              {PRESETS.map((p) => (
-                <button key={p.epochs} role="radio" aria-checked={epochs === p.epochs} className={epochs === p.epochs ? "on" : ""} onClick={() => setEpochs(p.epochs)}>
-                  {p.label} <span className="muted">{p.note}</span>
-                </button>
-              ))}
-            </div>
-            <details className="small ink2">
-              <summary className="cursor-pointer">Advanced settings</summary>
-              <div className="col" style={{ gap: 4, marginTop: 8 }}>
-                <span>Base model: <code>yolo11n.pt</code> (compact, exported to ONNX)</span>
-                <span>Epochs: {epochs} · image size 640 · batch 16</span>
-              </div>
-            </details>
-          </div>
-        </div>
-        <ErrorBox error={err} />
-        <div className="row">
-          <button className="btn" onClick={() => set({ step: 2 })}>← Back</button>
-          <div className="spacer" />
-          {done ? (
-            <>
-              <button className="btn" disabled={busy || nothingPicked} onClick={train}>Train again</button>
-              <button className="btn primary" onClick={() => set({ step: 4 })}>Verify on new footage →</button>
-            </>
-          ) : (
-            <button className="btn primary" disabled={busy || running || nothingPicked} onClick={train}>
-              {(busy || running) && <Spinner />}{running ? "Training…" : "Start training"}
-            </button>
-          )}
-        </div>
+    <div className="center-col fade-in">
+      <div className="hero compact">
+        <h1>{done ? "Your model is ready" : running ? "Training your model…" : "Train your model"}</h1>
+        <p>{done ? "Next, ZALU checks it on footage it has never seen." : "A small, fast detector trained on your labelled frames. It takes a few minutes."}</p>
       </div>
 
-      {(s.jobs.length > 0 || s.models.length > 0) && (
-        <section className="card col" style={{ marginTop: 16 }} aria-live="polite">
-          <h3>Progress</h3>
+      {(s.jobs.length > 0) && (
+        <section className="card col" aria-live="polite">
+          {s.jobs.length > 1 && <Progress value={overall} label="Overall training progress" />}
           {s.jobs.map((j) => {
             const d = datasets.find((x) => x.id === j.request.dataset_id);
-            const m = s.models.find((x) => x.id === j.result_id);
-            const icon = j.status === "succeeded" ? "✓" : j.status === "failed" ? "✕" : "…";
+            const icon = j.status === "succeeded" ? "✓" : j.status === "failed" ? "✕" : "";
             return (
               <div key={j.id} className="col" style={{ gap: 4 }}>
                 <div className="row small">
                   <b>{variantLabel("trained", d?.variant)}</b>
-                  <span className={`badge ${j.status === "succeeded" ? "good" : j.status === "failed" ? "bad" : "exp"}`}>{icon} {j.status}</span>
-                  <span className="muted">{j.message.split("\n")[0]}</span>
                   <div className="spacer" />
-                  {m && <span className="tiny muted">trained in {m.train_seconds}s · validation recall {pct(m.metrics.recall)}, precision {pct(m.metrics.precision)}</span>}
+                  <span className={j.status === "failed" ? "negv" : "muted"}>{icon} {j.status === "running" || j.status === "queued" ? j.message.split("\n")[0] : j.status}</span>
                 </div>
                 {j.status !== "failed"
                   ? <Progress value={j.progress} label={`${variantLabel("trained", d?.variant)} progress`} />
@@ -140,10 +93,54 @@ export function Train() {
               </div>
             );
           })}
-          {s.models.filter((m) => m.kind === "zero_shot").map((m) => (
-            <div key={m.id} className="row small"><b>Zero-shot baseline</b> <span className="badge good">✓ ready</span> <span className="muted">{m.base_model}, no training needed</span></div>
-          ))}
-          <p className="tiny muted">Validation numbers come from frames of the same recording. They help pick a model but are optimistic. The real score comes from the next step.</p>
+        </section>
+      )}
+
+      <ErrorBox error={err} />
+
+      {!running && (
+        <div className="actions-center">
+          {done ? (
+            <>
+              <button className="btn ghost" disabled={busy || nothingPicked} onClick={train}>Train again</button>
+              <button className="btn primary" onClick={() => set({ step: 4 })}>Test on new footage →</button>
+            </>
+          ) : (
+            <>
+              <button className="btn ghost" onClick={() => set({ step: 2 })}>← Labels</button>
+              <button className="btn primary" disabled={busy || nothingPicked} onClick={train}>{busy && <Spinner />}Start training</button>
+            </>
+          )}
+        </div>
+      )}
+
+      {!running && (
+        <div className="actions-center">
+          <button className="toggle" aria-expanded={showOptions} onClick={() => setShowOptions(!showOptions)}>{showOptions ? "Hide options" : "Options"}</button>
+        </div>
+      )}
+      {showOptions && !running && (
+        <section className="card col">
+          <fieldset className="col" style={{ border: 0, padding: 0, margin: 0, gap: 8 }}>
+            <legend className="text-[15px] font-semibold" style={{ marginBottom: 8 }}>Models to compare</legend>
+            {datasets.map((d) => (
+              <label key={d.id} className="flex gap-2 items-start small">
+                <input type="checkbox" checked={!!pick[d.id]} onChange={(e) => setPick({ ...pick, [d.id]: e.target.checked })} />
+                <span>{variantLabel("trained", d.variant)}</span>
+              </label>
+            ))}
+            <label className="flex gap-2 items-start small">
+              <input type="checkbox" checked={zeroShot} onChange={(e) => setZeroShot(e.target.checked)} />
+              <span>Zero-shot baseline (no training, for comparison)</span>
+            </label>
+          </fieldset>
+          <div className="tabs" role="radiogroup" aria-label="Training time">
+            {PRESETS.map((p) => (
+              <button key={p.epochs} role="radio" aria-checked={epochs === p.epochs} className={epochs === p.epochs ? "on" : ""} onClick={() => setEpochs(p.epochs)}>
+                {p.label} <span className="muted">{p.note}</span>
+              </button>
+            ))}
+          </div>
         </section>
       )}
     </div>
