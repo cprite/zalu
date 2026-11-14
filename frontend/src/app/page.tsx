@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { StatusFooter, Stepper, Topbar } from "@/components/Shell";
+import { StoryProgress, Topbar } from "@/components/Shell";
 import { ApiProvider } from "@/lib/api";
-import { FlowProvider, STEPS, useFlow } from "@/lib/flow";
+import { FlowProvider, STAGES, STEPS, stageOf, useFlow } from "@/lib/flow";
 import { Deploy } from "@/steps/Deploy";
 import { Describe } from "@/steps/Describe";
 import { Prepare } from "@/steps/Prepare";
@@ -23,7 +23,7 @@ function Journey() {
     main.current?.focus({ preventScroll: true }); // move keyboard / screen-reader focus to the new step
   }, [s.step]);
   return (
-    <main id="main" ref={main} tabIndex={-1} aria-label={`Step ${s.step + 1} of ${STEPS.length}: ${STEPS[s.step].label}`} style={{ outline: "none" }}>
+    <main id="main" ref={main} tabIndex={-1} aria-label={`${STAGES[stageOf(s.step)].label}: ${STEPS[s.step].label}`} style={{ outline: "none" }}>
       <Step key={s.step} />
     </main>
   );
@@ -36,9 +36,8 @@ export default function Page() {
         <a href="#main" className="skip">Skip to content</a>
         <div className="shell">
           <Topbar />
-          <Stepper />
+          <StoryProgress />
           <Journey />
-          <StatusFooter />
         </div>
       </FlowProvider>
     </ApiProvider>

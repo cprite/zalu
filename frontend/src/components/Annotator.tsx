@@ -134,7 +134,7 @@ export function Annotator({ frame, labels, classes, onChange }: {
           );
         })}
       </ul>
-      <p className="tiny muted">Drag on the image to add a box · select a box to fix or delete it (Delete key works too) · dashed = the auto-labeller was unsure</p>
+      <p className="tiny muted">Drag on the image to add a box · select a box to fix or delete it</p>
     </div>
   );
 }

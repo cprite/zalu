@@ -1,6 +1,6 @@
 # ZALU frontend (owner: Damir)
 
-Next.js 16 + React 19 + TypeScript + Tailwind CSS v4. The six-step journey: **Describe → Upload → Prepare → Train → Verify → Deploy**.
+Next.js 16 + React 19 + TypeScript + Tailwind CSS v4. Three stages: **Describe** (task, footage, check labels) → **Train** (train, test on new footage) → **Deploy**.
 Design tokens live in `src/app/globals.css` (`@theme`), shared with Figma via `design/` (see `design/README.md`).
 
 ```bash
@@ -26,11 +26,11 @@ Routes that a teammate has not merged yet (HTTP 501) show a clear "not connected
 |---|---|
 | `src/lib/types.ts` | TypeScript mirror of `backend/schemas.py` + the evaluation report shape |
 | `src/lib/api/` | `ZaluApi` interface, `live.ts` (FastAPI), `mock.ts` (sample data), provider |
-| `src/lib/coach.ts` | Smart Data Coach rules (frame count, negatives, per-class counts, measured brightness, sessions) |
 | `src/lib/frames.ts` | client-side frame extraction from images/videos, brightness, webcam JPEG grab |
 | `src/steps/*` | one component per step (Describe, Upload, Prepare, Train, Verify, Deploy) |
 | `src/components/ReportCard.tsx` | Model Report Card (metrics + 95% ranges vs targets, errors, per class, limitations, verdict) |
 | `src/components/FailureGallery.tsx` | missed / false-alarm test frames with plain-language reasons and fixes |
 | `src/components/Comparison.tsx` | baseline vs fine-tuned table + synthetic A/B verdict |
-| `src/components/Shell.tsx` | top bar, data-source switch, stepper, "what is real in this demo" footer |
+| `src/components/Shell.tsx` | top bar, data-source switch, Stories-style 3-stage progress |
+| `src/components/Composer.tsx` | message-box input: text + image/video attachments + send |
 | `src/app/globals.css` | design tokens (`@theme` → Tailwind utilities) and semantic component classes |
