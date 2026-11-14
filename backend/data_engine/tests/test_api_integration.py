@@ -89,8 +89,6 @@ def test_full_flow_through_api(client, tmp_path):
     assert label.read_text().startswith("0 ")  # manual person_with_vest box
 
 
-@pytest.mark.xfail(strict=True, reason="BLOCKER (Kolyan): training_engine/splits.check_splits rejects test-only "
-                   "datasets (train is a sentinel, val == test by design), so kind=test uploads get HTTP 422")
 def test_test_set_upload_through_api(client, tmp_path):
     spec = client.post("/api/tasks", json={"prompt": "Detect workers without safety vests."}).json()
     r = _upload(client, spec["task_id"], [make_video(tmp_path / "test_cam.mp4", seed=9)], kind="test")

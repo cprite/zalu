@@ -1,0 +1,100 @@
+{
+  "version": "1",
+  "title": "Safety Vest Compliance",
+  "description": "Live alerting on workers seen without a high-visibility safety vest.",
+  "layout": {
+    "columns": 12
+  },
+  "data_sources": [
+    {
+      "id": "live",
+      "type": "inference_session"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "violations_now",
+      "title": "Workers without a vest (now)",
+      "source_id": "live",
+      "operation": "class_count",
+      "class_name": "person_without_vest"
+    },
+    {
+      "id": "compliant_now",
+      "title": "Workers with a vest (now)",
+      "source_id": "live",
+      "operation": "class_count",
+      "class_name": "person_with_vest"
+    },
+    {
+      "id": "people_now",
+      "title": "Workers in view (now)",
+      "source_id": "live",
+      "operation": "detection_count"
+    }
+  ],
+  "widgets": [
+    {
+      "id": "violations_kpi",
+      "type": "kpi",
+      "title": "Workers without a vest (now)",
+      "source_id": "live",
+      "span": 4,
+      "config": {
+        "metric_id": "violations_now"
+      }
+    },
+    {
+      "id": "compliant_kpi",
+      "type": "kpi",
+      "title": "Workers with a vest (now)",
+      "source_id": "live",
+      "span": 4,
+      "config": {
+        "metric_id": "compliant_now"
+      }
+    },
+    {
+      "id": "people_kpi",
+      "type": "kpi",
+      "title": "Workers in view (now)",
+      "source_id": "live",
+      "span": 4,
+      "config": {
+        "metric_id": "people_now"
+      }
+    },
+    {
+      "id": "live",
+      "type": "live_preview",
+      "title": "Live camera",
+      "source_id": "live",
+      "span": 12,
+      "config": {
+        "show_boxes": true
+      }
+    },
+    {
+      "id": "violations_trend",
+      "type": "time_series",
+      "title": "Workers without a vest (last 10 min)",
+      "source_id": "live",
+      "span": 12,
+      "config": {
+        "metric_id": "violations_now",
+        "window_seconds": 600
+      }
+    },
+    {
+      "id": "detections_trend",
+      "type": "time_series",
+      "title": "Workers in view (last 10 min)",
+      "source_id": "live",
+      "span": 12,
+      "config": {
+        "metric_id": "people_now",
+        "window_seconds": 600
+      }
+    }
+  ]
+}

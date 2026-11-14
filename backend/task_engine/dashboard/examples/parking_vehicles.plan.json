@@ -1,0 +1,107 @@
+{
+  "prompt": "Detect vehicles in my parking lot and show their counts over time.",
+  "status": "ok",
+  "spec": {
+    "version": "1",
+    "title": "Parking Lot Vehicles",
+    "description": "Live view and per-frame counts of cars, trucks and motorcycles in the parking lot over time.",
+    "layout": {
+      "columns": 12
+    },
+    "data_sources": [
+      {
+        "id": "live",
+        "type": "inference_session"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "vehicles_now",
+        "title": "Vehicles in the lot (now)",
+        "source_id": "live",
+        "operation": "detection_count"
+      },
+      {
+        "id": "cars_now",
+        "title": "Cars in the lot (now)",
+        "source_id": "live",
+        "operation": "class_count",
+        "class_name": "car"
+      },
+      {
+        "id": "trucks_now",
+        "title": "Trucks/vans in the lot (now)",
+        "source_id": "live",
+        "operation": "class_count",
+        "class_name": "truck"
+      },
+      {
+        "id": "motorcycles_now",
+        "title": "Motorcycles in the lot (now)",
+        "source_id": "live",
+        "operation": "class_count",
+        "class_name": "motorcycle"
+      }
+    ],
+    "widgets": [
+      {
+        "id": "live_view",
+        "type": "live_preview",
+        "title": "Parking lot camera",
+        "source_id": "live",
+        "span": 8,
+        "config": {
+          "show_boxes": true
+        }
+      },
+      {
+        "id": "vehicles_kpi",
+        "type": "kpi",
+        "title": "Vehicles in the lot (now)",
+        "source_id": "live",
+        "span": 4,
+        "config": {
+          "metric_id": "vehicles_now"
+        }
+      },
+      {
+        "id": "vehicles_trend",
+        "type": "time_series",
+        "title": "Vehicles over the last 10 minutes",
+        "source_id": "live",
+        "span": 12,
+        "config": {
+          "metric_id": "vehicles_now",
+          "window_seconds": 600
+        }
+      },
+      {
+        "id": "cars_trend",
+        "type": "time_series",
+        "title": "Cars over the last 10 minutes",
+        "source_id": "live",
+        "span": 6,
+        "config": {
+          "metric_id": "cars_now",
+          "window_seconds": 600
+        }
+      },
+      {
+        "id": "vehicle_mix",
+        "type": "class_distribution",
+        "title": "Vehicles by type (now)",
+        "source_id": "live",
+        "span": 6,
+        "config": {}
+      }
+    ]
+  },
+  "ai_generated": true,
+  "generator": "claude:claude-opus-5-5",
+  "limitations": [
+    "Counts are per frame (vehicles visible now), not unique vehicles; charts cover only the last 10 minutes of the live session."
+  ],
+  "clarification_questions": [],
+  "rationale": "Leads with the live lot view and current vehicle count, then shows counts over time and the mix by vehicle type.",
+  "fallback_reason": null
+}
