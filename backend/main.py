@@ -165,6 +165,21 @@ def save_labels(dataset_id: str, labels: list[schemas.LabelCorrection]):
     return res
 
 
+@app.post("/api/datasets/{dataset_id}/synthesize", dependencies=[Depends(auth)])
+def synthesize(dataset_id: str, body: dict = {}):
+    """fal synthetic variants of TRAIN frames (paid: ~$0.04 per image). body: {max_images: 4, conditions?: [...]}.
+    The FAL_KEY lives on nikopi5 and is sent to the GPU worker for this call only."""
+    key = os.environ.get("FAL_KEY")
+    if not key:
+        raise HTTPException(503, "FAL_KEY is not configured on nikopi5")
+    n = int(body.get("max_images", 4))
+    if not 1 <= n <= 20:
+        raise HTTPException(422, "max_images must be 1..20 (each image is a paid fal call)")
+    ds = _get("datasets", dataset_id, schemas.DatasetManifest)
+    return _gpu(gpu_client.post, "/datasets/synthesize", timeout=1800,
+                json={"manifest": ds.model_dump(), "fal_key": key, "max_images": n, "conditions": body.get("conditions")})
+
+
 @app.get("/api/files", dependencies=[Depends(auth)])
 def get_file(path: str):
     """Any file under the GX10 data root (frames, previews, ONNX), streamed through nikopi5."""
