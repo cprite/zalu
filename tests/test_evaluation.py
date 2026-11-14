@@ -173,8 +173,10 @@ def test_select_threshold_on_validation():
     imgs = ["v1.jpg", "v2.jpg"]
     gt = [G("v1.jpg", "person", (0, 0, 10, 10))]
     pr = [P("v1.jpg", "person", (0, 0, 10, 10), 0.6), P("v2.jpg", "person", (0, 0, 10, 10), 0.3)]
-    s = core.select_threshold(gt, pr, imgs, ["person"])
+    s = core.select_threshold(gt, pr, imgs, ["person"], split="val")
     assert s["f1"] == 1.0 and 0.3 < s["threshold"] <= 0.6
+    with pytest.raises(ValueError, match="requires the validation"):
+        core.select_threshold(gt, pr, imgs, ["person"], split="test")
 
 
 # ---------------- fixtures in Kirill's DatasetManifest format ----------------
@@ -191,9 +193,12 @@ def manifest(ds_id, variant, root, frames, classes=("person",)):
 
 
 def frames_of(ds):
-    from backend.evaluation_engine.dataset_io import load_test_set
+    from backend.evaluation_engine.dataset_io import load_split
 
-    return load_test_set(ds, annotations={"annotations": []})
+    split = ds.images[0].split
+    return load_split(ds, split, annotations={"annotations": [
+        {"frame_id": f.frame_id, "status": "reviewed", "boxes": []} for f in ds.images
+    ]})
 
 
 TRAIN = lambda root="/d/train", sessions=("sess_a",): manifest(
@@ -249,8 +254,10 @@ def test_load_test_set_from_yolo_labels(tmp_path):
     Image.new("RGB", (100, 50)).save(root / "images/test/a.jpg")
     (root / "labels/test/a.txt").write_text("0 0.5 0.5 0.5 0.5" + chr(10))
     Image.new("RGB", (100, 50)).save(root / "images/test/b.jpg")
+    (root / "labels/test/b.txt").write_text("")
     ds = manifest("ds_y", "test", root, [("a", "test", "s1", False), ("b", "test", "s1", False)])
-    ts = load_test_set(ds, reader=lambda p: open(p, "rb").read(), annotations={})
+    from pathlib import Path
+    ts = load_test_set(ds, reader=lambda p: Path(p).read_bytes(), annotations={})
     assert ts.source == "yolo_labels" and [(b.cls, b.box) for b in ts.gt] == [("person", (25.0, 12.5, 75.0, 37.5))]
 
 

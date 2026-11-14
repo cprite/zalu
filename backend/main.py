@@ -267,7 +267,10 @@ def evaluate(req: schemas.EvaluationRequest):
             notes=["MOCK report: Evaluation Engine (Damir) not merged.",
                    "Numbers are the training run's VAL-split metrics, not an independent test-set evaluation."])
     else:
-        rep = fn(req, models, test)
+        try:
+            rep = _gpu(fn, req, models, test)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
     storage.save("reports", rep)
     return rep
 
