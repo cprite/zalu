@@ -11,7 +11,8 @@ from pathlib import Path
 from typing import Optional
 
 import numpy as np
-from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend import orchestrator, schemas
@@ -23,8 +24,12 @@ app = FastAPI(title="ZALU backend", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 
-def auth(authorization: Optional[str] = Header(None)) -> None:
-    if TOKEN and authorization != f"Bearer {TOKEN}":
+_bearer = HTTPBearer(auto_error=False)
+
+
+def auth(cred: Optional[HTTPAuthorizationCredentials] = Depends(_bearer)) -> None:
+    """Bearer token check; in Swagger (/docs) use the Authorize button."""
+    if TOKEN and (cred is None or cred.credentials != TOKEN):
         raise HTTPException(401, "missing or wrong bearer token")
 
 
