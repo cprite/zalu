@@ -43,13 +43,11 @@ docker exec -w /data zalu-gpu /opt/comfyui-env/bin/python -m backend.training_en
 Prints `ZALU_RESULT {json}`: split check, baseline (pretrained, no fine-tuning) metrics, fine-tuned metrics,
 train_seconds, ONNX check, paths. Benchmarks: `backend/BENCHMARK.md`.
 
-## Keys for Kirill's engines (`~/.zalu_env` on the GX10, chmod 600, passed with --env-file; never commit)
-- `FAL_KEY=...` for synthetic images (set).
-- **No Anthropic API key**: the Task Engine runs on the owner's Claude subscription through the Claude Code CLI
-  (installed in the image). Auth: `CLAUDE_CODE_OAUTH_TOKEN=...` from `claude setup-token`.
-  `backend/infrastructure/claude_cli.py` is a drop-in `LLMBackend` for `compile_task(prompt, llm=...)`;
-  `/api/tasks` uses it automatically when the token is present (`GET /api/health` → `claude_cli_subscription: true`),
-  otherwise it returns the mock vest spec. Tested on nikopi5: "Detect workers without safety vests" → valid spec in 17 s.
+## Keys (nikopi5 only: `~/.openclaw/credentials/hackathons/imperial-ai-hack-2026/zalu_api.env`, chmod 600; never commit)
+- `ZALU_TOKEN` (API bearer), `FAL_KEY` (synthetic images).
+- **No Anthropic API key**: the Task Engine runs on the owner's Claude subscription through the `claude` CLI already
+  logged in on nikopi5. `backend/infrastructure/claude_cli.py` is a drop-in `LLMBackend` for `compile_task(prompt, llm=...)`.
+  Tested: "Detect workers without safety vests" → valid spec in ~16 s.
 
 ## API (all except /api/health need `Authorization: Bearer $ZALU_TOKEN`)
 | Method | Path | Notes |
