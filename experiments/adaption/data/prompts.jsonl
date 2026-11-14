@@ -1,0 +1,1512 @@
+{"domain": "sports and gyms", "prompt": "Is anyone standing in the penalty area during the corner kick?", "split": "train"}
+{"domain": "retail store", "prompt": "people standing in front of the milk fridge door for longer than a minute", "split": "train"}
+{"domain": "airports", "prompt": "Please detect vehicles on the service road that are not in the airport fleet colour, yellow.", "split": "test"}
+{"domain": "home and pets", "prompt": "Detect kitchen counter clutter like dirty dishes without anyone cooking", "split": "train"}
+{"domain": "factory quality control", "prompt": "Broken zippers on the finished jackets", "split": "train"}
+{"domain": "airports", "prompt": "Monitor the apron and tell me about problems.", "split": "test"}
+{"domain": "retail store", "prompt": "spot anyone climbing on the shelves", "split": "train"}
+{"domain": "hospital and care home", "prompt": "child alone near the hospital elevator", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "can it watch my loading dock and tell me whats important", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect when a worker is not wearing safety boots on the site floor", "split": "train"}
+{"domain": "retail store", "prompt": "tell me who is a regular customer by their face and name", "split": "train"}
+{"domain": "public transport stations", "prompt": "i want to know when a bike is brought into the metro carriage", "split": "train"}
+{"domain": "airports", "prompt": "Detect liquid spills on the terminal floor.", "split": "test"}
+{"domain": "home and pets", "prompt": "Detect a person in the garage who is not wearing a hat", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Pickleball paddles on the bench not in the bag", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "workers carrying heavy boxes without a lifting belt", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "find broken chairs or tables", "split": "train"}
+{"domain": "farm and livestock", "prompt": "detect when somebody walks past the milk tank without gloves", "split": "train"}
+{"domain": "factory quality control", "prompt": "detect unfilled jars, level too low", "split": "train"}
+{"domain": "construction site safety", "prompt": "Show me anyone smoking near the fuel storage tank", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "people using phones during the exam", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Any employee wearing outdoor jackets inside the kitchen", "split": "test"}
+{"domain": "sports and gyms", "prompt": "Check whether the climbing ropes are frayed", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find unlabelled containers in the walk-in fridge", "split": "test"}
+{"domain": "public transport stations", "prompt": "detect people running on the stairs", "split": "train"}
+{"domain": "home and pets", "prompt": "dog laying on the rug in the living room zone near the TV", "split": "train"}
+{"domain": "factory quality control", "prompt": "Detect gloves on hands holding the knife in the meat cutting area; flag the ones with bare hands.", "split": "train"}
+{"domain": "airports", "prompt": "show me when a person enters the restricted area behind the check-in desks", "split": "test"}
+{"domain": "home and pets", "prompt": "cat sitting on the windowsill", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "i need to see when the door to cold storage is left open", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people without masks in the clean lab area of the office", "split": "train"}
+{"domain": "home and pets", "prompt": "Find spilled water on the floor near the dog bowl", "split": "train"}
+{"domain": "construction site safety", "prompt": "Mark any person standing in the blue zone near the loading dock", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "who is paying attention to the lecturer", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "I want to know when the fridge door is left open", "split": "test"}
+{"domain": "retail store", "prompt": "count stuff in the store", "split": "train"}
+{"domain": "factory quality control", "prompt": "Anyone smoking in the warehouse", "split": "train"}
+{"domain": "home and pets", "prompt": "cat in the plant pots", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "monkeys stealing food from the picnic table", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "people not wearing a hardhat in the yard", "split": "train"}
+{"domain": "factory quality control", "prompt": "missing gasket on engine block", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "Detect a customer waving to call the waiter.", "split": "train"}
+{"domain": "retail store", "prompt": "find bags of chips that are squashed", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "someone sitting at the outdoor tables", "split": "train"}
+{"domain": "hospital and care home", "prompt": "detect elderly person using a walker without a carer nearby", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect parking tickets on the windshield", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "ice cream cones without sprinkles", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Recognise a person who is hiding something in their pocket", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Notify me when the garden has residents outside without coats in winter.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "farmer feeding the animals", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Mark every golf ball on the driving range", "split": "train"}
+{"domain": "farm and livestock", "prompt": "tell me if a pig has no ear tag", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Tell me if a raccoon opens the bin lid", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "tell me which package contains stolen goods", "split": "train"}
+{"domain": "airports", "prompt": "Detect pets in carriers vs pets running free in the terminal.", "split": "test"}
+{"domain": "hospital and care home", "prompt": "read the lips of the doctor and write down what they said about the patient", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Tell me the blood pressure of each patient from the video.", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "find students with their feet on the chairs", "split": "train"}
+{"domain": "home and pets", "prompt": "Notify me if the dog's water bowl is empty", "split": "train"}
+{"domain": "public transport stations", "prompt": "people without a safety vest inside the construction zone next to platform 3", "split": "train"}
+{"domain": "home and pets", "prompt": "Something is wrong with my pet, find it", "split": "train"}
+{"domain": "farm and livestock", "prompt": "alert when the barn door is left open overnight", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Find the gym member who stole my water bottle", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect graffiti on the station walls", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "students in the gym without a towel", "split": "train"}
+{"domain": "airports", "prompt": "Tell me when a bus is waiting at the plane door with no passengers loading.", "split": "test"}
+{"domain": "sports and gyms", "prompt": "dumbells left on the floor insted of the rack", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Spot kids in the kitchen", "split": "test"}
+{"domain": "parking and traffic", "prompt": "tell me when the barrier is open with no car behind it", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Hands raised in the lecture hall", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cowz in the wrong pasture", "split": "train"}
+{"domain": "home and pets", "prompt": "Cat or dog on the dining table", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect standing desks that are raised", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect lights on in empty rooms", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Notify if a wheelbarrow is left in the aisle", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Count cars entering the garage", "split": "train"}
+{"domain": "home and pets", "prompt": "Alert if a cat is on the stove", "split": "train"}
+{"domain": "public transport stations", "prompt": "People standing on the escalator on the wrong side", "split": "train"}
+{"domain": "construction site safety", "prompt": "Find out who stole the drill last night", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect any worker handling cement without gloves and long sleeves", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "empty plates in the dish return area", "split": "train"}
+{"domain": "farm and livestock", "prompt": "chicks that are huddled together in the brooder", "split": "train"}
+{"domain": "airports", "prompt": "Detect wheelchairs left unattended in the corridor.", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Is the meeting room occupied?", "split": "train"}
+{"domain": "construction site safety", "prompt": "spot unlabeled chemical barrels outside the storage cage", "split": "train"}
+{"domain": "hospital and care home", "prompt": "detect face mask pulled below the nose", "split": "train"}
+{"domain": "parking and traffic", "prompt": "I need to spot parked cars with open doors", "split": "train"}
+{"domain": "sports and gyms", "prompt": "count people doing pushups in the open floor area", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Detect workers without hard hats in the warehouse", "split": "train"}
+{"domain": "sports and gyms", "prompt": "detect weight plates stacked on the floor instead of on the tree", "split": "train"}
+{"domain": "farm and livestock", "prompt": "will it rain tomorrow on the pasture", "split": "train"}
+{"domain": "farm and livestock", "prompt": "feed bin with the lid off", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect fire or smoke in the underground hall", "split": "train"}
+{"domain": "airports", "prompt": "Identify any person carrying a backpack in the sterile zone without going through the scanner.", "split": "test"}
+{"domain": "factory quality control", "prompt": "find the thing that is wrong with the product", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect when a dog is lying in its crate", "split": "train"}
+{"domain": "retail store", "prompt": "Notify me when a customer leaves the store with unpaid items", "split": "train"}
+{"domain": "hospital and care home", "prompt": "stuff", "split": "train"}
+{"domain": "farm and livestock", "prompt": "detect sheep outside the fence", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "red folders on the shelves", "split": "train"}
+{"domain": "factory quality control", "prompt": "Find cracked tiles", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect anyone sitting on the reception couch", "split": "train"}
+{"domain": "airports", "prompt": "Detect people entering the airside door without scanning badge, only if the door is open.", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Spot wild boar in the field, ignore the cows please.", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Alert me when a patient gets out of bed without a nurse next to them.", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "tell me which student is going to fail the course", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect when a worker is standing on the top step of a stepladder", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Forklift driver without a seatbelt", "split": "train"}
+{"domain": "retail store", "prompt": "detect trolleys parked in the disabled parking bay", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect vehicles stopped in the bus lane", "split": "train"}
+{"domain": "airports", "prompt": "Tell me when the conveyor belt at baggage claim is empty.", "split": "test"}
+{"domain": "construction site safety", "prompt": "hardhat vest gloves goggles - check all four on every worker coming through the gate", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Check anything weird happening on camera 3", "split": "train"}
+{"domain": "retail store", "prompt": "see shelves less than half full", "split": "train"}
+{"domain": "construction site safety", "prompt": "find any worker without a helmet inside the crane zone or near the open trench", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Spot the weird stuff in my trail cam photos.", "split": "train"}
+{"domain": "public transport stations", "prompt": "Counting passengers getting off the tram at the central stop pls", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect kids without an adult in the station", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect motorcycles on the sidewalk", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect a person standing directly beneath a lifted steel beam", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect a stag and a hind together in the same photo.", "split": "train"}
+{"domain": "airports", "prompt": "I want to know when someone climbs over the fence at the perimeter.", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Detect water bottles on the shared desk", "split": "train"}
+{"domain": "airports", "prompt": "Help me find stuff in the airport.", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "check burners left on with empty pots", "split": "train"}
+{"domain": "factory quality control", "prompt": "Identify bolts that are not tightened, the ones with no paint mark", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "I'd like the system to notice when a person leaves the lab without putting their lab coat on the hook", "split": "train"}
+{"domain": "airports", "prompt": "Detect missing wheel chocks under parked aircraft.", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "bag or backpack inside the packing zone", "split": "train"}
+{"domain": "construction site safety", "prompt": "Figure out whether this concrete wall will crack in six months", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Is there a bear? yes or no per picture", "split": "train"}
+{"domain": "hospital and care home", "prompt": "uncovered food on the serving trolley", "split": "train"}
+{"domain": "sports and gyms", "prompt": "kettlebells outside the marked storage zone", "split": "train"}
+{"domain": "retail store", "prompt": "count how many people wear red hats", "split": "train"}
+{"domain": "retail store", "prompt": "find lost children near the toy section", "split": "train"}
+{"domain": "retail store", "prompt": "detect bananas that look brown or rotten", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find out who stole the cheese", "split": "test"}
+{"domain": "farm and livestock", "prompt": "pigs coughing", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Count how many people are in the squat rack zone", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect puddles or flooding on the street", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect bus with no passengers", "split": "train"}
+{"domain": "parking and traffic", "prompt": "carz parked in teh handicaped spot without a badge", "split": "train"}
+{"domain": "public transport stations", "prompt": "Spot people carrying skis or surfboards in the carriage during rush hour", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect whether a driver is secretly angry at their wife", "split": "train"}
+{"domain": "public transport stations", "prompt": "make it find stuff that looks wrong", "split": "train"}
+{"domain": "hospital and care home", "prompt": "people without shoes in the corridor", "split": "train"}
+{"domain": "construction site safety", "prompt": "check if my crew is being safe", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "truck at the dock without a chock under the wheel", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect hand sanitizer dispenser empty or missing at the ward entrance", "split": "train"}
+{"domain": "construction site safety", "prompt": "who isnt wearing a vest", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Something about safety at the gym, not sure what yet", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Detect birds landing on the crop field", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Alert me for tigers in the camera trap images that are inside the marked clearing.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect whether the fox is happy or sad.", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "wet floor sign missing when floor is wet", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect missing hard hats and vests, both at the same time, at our main gate entrance", "split": "train"}
+{"domain": "airports", "prompt": "Find any car parked on the taxiway shoulder.", "split": "test"}
+{"domain": "public transport stations", "prompt": "scooters inside the station", "split": "train"}
+{"domain": "home and pets", "prompt": "recognize Mr. John Smith walking in my yard", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Alert me when someone sits at a desk without a laptop open", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Whenever a wild animal shows up near the tents, ping me.", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Alert me if somebody stands on the weight bench", "split": "train"}
+{"domain": "sports and gyms", "prompt": "detect cars parked in the stadium fire lane", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "worker sitting or lying on the floor (maybe fainted)", "split": "train"}
+{"domain": "factory quality control", "prompt": "cans without a pull tab", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "who will win the university football match", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Alert if the medicine trolley is unlocked and nobody is standing by it.", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect more than 6 people in a meeting room that fits 6", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Tell me if the office feels crowded", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect when the squat rack is occupied by more than one person", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "find skateboards inside the library", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "tell me the temperature inside the cooked chicken", "split": "test"}
+{"domain": "farm and livestock", "prompt": "rabbit hutch with the door unlatched", "split": "train"}
+{"domain": "parking and traffic", "prompt": "cars running a red light", "split": "train"}
+{"domain": "retail store", "prompt": "detect bottles on the top shelf that have no price tag", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "sandwich without a toothpick", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "people not using tongs to handle bread at the bakery counter", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "find chefs touching their face", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "make it detect stuff in the classroom", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "flag pictures with a bear in them", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "tells me what language customers speak", "split": "train"}
+{"domain": "offices and coworking", "prompt": "find boxes blocking the fire exit", "split": "train"}
+{"domain": "factory quality control", "prompt": "I want the camera to catch bad stuff", "split": "train"}
+{"domain": "factory quality control", "prompt": "Wrong color caps on the bottles - we only want blue ones", "split": "train"}
+{"domain": "parking and traffic", "prompt": "mark all the trucks without a trailer", "split": "train"}
+{"domain": "retail store", "prompt": "empty gaps next to the cleaning products", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people not wearing a hard hat in the office renovation zone", "split": "train"}
+{"domain": "factory quality control", "prompt": "detect rust spots on steel pipes", "split": "train"}
+{"domain": "hospital and care home", "prompt": "alert if an exit door is open and someone walks through it", "split": "train"}
+{"domain": "hospital and care home", "prompt": "visitor using phone in the MRI zone", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "people using the sink for washing food and dishes at the same time", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Dtect peple in the booth withuot a booking", "split": "train"}
+{"domain": "retail store", "prompt": "find open umbrellas inside the store", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "knives left in the sink", "split": "test"}
+{"domain": "retail store", "prompt": "spot dirty tables in the in-store cafe with leftover cups and plates", "split": "train"}
+{"domain": "hospital and care home", "prompt": "detect problems", "split": "train"}
+{"domain": "farm and livestock", "prompt": "any person in the pasture after 6pm", "split": "train"}
+{"domain": "hospital and care home", "prompt": "flag any trolley blocking the fire exit", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Know in advance when a wolf will attack the sheep.", "split": "train"}
+{"domain": "retail store", "prompt": "are there any people near the wine section after closing time? just detect persons in that area", "split": "train"}
+{"domain": "retail store", "prompt": "find empty shelf spots in the cereal aisle", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "detect the bad stuff", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "crate lid open on the packing table", "split": "train"}
+{"domain": "retail store", "prompt": "pls detect customers holding phones in the dairy aisle", "split": "train"}
+{"domain": "hospital and care home", "prompt": "People crowding at the nurses station, more than five at once", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Spot a lynx", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "person standing in the fire exit zone", "split": "train"}
+{"domain": "farm and livestock", "prompt": "man in blue overalls near the diesel tank", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "people in the prep area without aprons", "split": "test"}
+{"domain": "construction site safety", "prompt": "I want the camera to tell me if anybody walks into the excavation area", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Count how many people are in the cafeteria queue", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Is the defibrillator cabinet door open?", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect cutlery piled on a damp tea towel", "split": "test"}
+{"domain": "farm and livestock", "prompt": "Are the sheep healthy?", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Tell me what the athlete is thinking before the serve", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "pakages blocking the walkway", "split": "train"}
+{"domain": "home and pets", "prompt": "Show me when any dog is in the kitchen without a person being there", "split": "train"}
+{"domain": "home and pets", "prompt": "Dog near the front door waiting to go out", "split": "train"}
+{"domain": "home and pets", "prompt": "Count how many cats are in the room", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect visitors without a visitor sticker in the lobby", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect anyone using a mobile phone while wearing gloves", "split": "test"}
+{"domain": "factory quality control", "prompt": "workers in the forklift zone without a yellow vest", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Spot staff with no hair net in the kitchen of the care home", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "people running in the warehouse", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect people jumping from the platform onto the rails", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect an IV drip stand with no patient near it", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Detect a cutting board that is not the right colour for the raw meat zone", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "hard hats", "split": "train"}
+{"domain": "offices and coworking", "prompt": "detect fire extinguishers missing from their wall spot", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "chairs stacked in the corner", "split": "train"}
+{"domain": "factory quality control", "prompt": "something is off on the line, detect it", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Find any boxer without hand wraps in the sparring area", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "forklift in the pedestrian zone", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect open windows when AC is on", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "takeaway bags waiting on the counter", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "pastries on the tray without a label", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect whiteboards that haven't been erased", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "student crowd in front of the lecture hall doors", "split": "train"}
+{"domain": "airports", "prompt": "Detect people who are about to miss their flight.", "split": "test"}
+{"domain": "parking and traffic", "prompt": "Detect traffic cones on the road", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find foxes, badgers and deer. Nothing else matters.", "split": "train"}
+{"domain": "public transport stations", "prompt": "any unusual activity", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Detect cooks not wearing hairnets in the kitchen", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "I run a camera on a beaver dam, detect beavers swimming but not floating logs.", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "pepole eating food in the lecture hall", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect chairs stacked in the corner", "split": "train"}
+{"domain": "public transport stations", "prompt": "know if the passengers are happy with the service", "split": "train"}
+{"domain": "parking and traffic", "prompt": "wrong way cars in the one way street", "split": "train"}
+{"domain": "construction site safety", "prompt": "Locate every excavator, loader, and dump truck moving on site", "split": "train"}
+{"domain": "hospital and care home", "prompt": "show me visitors entering the isolation room without a mask and apron", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find all the penguins on the ice. Count them too.", "split": "train"}
+{"domain": "construction site safety", "prompt": "Is anyone standing under a suspended load? Please highlight them.", "split": "train"}
+{"domain": "hospital and care home", "prompt": "need to see when someone lies on the couch in the day room for long time", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect hands raised in the town hall room", "split": "train"}
+{"domain": "public transport stations", "prompt": "Identify John Smith when he walks into the station", "split": "train"}
+{"domain": "factory quality control", "prompt": "defective welds", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Spot swimmers in the deep end without a lifeguard watching", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "monitor stuff", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "I want to know if somebody smokes in the warehouse", "split": "train"}
+{"domain": "factory quality control", "prompt": "Tell me if the gate is open when the machine is on", "split": "train"}
+{"domain": "construction site safety", "prompt": "Predict which worker is going to get injured tomorrow", "split": "train"}
+{"domain": "retail store", "prompt": "Detect customers without a basket who are carrying more than three items in their hands", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect a patient who has pulled out their IV line.", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Spot hockey players without mouth guards", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Which players are going to score? Highlight them", "split": "train"}
+{"domain": "airports", "prompt": "Detect passengers using the exit lane in the wrong direction.", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Tell me when something interesting happens at the waterhole.", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect any animal on the tracks, like a cat or fox", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Which animals visit my bird bath? Just find them all.", "split": "train"}
+{"domain": "retail store", "prompt": "check price labels on cheese", "split": "train"}
+{"domain": "farm and livestock", "prompt": "spot calves that are separated from their mother", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Notice when the printer tray is empty", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "waiter carrying more than 3 plates", "split": "train"}
+{"domain": "construction site safety", "prompt": "Make the camera warn people before an accident happens", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "find all pictures where a fox is present but not a cat", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "students without a backpack entering the building", "split": "train"}
+{"domain": "retail store", "prompt": "detect staff members not wearing gloves at the meat counter", "split": "train"}
+{"domain": "sports and gyms", "prompt": "People using the bench press without a safety bar", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "spot anyone touching ready-to-eat food with bare hands", "split": "test"}
+{"domain": "sports and gyms", "prompt": "Alert when anyone climbs over the fence at the soccer pitch", "split": "train"}
+{"domain": "retail store", "prompt": "spot people not using a basket in the small store", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Check the space for problems", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect when a person lies on the floor and doesn't move for a while in the gym", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "wheelchair users at the ramp", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Alert me when a delivery person enters the office", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect extra monitors on desks", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect cars blocking the pedestrian crossing", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Count free chairs around the big meeting table", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Spot anyone smoking near the hospital entrance.", "split": "train"}
+{"domain": "parking and traffic", "prompt": "pedestrians without a reflective vest in the construction zone", "split": "train"}
+{"domain": "factory quality control", "prompt": "Check every circuit board for solder bridges between pins and stop the line if one is found.", "split": "train"}
+{"domain": "airports", "prompt": "Detect whether a passenger is lying at passport control.", "split": "test"}
+{"domain": "parking and traffic", "prompt": "help me with my car park camera", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Cyclists on the spin bikes without water bottles", "split": "train"}
+{"domain": "airports", "prompt": "unattended bag in the departure hall", "split": "test"}
+{"domain": "farm and livestock", "prompt": "Notify me when a farm worker is not wearing a hi-vis vest", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find staff members without a high-vis vest working near the rails", "split": "train"}
+{"domain": "retail store", "prompt": "Spot people carrying a backpack in the electronics section", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "people using a phone while driving a forklift", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "count people in zone A", "split": "train"}
+{"domain": "retail store", "prompt": "locate price tags missing from the fruit crates", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Diagnose pneumonia from the way the patient is breathing on camera.", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "dog inside the cafe", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "something to check the food is ok", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "audio of someone talking during silent study", "split": "train"}
+{"domain": "factory quality control", "prompt": "Predict which machine will break down next week just by looking at it.", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "napkin holders that are empty", "split": "train"}
+{"domain": "construction site safety", "prompt": "find cables lying across walkways that people could trip on", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect bikes parked inside the office", "split": "train"}
+{"domain": "airports", "prompt": "Detect passengers who look angry at the airline desk.", "split": "test"}
+{"domain": "public transport stations", "prompt": "Predict which train will be late tomorrow", "split": "train"}
+{"domain": "retail store", "prompt": "detect a wheelchair user at the entrance so staff can help", "split": "train"}
+{"domain": "construction site safety", "prompt": "find workers on scaffolding without a harness or lanyard attached", "split": "train"}
+{"domain": "home and pets", "prompt": "Identify which person is my neighbor Sarah at the door", "split": "train"}
+{"domain": "airports", "prompt": "Hey, can you spot any baggage trolleys outside the trolley parking bay?", "split": "test"}
+{"domain": "hospital and care home", "prompt": "any one in the laundry room without protective apron", "split": "train"}
+{"domain": "factory quality control", "prompt": "I want to see when something is blocking the emergency exit door", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect badminton shuttlecocks on the floor outside the court lines", "split": "train"}
+{"domain": "home and pets", "prompt": "I want to know when the cat is near the fish tank", "split": "train"}
+{"domain": "hospital and care home", "prompt": "watch the hospital for anything unusual please", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Cows mooing loudly", "split": "train"}
+{"domain": "airports", "prompt": "Identify the name of every person walking through arrivals.", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "find problems", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "empty desks in the study hall", "split": "train"}
+{"domain": "parking and traffic", "prompt": "spot anything weird in the parking lot", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect exam papers on desks before the exam starts", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "something about safety, I dunno, just make it work", "split": "train"}
+{"domain": "factory quality control", "prompt": "empty slots in the tray", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "I want to know if the animals are healthy.", "split": "train"}
+{"domain": "public transport stations", "prompt": "Mark every person who is standing in the queue at the ticket counter", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "persons without safety glasses near the cutting station", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find passengers carrying large bags in the rush hour on the escalator, it blocks others", "split": "train"}
+{"domain": "factory quality control", "prompt": "Cables with damaged insulation", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "detect snakes on the path", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "people not wearing masks in the food storage area", "split": "train"}
+{"domain": "construction site safety", "prompt": "find tools or materials left near the edge of the roof that could fall", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect stuff that shouldn't be there", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "predict which food will spoil tomorrow", "split": "test"}
+{"domain": "factory quality control", "prompt": "Tell me what the shift manager is thinking about right now.", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect doors left open in the server room", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect my cat when she is on the left half of the sofa", "split": "train"}
+{"domain": "factory quality control", "prompt": "Detect missing lids on the paint buckets sitting on the pallet.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "quad bike with child passenger", "split": "train"}
+{"domain": "retail store", "prompt": "detect long lines at the deli", "split": "train"}
+{"domain": "home and pets", "prompt": "Dog drinking from the toilet", "split": "train"}
+{"domain": "farm and livestock", "prompt": "detect wolves near the flock", "split": "train"}
+{"domain": "farm and livestock", "prompt": "all horses in the stable without blankets when it's cold", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find a car in the 15 minute zone for the whole afternoon", "split": "train"}
+{"domain": "retail store", "prompt": "detect customers using the staff only door", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "guess the grades of students from their faces", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people in the meeting room after 7pm", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "person within 2 meters of a moving forklift", "split": "train"}
+{"domain": "retail store", "prompt": "tell me when the bakery tray is empty", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "dogs on campus without a leash", "split": "train"}
+{"domain": "factory quality control", "prompt": "Spot any person in the robot cell while the light is red", "split": "train"}
+{"domain": "farm and livestock", "prompt": "horse with a rider and no helmet", "split": "train"}
+{"domain": "retail store", "prompt": "detect people who are lying to the cashier", "split": "train"}
+{"domain": "construction site safety", "prompt": "my guys keep forgetting their helmets, can you catch it?", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect police cars parked in the lot", "split": "train"}
+{"domain": "airports", "prompt": "Spot people crossing the apron outside the marked walkway.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "I want to know when the water trough is empty", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect people entering the wildlife sanctuary without a ranger uniform", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "figure out which diner is lying about their allergy", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "dirty tables that haven't been cleaned", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "detect when someone is smoking on the terrace", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect the book return box full", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "read what the students are thinking during the lecture", "split": "train"}
+{"domain": "factory quality control", "prompt": "Count cans on line 2 that have dents", "split": "train"}
+{"domain": "airports", "prompt": "Find tourists with selfie sticks in the baggage claim.", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "persons in the restricted area after 8pm", "split": "train"}
+{"domain": "factory quality control", "prompt": "Welders without protective mask", "split": "train"}
+{"domain": "home and pets", "prompt": "detect packages at the front door", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find ducks on the lake but ignore swans", "split": "train"}
+{"domain": "parking and traffic", "prompt": "cars double parked near the school entrance", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find cars with a broken windshield", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect open flames left unattended", "split": "test"}
+{"domain": "farm and livestock", "prompt": "Count eggs on the conveyor belt", "split": "train"}
+{"domain": "hospital and care home", "prompt": "monitor the waiting room, you know, the usual stuff", "split": "train"}
+{"domain": "construction site safety", "prompt": "alert if fewer than two people are present when the welding torch is on", "split": "train"}
+{"domain": "parking and traffic", "prompt": "kids on bikes in the parking lot", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find pots left on the floor", "split": "test"}
+{"domain": "construction site safety", "prompt": "detect workers using a drill without eye protection", "split": "train"}
+{"domain": "construction site safety", "prompt": "people in the red exclusion zone", "split": "train"}
+{"domain": "sports and gyms", "prompt": "detect kids on the climbing wall without harness", "split": "train"}
+{"domain": "sports and gyms", "prompt": "find the person who will get injured tomorrow", "split": "train"}
+{"domain": "airports", "prompt": "Find trolleys blocking the emergency exit.", "split": "test"}
+{"domain": "public transport stations", "prompt": "Tell me which passengers are going to buy a ticket next week", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cows crossing the red line on the ground", "split": "train"}
+{"domain": "farm and livestock", "prompt": "dog off leash near sheep", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Notify me when a goalkeeper is not wearing gloves", "split": "train"}
+{"domain": "construction site safety", "prompt": "can it just watch for bad stuff happening on site?", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Detect chickens not stored in the chiller", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Detect laptops left unattended on desks", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect a dog digging in the flower bed", "split": "train"}
+{"domain": "hospital and care home", "prompt": "persons falling down in the lounge", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "Alert if a person stands in the walk-in fridge for more than 10 mins", "split": "train"}
+{"domain": "factory quality control", "prompt": "Detect workers in the press zone without safety gloves", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Detect fire extinguisher missing from its wall spot", "split": "train"}
+{"domain": "public transport stations", "prompt": "Tell me when the platform is overcrowded", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "lab goggles missing on students in the chemistry lab", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect any person in the sauna area without a towel", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "bats flying out of the cave", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Which athletes are taking steroids?", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "show me when a truck is waiting at gate 3", "split": "train"}
+{"domain": "home and pets", "prompt": "Tell me if the person in the photo is lying", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "identify gloved hands vs ungloved hands", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect squirels", "split": "train"}
+{"domain": "offices and coworking", "prompt": "detect monitor with sticky notes on screen", "split": "train"}
+{"domain": "retail store", "prompt": "detect bottles of water lying on their side", "split": "train"}
+{"domain": "airports", "prompt": "Find cars stopped at the drop-off curb for too long.", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "identify John Smith when he enters the restaurant", "split": "train"}
+{"domain": "hospital and care home", "prompt": "detect trash bags left in front of the fire door", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cow lick salt block", "split": "train"}
+{"domain": "airports", "prompt": "Find cleaning staff who are not wearing a uniform in the washroom area.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "find lame cow walking", "split": "train"}
+{"domain": "hospital and care home", "prompt": "identify the exact name of every visitor entering the building", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "trash bins that are overflowing", "split": "train"}
+{"domain": "parking and traffic", "prompt": "I want to know when a car blocks the driveway", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find nature things in the pictures.", "split": "train"}
+{"domain": "retail store", "prompt": "alert me when someone stands in the cashier zone without a staff vest", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect workers carrying heavy loads alone, like a bag of cement bigger than 25kg", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect problem vehicles", "split": "train"}
+{"domain": "retail store", "prompt": "customers carrying bags without a receipt in hand near the exit", "split": "train"}
+{"domain": "public transport stations", "prompt": "help me with security", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Check whether the resident has their call button within reach of the bed.", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "find anything that might annoy customers", "split": "train"}
+{"domain": "home and pets", "prompt": "Is a cat on top of the fridge?", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "count the bottles of wine on the shelf", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "alert me when someone handles food without gloves", "split": "test"}
+{"domain": "home and pets", "prompt": "detect my parrot when it is outside the cage and not on its perch", "split": "train"}
+{"domain": "farm and livestock", "prompt": "sheep flipped on their back (cast sheep)", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "can you tell me when a person is standing in the red danger zone near the fryer", "split": "test"}
+{"domain": "home and pets", "prompt": "cat on the kitchen counter", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "I want to catch problems in my cafe", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect whether a staff member is happy at their job.", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Is anyone standing in the medication room who isn't wearing a badge?", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Alert me when a cow is lying down in the barn for too long.", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect whether my dog is secretly sad", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Tell me what the deer is thinking when it looks at the camera.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Tell me the exact age of each owl in the photos.", "split": "train"}
+{"domain": "parking and traffic", "prompt": "spot cyclists without helmets", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Find swimmers not wearing swim caps", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "forklift", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect cows or sheep entering the nature reserve zone but not wild deer.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find me a photo with a fox and a rabbit in it", "split": "train"}
+{"domain": "retail store", "prompt": "help with the shop cameras", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect a dog sitting on the couch while no person is in the room", "split": "train"}
+{"domain": "public transport stations", "prompt": "umbrellas left at the bench", "split": "train"}
+{"domain": "retail store", "prompt": "find the thieves", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Count basketball players inside the three-point line", "split": "train"}
+{"domain": "factory quality control", "prompt": "pallet in the forklift lane", "split": "train"}
+{"domain": "home and pets", "prompt": "detect a bowl of food left out with no pet nearby", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "tell me which customer will leave a tip", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Monitor my pool somehow", "split": "train"}
+{"domain": "home and pets", "prompt": "help me keep my animals safe", "split": "train"}
+{"domain": "retail store", "prompt": "detect a shopper's age exactly in years", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Detect a tractor driving on the grass but not on the road", "split": "train"}
+{"domain": "factory quality control", "prompt": "Apples with bruises or brown spots", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect people on the trail camera shots, but not hikers wearing orange vests.", "split": "train"}
+{"domain": "airports", "prompt": "Detect more than one person going through the e-gate at the same time.", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect interesting birds", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "overhead crane carrying a load above people", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "pallets", "split": "train"}
+{"domain": "farm and livestock", "prompt": "predict how much milk each cow will produce tomorrow", "split": "train"}
+{"domain": "factory quality control", "prompt": "Detect chocolate bars with no wrapper", "split": "train"}
+{"domain": "parking and traffic", "prompt": "cars parked on the grass", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Detect delivery vans blocking the bike lane", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "empty pallets left in the walkway", "split": "train"}
+{"domain": "retail store", "prompt": "count customers entering the door", "split": "train"}
+{"domain": "sports and gyms", "prompt": "someone on the yoga mat zone", "split": "train"}
+{"domain": "airports", "prompt": "Find people sitting on the floor near power outlets.", "split": "test"}
+{"domain": "sports and gyms", "prompt": "I want it to watch my gym", "split": "train"}
+{"domain": "retail store", "prompt": "Show me boxes blocking the emergency exit", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Alert if a person enters the bull pen", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "students walking on the grass instead of the path", "split": "train"}
+{"domain": "airports", "prompt": "Find open cargo hold doors with nobody working nearby.", "split": "test"}
+{"domain": "home and pets", "prompt": "Show me when a dog jumps on the kitchen table", "split": "train"}
+{"domain": "retail store", "prompt": "detect a person lingering by the jewelry case for a long time", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find passengers who lean on the train doors", "split": "train"}
+{"domain": "sports and gyms", "prompt": "find players not wearing a helmet on the field", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "waiters w/o masks", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect if the food tastes good", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "find damaged cartons", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "people in the server room without a badge", "split": "train"}
+{"domain": "factory quality control", "prompt": "burnt cookies", "split": "train"}
+{"domain": "home and pets", "prompt": "dogg barking at the mailman", "split": "train"}
+{"domain": "construction site safety", "prompt": "Tell me the name of the guy in the yellow helmet who is always slacking", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect cooks with long hair not tied back", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "e-scooters in the pedestrian zone", "split": "train"}
+{"domain": "home and pets", "prompt": "Find a lizard in the terrarium outside the heat lamp zone", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "detect foxes near the chicken coop", "split": "train"}
+{"domain": "home and pets", "prompt": "my doggo keeps getting on the bed lol, catch him", "split": "train"}
+{"domain": "hospital and care home", "prompt": "spot spilled liquid on the floor in the cafeteria", "split": "train"}
+{"domain": "construction site safety", "prompt": "where are people not wearing the right stuff", "split": "train"}
+{"domain": "factory quality control", "prompt": "Bottles with no label or crooked labels", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Show me hedgehogs in my garden but not when it is raining.", "split": "train"}
+{"domain": "retail store", "prompt": "detect trolleys with children sitting inside without a seat belt", "split": "train"}
+{"domain": "retail store", "prompt": "people without masks in the pharmacy section", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "bicycles inside the building", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect EV cars not charging in charging bays", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect people on their phones while operating heavy machinery", "split": "train"}
+{"domain": "retail store", "prompt": "detect forklifts in the customer area", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find cars with the hazard lights on", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Find a missing cow", "split": "train"}
+{"domain": "home and pets", "prompt": "I want to see when things are messy", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Read the text on every laptop screen and summarize it", "split": "train"}
+{"domain": "construction site safety", "prompt": "Anyone inside the confined space entrance without a spotter", "split": "train"}
+{"domain": "retail store", "prompt": "detect cashiers without a uniform apron", "split": "train"}
+{"domain": "sports and gyms", "prompt": "count tennis balls on the court after practice", "split": "train"}
+{"domain": "public transport stations", "prompt": "bags left alone on the bench", "split": "train"}
+{"domain": "parking and traffic", "prompt": "watch the road and tell me stuff", "split": "train"}
+{"domain": "airports", "prompt": "detect passengers without boarding pass in hand at gate", "split": "test"}
+{"domain": "parking and traffic", "prompt": "cars on the zebra crossing", "split": "train"}
+{"domain": "hospital and care home", "prompt": "spot visitors in the ICU without a gown", "split": "train"}
+{"domain": "factory quality control", "prompt": "detect bad solder joints", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people not at their assigned desk", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "food waste bins without lids", "split": "test"}
+{"domain": "farm and livestock", "prompt": "Bees flying in and out of the hive entrance, count them", "split": "train"}
+{"domain": "retail store", "prompt": "find pallets in the walkway without a yellow cone next to them", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect a lion lying on the road in the safari camera zone, but skip the pictures where a jeep is also there.", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "pallet in the aisle between racks 4 and 5", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Referee holding a red card", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect people entering the staff only door", "split": "train"}
+{"domain": "sports and gyms", "prompt": "alert me when someone is on the treadmill without a towel", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Tell me what the driver is thinking", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "kitchen monitoring pls", "split": "test"}
+{"domain": "home and pets", "prompt": "show me kittens in the basket", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect if someone is feeling stressed or unhappy", "split": "train"}
+{"domain": "public transport stations", "prompt": "somone smoking under the no smoking sign", "split": "train"}
+{"domain": "home and pets", "prompt": "dog bowl with no food in it", "split": "train"}
+{"domain": "home and pets", "prompt": "Predict when my cat will get sick next month", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "somthing wrong in the kitchen", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "mobile phone on the kitchen prep table", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Figure out which animals are in danger.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "sheep wearing a collar vs not wearing one", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "how full is the cafe right now", "split": "train"}
+{"domain": "retail store", "prompt": "count people in the checkout queue", "split": "train"}
+{"domain": "farm and livestock", "prompt": "check if the fence is broken", "split": "train"}
+{"domain": "retail store", "prompt": "show me shelves where the milk is out of stock", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Identify John from accounting when he walks in", "split": "train"}
+{"domain": "retail store", "prompt": "detect when a shopper picks up a product and puts it back", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "count the bicycles on campus pls", "split": "train"}
+{"domain": "construction site safety", "prompt": "spot people sitting or resting on the edge of the concrete slab", "split": "train"}
+{"domain": "airports", "prompt": "People in the baggage claim area without a trolley.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "smoke in the barn", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Know which car is going to leave the spot in 10 minutes", "split": "train"}
+{"domain": "factory quality control", "prompt": "Find tires with bubbles or cuts on the sidewall.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect birds on the feeder when its a sparrow but not a pidgeon", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Help me see if the office is being used well", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect people wearing shoes on the studio mats", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Track what's going on in the coworking space", "split": "train"}
+{"domain": "construction site safety", "prompt": "dont see any hardhat on that guy, detect it plz", "split": "train"}
+{"domain": "retail store", "prompt": "detect which customers are rich", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Count how many people are in the phone booth", "split": "train"}
+{"domain": "factory quality control", "prompt": "detect wires not connected to the terminal block", "split": "train"}
+{"domain": "hospital and care home", "prompt": "detect staff not wearing masks in the ward", "split": "train"}
+{"domain": "retail store", "prompt": "tell me what's going on in my shop", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect when someone enters the pharmacy storeroom after hours", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "can it tell if a student is lying", "split": "train"}
+{"domain": "airports", "prompt": "Find ground power units still connected to a plane that is moving away.", "split": "test"}
+{"domain": "hospital and care home", "prompt": "something about hygeine in the kitchen idk", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect when a bed is empty and the sheets are on the floor", "split": "train"}
+{"domain": "construction site safety", "prompt": "Spot a bulldozer moving while a person is within its blind spot", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect people wearing yoga pants without socks", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect bacteria on the chopping board", "split": "test"}
+{"domain": "airports", "prompt": "Read the thoughts of passengers who look nervous at security.", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "Detect people washing hands at the hand sink", "split": "test"}
+{"domain": "hospital and care home", "prompt": "staff carrying patient without a lifting hoist", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "raw meat stored above vegetables in the fridge", "split": "test"}
+{"domain": "public transport stations", "prompt": "Find buses without a visible route number on the front", "split": "train"}
+{"domain": "parking and traffic", "prompt": "something with traffic, I'm not sure what exactly", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "make the camera smart for my warehouse", "split": "train"}
+{"domain": "construction site safety", "prompt": "Alert me if the gate is left open when nobody is around", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "identify which cook is John from the video", "split": "test"}
+{"domain": "factory quality control", "prompt": "Spot packages with torn or open flaps before they reach the shipping station, please.", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect people walking on the road not the sidewalk", "split": "train"}
+{"domain": "airports", "prompt": "I want a camera that watches the gate and knows what is happening.", "split": "test"}
+{"domain": "construction site safety", "prompt": "pls detect pepole without helmet", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Alert me when someone sits on the lecture hall stairs", "split": "train"}
+{"domain": "construction site safety", "prompt": "Find workers crossing the vehicle lane outside the marked crosswalk", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect people who intend to commit a crime in the parking lot", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect a student cheating by looking at neighbour's paper", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect salmonella in the raw eggs", "split": "test"}
+{"domain": "retail store", "prompt": "identify people entering through the exit-only door", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Count chickens in the coop", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect gymnasts on the balance beam without a mat underneath", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Know who stole my lunch from the fridge by name", "split": "train"}
+{"domain": "airports", "prompt": "Detect staff using a phone while driving a tug on the apron.", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "delivery drivers waiting by the door", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Sheeps bunching near the gate", "split": "train"}
+{"domain": "home and pets", "prompt": "Spot when the front door is open and nobody is home", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect when someone is inside the CEO office", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "person walking in the truck loading area without a vest", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect blind persons with a white cane near the platform edge", "split": "train"}
+{"domain": "home and pets", "prompt": "turtle out of the water", "split": "train"}
+{"domain": "factory quality control", "prompt": "Is there a hand inside the stamping machine while it is running?", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "students wearing caps during exam", "split": "train"}
+{"domain": "airports", "prompt": "Detect snow piles blocking the taxiway markings.", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "pigeons in the cafeteria", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect rugby players in the in-goal area", "split": "train"}
+{"domain": "factory quality control", "prompt": "bent pins on the connector", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "figure out who stole the missing laptop", "split": "train"}
+{"domain": "public transport stations", "prompt": "tell me what the passenger on platform 2 is thinking", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "detect cockroaches or mice on the floor", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "seats occupied by bags only", "split": "train"}
+{"domain": "public transport stations", "prompt": "Make the camera watch the station", "split": "train"}
+{"domain": "factory quality control", "prompt": "empty spot on the shelf where a part should be", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people in the gym room without towels", "split": "train"}
+{"domain": "retail store", "prompt": "detect people holding two baskets", "split": "train"}
+{"domain": "factory quality control", "prompt": "I need to know when a person enters the cutting machine area without a helmet and vest", "split": "train"}
+{"domain": "sports and gyms", "prompt": "spot skiers not wearing goggles on the slope", "split": "train"}
+{"domain": "retail store", "prompt": "detect unattended bags left near the entrance", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect trains that arrive with a broken window", "split": "train"}
+{"domain": "airports", "prompt": "detect smoke or fire in the baggage hall", "split": "test"}
+{"domain": "home and pets", "prompt": "Detect my dog on the sofa", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect delivery boxes on the floor of the kitchen", "split": "test"}
+{"domain": "construction site safety", "prompt": "detect people not wearing respirator masks in the dusty cutting area", "split": "train"}
+{"domain": "airports", "prompt": "Count passengers standing in the security queue so I know when it is longer than 30 people.", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Hear what people are saying in the phone booth", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Is the door open or closed", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect cyclists without helmets on the velodrome", "split": "train"}
+{"domain": "public transport stations", "prompt": "Count how many people are waiting at bus stop 12 right now", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect anyone entering the radiology room without a lead apron on", "split": "train"}
+{"domain": "home and pets", "prompt": "Tell me if my puppy chews the shoes", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "whiteboard with no writing on it", "split": "train"}
+{"domain": "farm and livestock", "prompt": "find the black sheep", "split": "train"}
+{"domain": "farm and livestock", "prompt": "calf drinking from bottle", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect workers with no ear protection next to the jackhammer", "split": "train"}
+{"domain": "retail store", "prompt": "count cans of cola on the shelf", "split": "train"}
+{"domain": "construction site safety", "prompt": "find uncovered rebar ends sticking out that someone could fall on", "split": "train"}
+{"domain": "hospital and care home", "prompt": "wet floor sign missing when floor is being mopped", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect a person in the boxing ring without a mouthguard", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "coffee cups left on tables after customers leave", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find opened cans stored in the fridge", "split": "test"}
+{"domain": "sports and gyms", "prompt": "detect people not wearing a lifejacket on the kayak", "split": "train"}
+{"domain": "hospital and care home", "prompt": "find syringes left on the bedside table", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "high chairs that are free", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Predict which day the bear will come back to my camera.", "split": "train"}
+{"domain": "hospital and care home", "prompt": "doctors not wearing white coats in sterile area", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Spot people lifting heavy with nobody around to help, in the free weights area after 9pm", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect veichles in the taxi rank that are not taxis", "split": "train"}
+{"domain": "home and pets", "prompt": "squirrels at the feeder", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Detect any car taller than the height limit bar", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect cables on the floor near walkways", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect empty platforms so we can close the lights", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Track any fox in the left half of the image.", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "cages and roll containers parked outside the marked zone", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "someone with a camera pointed at the exam paper", "split": "train"}
+{"domain": "parking and traffic", "prompt": "cars w/o seatbelt on drivers", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect backpacks left unattended in the corridor", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect small birds in the hedge, only when no cat is near.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "tractor parked in the yard with no one inside", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect poachers carrying rifles in the forest at night.", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Detect ambulances in the traffic", "split": "train"}
+{"domain": "airports", "prompt": "detect baggage carts hooked to the tug more than 4 at a time", "split": "test"}
+{"domain": "factory quality control", "prompt": "Watch the factory and warn me about problems.", "split": "train"}
+{"domain": "factory quality control", "prompt": "is the worker wearing a hard hat? if not, flag it", "split": "train"}
+{"domain": "airports", "prompt": "Detect people inside the baggage sorting area without safety shoes or gloves.", "split": "test"}
+{"domain": "public transport stations", "prompt": "Find people who are blocking the emergency exit with their luggage", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect packages on the reception desk", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect when the chef is feeling stressed", "split": "test"}
+{"domain": "public transport stations", "prompt": "Detect vending machines that are out of order with a dark screen", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect mugs left on the kitchen counter overnight", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Detect mice or rats anywhere in the kitchen", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "predict which seats will be taken tomorrow", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Find laptops without a security lock cable", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Spot nurses wearing jewellery on their hands in the surgical ward", "split": "train"}
+{"domain": "retail store", "prompt": "Detect when the checkout counter has more than 3 people waiting", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "sleeping cook", "split": "test"}
+{"domain": "public transport stations", "prompt": "Find trams with open doors while moving", "split": "train"}
+{"domain": "factory quality control", "prompt": "Find products on the belt that are upside down.", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "tell me if the conveyor is jammed with boxes", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect any animal inside the chicken coop that is not a chicken", "split": "train"}
+{"domain": "retail store", "prompt": "detect any person near the safe in the office room", "split": "train"}
+{"domain": "retail store", "prompt": "detect when someone takes a bottle from the liquor shelf and hides it in a coat", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect rubbish on the tracks like bottles or bags", "split": "train"}
+{"domain": "construction site safety", "prompt": "I need safety monitoring", "split": "train"}
+{"domain": "public transport stations", "prompt": "Alert me if someone is jumping over the barrier at gate B", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "need to see anyone in the kitchen with no apron and no gloves, camera is above the pass", "split": "test"}
+{"domain": "hospital and care home", "prompt": "detect blocked corridors, boxes or carts in the way of beds", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "two forklifts close to each other at the intersection", "split": "train"}
+{"domain": "farm and livestock", "prompt": "hens laying eggs in the nesting box", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "bare hands on pizza", "split": "test"}
+{"domain": "home and pets", "prompt": "Is the oven door open?", "split": "train"}
+{"domain": "retail store", "prompt": "predict how much sales will be next month from the camera", "split": "train"}
+{"domain": "home and pets", "prompt": "Dog in the garden without a leash", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detct skaters without knee pads at the skatepark", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect people not wearing hard hats", "split": "train"}
+{"domain": "factory quality control", "prompt": "Any glass bottle with a chip on the rim", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Count people standing in the hallway more than 3 at a time", "split": "train"}
+{"domain": "farm and livestock", "prompt": "A cow that is about to give birth, I want to see the signs like tail raised and restless", "split": "train"}
+{"domain": "retail store", "prompt": "detect a customer with a stroller entering the aisle that is too narrow", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "who is the manager in this video", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find passengers inside the red danger zone near the tracks", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "box on the floor in the aisle", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Tell me which employee is going to quit", "split": "train"}
+{"domain": "public transport stations", "prompt": "Anyone riding a skateboard on the platform", "split": "train"}
+{"domain": "factory quality control", "prompt": "Missing rivets on the car door panel", "split": "train"}
+{"domain": "hospital and care home", "prompt": "person in a hospital gown outside the building", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "cars parked in the fire lane next to the science building", "split": "train"}
+{"domain": "retail store", "prompt": "make it find stuff", "split": "train"}
+{"domain": "public transport stations", "prompt": "people on the tracks", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect weightlifters with no chalk on their hands", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "make it catch hygiene problems", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect an animal", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "wokers with no helmet near the crane", "split": "train"}
+{"domain": "construction site safety", "prompt": "persons inside the scaffolding area when the sign says closed", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Mark every elephant that is close to the water hole, but not the ones that are far away in the background.", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "watch my staff", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "find chairs that have fallen over", "split": "train"}
+{"domain": "hospital and care home", "prompt": "I want safety monitoring for my care home, not sure what exactly.", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect empty desks", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Cleaner without high-vis vest in the car park", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Sheep in the field without a shepherd nearby", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect wrokers without safty vests plese", "split": "train"}
+{"domain": "public transport stations", "prompt": "Notify me if a wheelchair user is waiting at the lift and no staff is near", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "students entering the exam room with a bag", "split": "train"}
+{"domain": "home and pets", "prompt": "Spot a pet near the Christmas tree", "split": "train"}
+{"domain": "factory quality control", "prompt": "Find pizzas with missing toppings or no cheese on one side.", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Help me keep residents safer at night somehow", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "tell me when the espresso machine is unattended", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "tell me what the dishwasher is thinking about", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "my warehouse is messy, tell me when something is wrong", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect cars parked in front of the fire hydrant", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "pets in the dining area near food", "split": "test"}
+{"domain": "parking and traffic", "prompt": "Predict which car will crash tomorrow", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Detect when the horse feels sad or lonely", "split": "train"}
+{"domain": "factory quality control", "prompt": "pcb with missing capacitors", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "smart watches on wrists during the test", "split": "train"}
+{"domain": "airports", "prompt": "Anyone standing on the yellow line at the edge of the platform of the airport train?", "split": "test"}
+{"domain": "construction site safety", "prompt": "alert me when someone is on the roof without a safety harness", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "count people in the queue at the counter", "split": "train"}
+{"domain": "home and pets", "prompt": "is there a person on the couch without the dog next to them", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Tell me when a bed rail is left down while the patient is in bed.", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect hi vis vests with no reflective stripes", "split": "train"}
+{"domain": "parking and traffic", "prompt": "alert me when a van stays in the loading zone", "split": "train"}
+{"domain": "factory quality control", "prompt": "Read the mind of the operator and see if he is tired of his job.", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "tell me stuff", "split": "train"}
+{"domain": "parking and traffic", "prompt": "motorbike riders not wearing a helmet", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Detect pickup trucks with an open tailgate", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Carer pushing wheelchair without footrests attached", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "customer standing at the counter for too long without being served", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find the bad drivers", "split": "train"}
+{"domain": "airports", "prompt": "Alert if more than 5 people are standing in the security lane exit zone.", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "find empty hand soap dispensers at the wash station", "split": "test"}
+{"domain": "public transport stations", "prompt": "Detect police officers on the platform", "split": "train"}
+{"domain": "airports", "prompt": "Detect forklifts driving inside the cargo zone without a flashing light on.", "split": "test"}
+{"domain": "sports and gyms", "prompt": "figure out if people are happy at the gym", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Flag any drone flying over the nesting area.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "detect trash left on the trail by visitors", "split": "train"}
+{"domain": "home and pets", "prompt": "Is there a bird at my bird feeder?", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "shrink wrap rolls on the floor", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Find piglets outside the farrowing crate", "split": "train"}
+{"domain": "sports and gyms", "prompt": "detect dogs on the football pitch", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Is Mrs Patel feeling lonely today?", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "worker without gloves handling boxes", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect cups on the floor in the phone booth", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "forklift carrying a load with the forks raised too high", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Detect strapped vs unstrapped loads on the truck bed", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect the good wildlife shots", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Find players on the bench with their shoes untied", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Identify the exact name of the person who owns each car", "split": "train"}
+{"domain": "home and pets", "prompt": "Know the exact breed DNA of my mutt from the camera", "split": "train"}
+{"domain": "retail store", "prompt": "dtect shopping baskets left on the floor", "split": "train"}
+{"domain": "airports", "prompt": "Make it tell me when things look wrong.", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "find open cash register drawer with nobody at it", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cow in the crush without the head gate closed", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect people in my living room without shoes off", "split": "train"}
+{"domain": "construction site safety", "prompt": "hard hat missing = alert. thats all i need", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "check that everyone in zone B wears a beard cover", "split": "test"}
+{"domain": "offices and coworking", "prompt": "I just want to know if people are being productive", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect electrical panels with the door open", "split": "train"}
+{"domain": "hospital and care home", "prompt": "more than 2 people in the lift with a bed", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Find trucks parked overnight in the yard", "split": "train"}
+{"domain": "airports", "prompt": "Detect crowds forming at the exit doors.", "split": "test"}
+{"domain": "home and pets", "prompt": "Detect a person holding a vacuum cleaner in the hallway", "split": "train"}
+{"domain": "home and pets", "prompt": "Predict which dog will bark tomorrow", "split": "train"}
+{"domain": "offices and coworking", "prompt": "tell me when a person is standing in the server room", "split": "train"}
+{"domain": "home and pets", "prompt": "dog on the couch but not on the blanket", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "know what the customer is thinking about the food", "split": "train"}
+{"domain": "factory quality control", "prompt": "Pls find chipped edges on the ceramic plates, they go to the packing table fast", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "find empty tables in the dining area", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect the robot vacuum stuck under the couch", "split": "train"}
+{"domain": "factory quality control", "prompt": "Find paint drips on the car bodies.", "split": "train"}
+{"domain": "home and pets", "prompt": "Make it detect stuff in my house", "split": "train"}
+{"domain": "airports", "prompt": "A person lying on the floor in the waiting area.", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "laptop open without a person sitting at it", "split": "train"}
+{"domain": "airports", "prompt": "Detect aircraft on stand 7 and say when a catering truck is next to it.", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Check if the meeting room whiteboard marker is missing from the tray", "split": "train"}
+{"domain": "home and pets", "prompt": "detect mice in the pantry", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect cars parked crooked over two spaces", "split": "train"}
+{"domain": "airports", "prompt": "Spot anyone smoking near the fuel station.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "goat in the vegetable garden", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Show me when a heron stands in the pond shallow area", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "find water bottles left on the floor in the aisle", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect welders without a face shield", "split": "train"}
+{"domain": "public transport stations", "prompt": "Highlight people sitting on the stairs blocking the exit", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Read the mind of the player at the free throw line", "split": "train"}
+{"domain": "construction site safety", "prompt": "identify people operating a power saw without gloves", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cows standing in the feed alley without feed in front of them", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "monitor the campus", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "staff using phones during service", "split": "train"}
+{"domain": "retail store", "prompt": "detect which shoppers are about to steal something", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect e-scooters riding two people", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find scooters parked on the pavement", "split": "train"}
+{"domain": "retail store", "prompt": "detect when a customer is standing in the zone behind the counter", "split": "train"}
+{"domain": "retail store", "prompt": "detect lids missing from the coffee cups stack", "split": "train"}
+{"domain": "hospital and care home", "prompt": "resident wandering at night in the dementia unit hallway", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "check whether every salad has a lemon slice on it", "split": "train"}
+{"domain": "retail store", "prompt": "hands inside the open cash register drawer", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "tell me if any cleaning spray bottles are stored beside the food", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "Detect two people lifting a box together vs one person alone", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "cooks wearing no face masks", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "Cars parked on the loading ramp", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "how many people are in the line at lunch", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find raw chicken on the same cutting board as vegetables", "split": "test"}
+{"domain": "hospital and care home", "prompt": "monitor the car park for people with crutches struggling at the kerb", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "count how many pallets are in loading bay 2", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "are the employees honest", "split": "test"}
+{"domain": "factory quality control", "prompt": "Boxes stacked higher than 3 on the pallet", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "idk, maybe forklifts that go too fast?", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "coffee machine steam wand not wiped", "split": "train"}
+{"domain": "public transport stations", "prompt": "folks blocking the elevator door", "split": "train"}
+{"domain": "hospital and care home", "prompt": "tell me if a patient is lying about taking their pills", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Tell me when a ball goes out of bounds", "split": "train"}
+{"domain": "airports", "prompt": "Detct people carryng large bags into the cabin area, bigger than the allowed size.", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "people standing in the emergency exit zone", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "latte with no foam art", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "Can you see who stole my recipe", "split": "train"}
+{"domain": "retail store", "prompt": "Notify me if a child is alone near the exit doors", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "spot staff carrying food without a tray into the dining room", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "empty shelf slots in rack A", "split": "train"}
+{"domain": "retail store", "prompt": "detect shoppers who have a bad mood", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "count how many chefs are in the kitchen", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "foodd left uncovered on the buffet", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "bins overflowing with rubbish", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "detect ladders left standing in the aisle", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "whiteboard markers missing from the tray", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Spot unattended bags in the lobby", "split": "train"}
+{"domain": "offices and coworking", "prompt": "find people wearing headphones at their desk", "split": "train"}
+{"domain": "retail store", "prompt": "count the products in the cart at checkout", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect archers standing behind the shooting line", "split": "train"}
+{"domain": "airports", "prompt": "Detect gate area bad behaviour.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "dead chicken on the floor of the henhouse", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "monitor hygeine", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect people lifting weights without a spotter nearby", "split": "train"}
+{"domain": "construction site safety", "prompt": "Flag when a forklift is closer than 2 meters to a pedestrian", "split": "train"}
+{"domain": "parking and traffic", "prompt": "trucks in the no-truck lane", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Count boxes on each shelf", "split": "train"}
+{"domain": "farm and livestock", "prompt": "sick pig", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect people sitting on the floor without a seat", "split": "train"}
+{"domain": "farm and livestock", "prompt": "is the gate open", "split": "train"}
+{"domain": "retail store", "prompt": "Is anyone standing at the self checkout without scanning anything? I want to know when a person is at the machine with no item in hand.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Mark frogs on lily pads in the pond", "split": "train"}
+{"domain": "retail store", "prompt": "find stacked cardboard boxes in the aisle", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "count the trucks in the yard", "split": "train"}
+{"domain": "factory quality control", "prompt": "workers not wearing masks in clean room", "split": "train"}
+{"domain": "home and pets", "prompt": "is the stove on with no pot on it", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "watch the kitchen", "split": "train"}
+{"domain": "parking and traffic", "prompt": "monitor my street", "split": "train"}
+{"domain": "airports", "prompt": "Tell me which passenger is John Smith from the passenger list.", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "i need to know if any mooses are crossing the road section on the left side of the camera", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect ladders that nobody is holding at the bottom", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Detect missing pallet labels", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "cups stacked wrong at the bar", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "person on the stairs", "split": "train"}
+{"domain": "home and pets", "prompt": "Flag when the gate is left open and the dog is in the front yard", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cow eating from trough", "split": "train"}
+{"domain": "offices and coworking", "prompt": "detect umbrellas left in the hallway", "split": "train"}
+{"domain": "public transport stations", "prompt": "unattended suitcase near the ticket machine", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Count monitors turned on in the open space", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "customer touching food in the display", "split": "train"}
+{"domain": "public transport stations", "prompt": "count people entering through the main entrance every hour", "split": "train"}
+{"domain": "retail store", "prompt": "track the carts", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "pelicans on the pier posts", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "tables with menus but no food", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Count the number of people waiting in the reception area.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Count the birds on my feeder.", "split": "train"}
+{"domain": "airports", "prompt": "Mark where each person stands in the immigration queue so I can count how long the line is.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "cow head stuck in the feeding fence", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "people smoking near the entrance", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "hardhat missing on workers at the construction site by the library", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect people standing between parked cars", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect trams that are parked in the zone where they should not stop", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect a person near the front door after closing time", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "pallets in the wrong color zone, like red pallet in the green area", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find people using phones while driving", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect laundry basket overflowing", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Alert me when a person is standing inside the yellow forklift lane", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Highlight any kangaroo in the paddock zone near the fence", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people sitting at the hot desks", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Identify which gym member is John Smith", "split": "train"}
+{"domain": "public transport stations", "prompt": "Show where the crowd is thickest in the hall", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect anything unusual", "split": "train"}
+{"domain": "factory quality control", "prompt": "missing screws on the motherboard", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "people sitting in the first two rows only", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "driver outside the cab in the loading yard without a vest", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "parcels on the conveyor belt that are upside down", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "pizza left on the pass for too long", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Detect a person sitting on the floor of the shower room", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "I want to know about safety", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Is a person standing inside the shot put circle?", "split": "train"}
+{"domain": "public transport stations", "prompt": "Check that every taxi in the rank has its roof light on", "split": "train"}
+{"domain": "hospital and care home", "prompt": "i need to know if kids are runing in the childrens ward corridor", "split": "train"}
+{"domain": "parking and traffic", "prompt": "pls detect cars with lights off at night", "split": "train"}
+{"domain": "factory quality control", "prompt": "Can it look at my products and tell which ones are good?", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "need 2 spot foxs near hen house, not when farmer is there", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Read the mind of the squirrel", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "detect a hawk perched on the fence post", "split": "train"}
+{"domain": "airports", "prompt": "Predict which flight will be delayed tomorrow from the camera feed.", "split": "test"}
+{"domain": "airports", "prompt": "Spot catering trucks without a driver in the cab.", "split": "test"}
+{"domain": "retail store", "prompt": "detekt wet floor signs missing near the mop bucket", "split": "train"}
+{"domain": "home and pets", "prompt": "detect my two dogs fighting over a toy", "split": "train"}
+{"domain": "factory quality control", "prompt": "Spot bread loaves that are burnt on top.", "split": "train"}
+{"domain": "factory quality control", "prompt": "detect scratches on the metal sheets", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Find people using phones in the no-phone focus room", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Count zebras in the herd by the river", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect the smell of the skunk before it shows up.", "split": "train"}
+{"domain": "retail store", "prompt": "detect a person in the zone between the till and the door holding a product without a bag", "split": "train"}
+{"domain": "airports", "prompt": "Can it just check if the airport is safe?", "split": "test"}
+{"domain": "construction site safety", "prompt": "alert when a crane hook is carrying a load over a walkway where people are", "split": "train"}
+{"domain": "construction site safety", "prompt": "Are the safety cones set up around the open pit? Detect when cones are missing", "split": "train"}
+{"domain": "offices and coworking", "prompt": "find coffee cups left on the conference table", "split": "train"}
+{"domain": "sports and gyms", "prompt": "I want to know when machines are free", "split": "train"}
+{"domain": "airports", "prompt": "Spot cars parked in the disabled spots without a permit sign.", "split": "test"}
+{"domain": "offices and coworking", "prompt": "detect wheelchairs blocked by furniture in the corridor", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "diagnose which student is ill from the camera", "split": "train"}
+{"domain": "retail store", "prompt": "Detect shoppers not wearing a basket or cart near the entrance", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "I need a camera thing that watches my kitchen and tells me if its clean enough", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "mugs without saucers on tables", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "how many peple are inside the auditorium", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect people standing in the zone near the projector screen", "split": "train"}
+{"domain": "parking and traffic", "prompt": "cars waiting more than 5 minutes at the gate", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect open manholes without covers", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "worker w/o vest", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find potholes in the road", "split": "train"}
+{"domain": "home and pets", "prompt": "find the trash can lid being open", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect packages in the mailroom shelf", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "pallet wrapped in stretch film vs not wrapped", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Pick out otters on the riverbank", "split": "train"}
+{"domain": "farm and livestock", "prompt": "bull mounting another cow", "split": "train"}
+{"domain": "airports", "prompt": "Detect any vehicle on the runway.", "split": "test"}
+{"domain": "parking and traffic", "prompt": "cars in the disabled bay with no blue badge", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect broken lights on the platform ceiling", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect hands touching raw meat then the fridge handle", "split": "test"}
+{"domain": "parking and traffic", "prompt": "detect snow covered cars in the parking lot", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect laptops on desks in the library", "split": "train"}
+{"domain": "home and pets", "prompt": "Tell me the age and health insurance of my cat", "split": "train"}
+{"domain": "public transport stations", "prompt": "Spot passengers standing between the train and the platform door gap", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect any pet that is in the baby's room", "split": "train"}
+{"domain": "parking and traffic", "prompt": "cars that dont stop at the stop sign", "split": "train"}
+{"domain": "public transport stations", "prompt": "ppl crossing the road outside the pedestrian crossing at the bus stop", "split": "train"}
+{"domain": "factory quality control", "prompt": "Spot loose cables lying on the walkway where people walk.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Detect pigs without water in the drinker area", "split": "train"}
+{"domain": "farm and livestock", "prompt": "I need something to watch my cows and tell me if anything looks wrong", "split": "train"}
+{"domain": "airports", "prompt": "Detect pushback tug working with no wing walker visible.", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "detect anyone not wearing closed-toe shoes in the kitchen", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "Customers using laptops for a long time", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Notify me if a squirrel is on the bird feeder and no bird is there", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Predict when the printer will break", "split": "train"}
+{"domain": "factory quality control", "prompt": "Count the number of finished parts that pass the camera each minute", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect cones that have been knocked over on the training field", "split": "train"}
+{"domain": "airports", "prompt": "Spot ground crew without helmets near the aircraft.", "split": "test"}
+{"domain": "factory quality control", "prompt": "Is the fire extinguisher in its place? Flag if it's gone.", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect person + no helmet + inside zone A. thanks", "split": "train"}
+{"domain": "home and pets", "prompt": "Window left open while it rains", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Spot anyone climbing on the racking", "split": "train"}
+{"domain": "hospital and care home", "prompt": "alert for residents sitting alone in the dining room with no staff in the zone", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Locate every moose calf next to an adult moose.", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Alert me to unattended bags in the locker room entrance", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect stoped cars on the highway shoulder", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "extra bag on the seat next to customer", "split": "train"}
+{"domain": "retail store", "prompt": "detect when a customer puts an item in their pocket instead of the basket", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "pls tell me if the fryer is on and nobody is near it", "split": "train"}
+{"domain": "airports", "prompt": "Find out who is a terrorist among the people in the departure hall.", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Make it notice when something looks off in the office", "split": "train"}
+{"domain": "farm and livestock", "prompt": "lamb with the mother", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Is the loading dock door open or closed?", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "detect crane birds in the marshland, plz also dont count the herons", "split": "train"}
+{"domain": "factory quality control", "prompt": "Tell me which worker is going to quit next month.", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect dogs without a leash in the concourse", "split": "train"}
+{"domain": "factory quality control", "prompt": "Detect bags that were not sealed properly at the top", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Spot dirty dishes in the sink", "split": "train"}
+{"domain": "airports", "prompt": "Watch the terminal for anything unusual please!!", "split": "test"}
+{"domain": "construction site safety", "prompt": "Spot fire extinguishers that are missing from their usual spot near the welding station", "split": "train"}
+{"domain": "sports and gyms", "prompt": "people sitting on the leg press machine for more than 10 minutes without moving", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find any vehicle in the no parking zone", "split": "train"}
+{"domain": "airports", "prompt": "luggage w/o owner near the check in counter for more then 10 minutes", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "workers not wearing hi-vis vests", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect wheelbarrows or tools left in the stairwell", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "vehicles on the footpath", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "count empty seats in row 3", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Count heads. Quick.", "split": "train"}
+{"domain": "factory quality control", "prompt": "spot misaligned stickers on laptops", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect passengers not wearing a mask in the waiting hall", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people at the vending machine", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "full tables vs empty tables", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "predict when the next health inspection will fail", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "detect trash bins overflowing near the docks", "split": "train"}
+{"domain": "farm and livestock", "prompt": "dairy cow with swollen udder", "split": "train"}
+{"domain": "farm and livestock", "prompt": "ducks in the pond", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect trays of cooked food sitting on the counter, not in the fridge", "split": "test"}
+{"domain": "public transport stations", "prompt": "I need to know who is a pickpocket", "split": "train"}
+{"domain": "airports", "prompt": "Is there a plane at the gate? Tell me when the jet bridge is attached or not.", "split": "test"}
+{"domain": "home and pets", "prompt": "Cat litter box that is full of poop", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect staff wearing jewellery or rings while preparing food", "split": "test"}
+{"domain": "hospital and care home", "prompt": "Patient with oxygen mask taken off", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "barcode scanner left on the floor", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "something weird in the hall", "split": "train"}
+{"domain": "hospital and care home", "prompt": "nurse without gloves", "split": "train"}
+{"domain": "construction site safety", "prompt": "find blocked fire exits with materials stacked in front", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Is the boxing ring empty or occupied?", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect buses that are too full to board", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "flag any person in the staff-only area who isn't wearing a name badge", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Tag every photo that has a wolf and no other animals around it.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "sheep that have been sheared vs not sheared", "split": "train"}
+{"domain": "retail store", "prompt": "detect cigarettes on the counter when no staff member is next to it", "split": "train"}
+{"domain": "retail store", "prompt": "Detect people taking more than one free sample from the tasting table.", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Person eating in the food prep zone", "split": "test"}
+{"domain": "sports and gyms", "prompt": "detect runners without bibs", "split": "train"}
+{"domain": "factory quality control", "prompt": "scratchs on the aluminium frames", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "identify John from receiving by his face", "split": "train"}
+{"domain": "construction site safety", "prompt": "find scaffolding without toe boards", "split": "train"}
+{"domain": "parking and traffic", "prompt": "spot taxis waiting in the VIP spaces", "split": "train"}
+{"domain": "parking and traffic", "prompt": "buses stopping outside the bus stop", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect kids near the street without an adult", "split": "train"}
+{"domain": "factory quality control", "prompt": "Check if the lid is sealed on every yoghurt cup", "split": "train"}
+{"domain": "hospital and care home", "prompt": "spot open sharps bin overflowing", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Spot anyone wearing a watch while kneading dough", "split": "test"}
+{"domain": "public transport stations", "prompt": "Detect persons crossing the tracks outside the marked crossing", "split": "train"}
+{"domain": "airports", "prompt": "Someone entering the runway crossing without a vehicle.", "split": "test"}
+{"domain": "hospital and care home", "prompt": "Identify packages left unattended in the waiting room.", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Alert if anyone is in the supply closet", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "make it better", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect eagles flying over the ridge", "split": "train"}
+{"domain": "construction site safety", "prompt": "workers wearing shorts instead of long trousers", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "open windows in the lecture hall when the heating is on", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Identify which of the hikers is my neighbor John Smith.", "split": "train"}
+{"domain": "sports and gyms", "prompt": "detect bad form", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Alert me when a deer is in the garden but no dog is with it.", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect cockroaches near the sink", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "wear helmets on e-scooters on campus paths", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Spot anyone not wearing a badge in the reception area", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "forklift driving with no load vs with a load", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "workers in the zone near the conveyor without safety vest", "split": "train"}
+{"domain": "construction site safety", "prompt": "Make it so the camera notices when something is dangerous", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect lifeguard chairs that have nobody sitting in them", "split": "train"}
+{"domain": "parking and traffic", "prompt": "vehicles in the fire lane", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect when someone leaves the building with a gym towel", "split": "train"}
+{"domain": "farm and livestock", "prompt": "detect manure spill on the walkway", "split": "train"}
+{"domain": "home and pets", "prompt": "dog in the car without a human", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "cook not wearing gloves while handling food", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "person behind the till without a uniform", "split": "train"}
+{"domain": "farm and livestock", "prompt": "horses without halters in the paddock", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find passengers on the left side of the platform behind the line", "split": "train"}
+{"domain": "construction site safety", "prompt": "Workers near the edge of the building without a guard rail", "split": "train"}
+{"domain": "factory quality control", "prompt": "Detect gaps between the wooden planks that are too wide", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Count how many cars are in the office parking spot", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find uncovered pots on the hob", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "people sitting at a table with no laptop", "split": "train"}
+{"domain": "public transport stations", "prompt": "alert when somebody leaves a backpack and walks away", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Spot tracks in the snow", "split": "train"}
+{"domain": "public transport stations", "prompt": "I need a camera that sees when the train doors are open but nobody is getting on or off", "split": "train"}
+{"domain": "public transport stations", "prompt": "i need alerts for tickets inspectors not at the gate during morning peak", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Detect when a pallet falls from the shelf", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find the cute animals", "split": "train"}
+{"domain": "factory quality control", "prompt": "Look for foreign objects like plastic or hair on the food conveyor.", "split": "train"}
+{"domain": "parking and traffic", "prompt": "how many empty parking spots are there in lot B", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "plates piled up on a table, needs bussing", "split": "train"}
+{"domain": "hospital and care home", "prompt": "find paitents sitting on the floor in the waiting area", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect bikes chained to the station fence", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect unsafe behavior", "split": "train"}
+{"domain": "factory quality control", "prompt": "uncapped syringes on the assembly table", "split": "train"}
+{"domain": "factory quality control", "prompt": "Detect bottles without caps in the red zone", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Chickens with missing feathers on their back", "split": "train"}
+{"domain": "construction site safety", "prompt": "count the workers wearing yellow helmets versus those with no helmet", "split": "train"}
+{"domain": "airports", "prompt": "Detect aircraft with a missing engine cover while parked overnight.", "split": "test"}
+{"domain": "public transport stations", "prompt": "Flag any vehicle blocking the bus lane in front of the stop", "split": "train"}
+{"domain": "sports and gyms", "prompt": "People wearing the club's red jersey vs. people wearing blue jerseys", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Identify athletes by their name from their face", "split": "train"}
+{"domain": "factory quality control", "prompt": "Find cartons that are crushed or deformed at the corners before wrapping.", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Notice anyone using the cable machine without gloves", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "see if anybody puts raw fish on the vegetable board", "split": "test"}
+{"domain": "public transport stations", "prompt": "Can it tell me how much money each passenger earns?", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Detect red cars in lot A", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "detect staff without hairnet in the kitchen", "split": "train"}
+{"domain": "sports and gyms", "prompt": "How many runners are in lane one of the track?", "split": "train"}
+{"domain": "public transport stations", "prompt": "I want to catch people who dont validate their card at the reader", "split": "train"}
+{"domain": "airports", "prompt": "Detect de-icing trucks that are parked outside their marked bay.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "cows on the road", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect cars without license plates visible", "split": "train"}
+{"domain": "home and pets", "prompt": "Find cat toys on the floor in the hallway", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "people not wearing hair nets near the grill", "split": "test"}
+{"domain": "retail store", "prompt": "detect open freezer doors", "split": "train"}
+{"domain": "airports", "prompt": "Alert when the number of pasengers at the customs desk goes above 20.", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "students holding coffee cups in the computer lab", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect keyboards left on the meeting table", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect students sleeping in class", "split": "train"}
+{"domain": "airports", "prompt": "detect empty seats at gate B4 so we can see when the area is full", "split": "test"}
+{"domain": "parking and traffic", "prompt": "spot any car missing a front plate", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Tell me how fast the sprinter's heart is beating", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Predict which desks will be taken tomorrow", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "someone standing at the podium", "split": "train"}
+{"domain": "home and pets", "prompt": "Tell me what my dog is thinking", "split": "train"}
+{"domain": "public transport stations", "prompt": "i want to see when the bin is full", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect fire or smoke on the site", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "trays without cling film in the fridge", "split": "test"}
+{"domain": "offices and coworking", "prompt": "detect paper jam light on the copier", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect bees on the flowers in the left bed, not wasps.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Spot a leopard in the tree branches", "split": "train"}
+{"domain": "home and pets", "prompt": "detect kid near the pool without an adult", "split": "train"}
+{"domain": "public transport stations", "prompt": "Show people queuing in front of the info desk, more than 10 is too many", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Staff not using hand gel when they enter a patient room", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Lecturer without a microphone", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cow with calf in the calving pen, only when the calf is standing", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "detect what is inside the sealed boxes", "split": "train"}
+{"domain": "home and pets", "prompt": "Find the cat outside the cat flap", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "anybody on the roof", "split": "train"}
+{"domain": "sports and gyms", "prompt": "find wet floor around the pool without a warning sign", "split": "train"}
+{"domain": "home and pets", "prompt": "Find a cat sat in the sink", "split": "train"}
+{"domain": "factory quality control", "prompt": "workers without saftey glasses near the grinder", "split": "train"}
+{"domain": "public transport stations", "prompt": "worker not wearing hard hat on the platform edge", "split": "train"}
+{"domain": "parking and traffic", "prompt": "count the cars passing the junction", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Mark the deer standing inside the fenced area.", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect open trenches with no barrier or fence around them", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "flag open food containers left uncovered on the counter", "split": "test"}
+{"domain": "airports", "prompt": "find luggage left alone near gate 12", "split": "test"}
+{"domain": "airports", "prompt": "Detect drones flying near the airfield.", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "people without face masks in the lab", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "check if the employee is lying about his break time", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "spilled liquid on the floor", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "I need to track things that move", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Notice if the cleaning cart is left in the corridor", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "cup without a lid on the takeaway counter", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "empty glasses on the bar counter", "split": "train"}
+{"domain": "airports", "prompt": "Count everything that moves in the car park.", "split": "test"}
+{"domain": "factory quality control", "prompt": "Person standing too close to the conveyor edge", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect what the workers are thinking about right now", "split": "train"}
+{"domain": "home and pets", "prompt": "Rabbit on the lawn", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect people in the stretching area", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Seals on the beach rocks, count please", "split": "train"}
+{"domain": "airports", "prompt": "Check if the aircraft doors are open while no stairs or bridge is attached.", "split": "test"}
+{"domain": "airports", "prompt": "Person in a security uniform not wearing a badge.", "split": "test"}
+{"domain": "farm and livestock", "prompt": "Horse lying down in stable (not standing)", "split": "train"}
+{"domain": "farm and livestock", "prompt": "cattle with no ear tags", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Count members entering through the front turnstile", "split": "train"}
+{"domain": "sports and gyms", "prompt": "track stuff in the sports hall", "split": "train"}
+{"domain": "retail store", "prompt": "staff without name badge", "split": "train"}
+{"domain": "retail store", "prompt": "find employees on their phones behind the till", "split": "train"}
+{"domain": "parking and traffic", "prompt": "predict how much traffic there will be next Christmas", "split": "train"}
+{"domain": "factory quality control", "prompt": "scratched phone screens", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Cows in the milking parlour without a milking cluster attached", "split": "train"}
+{"domain": "parking and traffic", "prompt": "track motorbikes in the bicycle lane", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Tell me what the employees are thinking while they work", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "AGV robot blocked by a box", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect cars parked in the taxi pickup lane without a taxi sign", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "detect if customers are happy with their meal taste", "split": "train"}
+{"domain": "factory quality control", "prompt": "Look for oil puddles on the floor under the machine", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect people entering the demolition area who are not wearing a respirator and coveralls", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Notice a coyote near my back door without anyone standing there.", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Predict which team will win tonight's game", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "show me when a knife is left outside the knife block or magnetic strip", "split": "test"}
+{"domain": "factory quality control", "prompt": "Notify when a worker is not wearing ear protection in the noisy zone", "split": "train"}
+{"domain": "retail store", "prompt": "tell me which customers will buy something tomorrow", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "I want to spot badgers coming out of the sett entrance", "split": "train"}
+{"domain": "parking and traffic", "prompt": "detect bikes locked to the wrong rack", "split": "train"}
+{"domain": "farm and livestock", "prompt": "I want to see all the animals that are not in their paddock", "split": "train"}
+{"domain": "factory quality control", "prompt": "Check that each carton has exactly 6 bottles, flag any carton with less", "split": "train"}
+{"domain": "airports", "prompt": "Detect more than two people in the lift marked for wheelchairs only.", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "unattended bags near the entrance", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Warn me if a visitor goes past the 'staff only' sign.", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect the exact weight of the load on the crane just from the video", "split": "train"}
+{"domain": "construction site safety", "prompt": "Something about PPE, not sure exactly what, you tell me", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Detect any rat or mouse near the grain storage.", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find sponges left on the work surface", "split": "test"}
+{"domain": "farm and livestock", "prompt": "detect a snake in the chicken run", "split": "train"}
+{"domain": "farm and livestock", "prompt": "show me when a lamb is born in the lambing shed", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect eggs placed next to ready-to-eat salad", "split": "test"}
+{"domain": "airports", "prompt": "Detect that thing the staff put on the plane.", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "Customers who walk in but leave without ordering", "split": "train"}
+{"domain": "retail store", "prompt": "find all fruit crates that have no label", "split": "train"}
+{"domain": "construction site safety", "prompt": "Alert when a truck is reversing and a person is behind it without a spotter", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect flys on the food", "split": "test"}
+{"domain": "parking and traffic", "prompt": "detect pedestrians crossing outside the crosswalk", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "people with headphones in the study room", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "predict how many guests will come tomorrow", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect a person wearing a red jacket in the ticket hall", "split": "train"}
+{"domain": "parking and traffic", "prompt": "find cars parked without a permit sticker", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect a cat with a bell collar", "split": "train"}
+{"domain": "home and pets", "prompt": "alert when the dog gets on the stairs", "split": "train"}
+{"domain": "airports", "prompt": "Detect stray animals on the grass near the taxiway.", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Show me when a visitor waits in the lobby more than 10 minutes", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Alert when more than one deer enters the feeding area.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "the cows are bunched in the corner, tell me when more than five are in the left zone", "split": "train"}
+{"domain": "factory quality control", "prompt": "Check everything is ok", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Notice chairs that are pushed out from the desk", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Is the food tray still untouched on the table after an hour?", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detect whether the students are happy with the lecture", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect how much each worker is getting paid based on how they look", "split": "train"}
+{"domain": "construction site safety", "prompt": "Determine if the soil beneath the foundation is stable", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect no-hi-vis people on the road next to the site", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Figure out which nurse will quit next month.", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "chef without hat in kitchen", "split": "train"}
+{"domain": "retail store", "prompt": "find shoes that are on the floor and not on the display", "split": "train"}
+{"domain": "farm and livestock", "prompt": "strangers on the farm", "split": "train"}
+{"domain": "public transport stations", "prompt": "Show me empty seats on the bus", "split": "train"}
+{"domain": "retail store", "prompt": "warn me about a robbery before it happens", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Notify me if the front door of the care home is propped open.", "split": "train"}
+{"domain": "airports", "prompt": "Detect people running in the terminal.", "split": "test"}
+{"domain": "home and pets", "prompt": "Read my cat's mind and tell me if she loves me", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Tell me if John Smith in room 12 is in the corridor.", "split": "train"}
+{"domain": "airports", "prompt": "Count the planes parked on stands 1 to 10.", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "read what the forklift driver is thinking", "split": "train"}
+{"domain": "parking and traffic", "prompt": "identify vehicles with a roof box", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Show me when the pool lane has more than 4 swimmers", "split": "train"}
+{"domain": "retail store", "prompt": "Detect products placed on the wrong shelf, like shampoo among the snacks.", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "restaurant stuff", "split": "train"}
+{"domain": "factory quality control", "prompt": "Flag any bottle on the conveyor that has no cap.", "split": "train"}
+{"domain": "factory quality control", "prompt": "stains on fabric rolls", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "projector turned on but nobody in the room", "split": "train"}
+{"domain": "retail store", "prompt": "find the boxes of cereal that are upside down", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "baristas serving drinks without lids on to-go cups", "split": "train"}
+{"domain": "retail store", "prompt": "spot spilled liquid on the floor", "split": "train"}
+{"domain": "public transport stations", "prompt": "Count buses waiting at the depot exit", "split": "train"}
+{"domain": "construction site safety", "prompt": "workers w/o gloves near the concrete mixer", "split": "train"}
+{"domain": "construction site safety", "prompt": "alert if a person climbs a ladder without a hard hat", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "detecte les \u00e9tudiants sans carte d'\u00e9tudiant", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect people without safety glasses while using the angle grinder", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "tea towels draped over the shoulder", "split": "test"}
+{"domain": "home and pets", "prompt": "alert me when the dog is on the bed without a blanket", "split": "train"}
+{"domain": "parking and traffic", "prompt": "count how many cars are in each lane", "split": "train"}
+{"domain": "construction site safety", "prompt": "find vehicles parked in the emergency exit path", "split": "train"}
+{"domain": "retail store", "prompt": "read the minds of people looking at the TV display", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Predict when the pallets will run out next week", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "person next to the stove without an oven glove", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "any chair pulled out in the patio at closing time", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Find out if the driver has a valid driving licence just from the video", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "pallets stacked higher than 3 layers", "split": "train"}
+{"domain": "airports", "prompt": "Detect people not wearing a hi-vis vest on the apron.", "split": "test"}
+{"domain": "factory quality control", "prompt": "Make it check quality", "split": "train"}
+{"domain": "factory quality control", "prompt": "Flag a worker who's not wearing a hairnet in the food area, also the beard cover if he has a beard.", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Hey can u find all the jump ropes lying in the corridor", "split": "train"}
+{"domain": "airports", "prompt": "Alert if the fuel hose is lying on the ground and nobody is next to it.", "split": "test"}
+{"domain": "construction site safety", "prompt": "Detect workers without hard hats", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "owl in tree", "split": "train"}
+{"domain": "offices and coworking", "prompt": "I want to know when someone leaves the kitchen with the fridge door open", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect volleyball on the net tape", "split": "train"}
+{"domain": "public transport stations", "prompt": "Spot wet floor signs missing near the spillage", "split": "train"}
+{"domain": "home and pets", "prompt": "toddler near the stairs without the baby gate closed", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "burger without lettuce on the tray", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "read the minds of the customers waiting for dinner", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "detect cardboard boxes blocking the emergency door", "split": "train"}
+{"domain": "home and pets", "prompt": "Cat sleeping inside the cardboard box", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "pasta bowls without parmesan cheese", "split": "train"}
+{"domain": "construction site safety", "prompt": "Spot anyone working at height with no helmet chin strap", "split": "train"}
+{"domain": "home and pets", "prompt": "find cats that are not in the litter box area", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "gloves on the floor", "split": "test"}
+{"domain": "parking and traffic", "prompt": "detect cars that are parked facing the wrong way", "split": "train"}
+{"domain": "construction site safety", "prompt": "Notice if anyone enters the site without signing in at the gatehouse board", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find motion of a bobcat near the cabin porch", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect desks with food on them", "split": "train"}
+{"domain": "parking and traffic", "prompt": "bikes in the car lane", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect missing lids on the soup pots", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "detect lost wallets on the tables", "split": "train"}
+{"domain": "hospital and care home", "prompt": "count wheelchairs parked in the entrance hall", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "is the door to the storage room open", "split": "train"}
+{"domain": "farm and livestock", "prompt": "hens outside the run area", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Find students in the lecture hall who are not wearing a lanyard", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Monitor the place for me please", "split": "train"}
+{"domain": "construction site safety", "prompt": "Spot anyone standing inside the crane swing zone", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "predict which boxes will fall tomorrow", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Tell me who stole the bike last week from the camera", "split": "train"}
+{"domain": "parking and traffic", "prompt": "dogs running loose on the road", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "spot dirty chopping boards", "split": "test"}
+{"domain": "retail store", "prompt": "know what the shopper is thinking before picking a product", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect tourists feeding animals", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect phone chargers left plugged in on empty desks", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Tell me the name of the farmer on camera", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "Find food left on the floor", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Find a bird on the nest box entrance, only if it is a blue tit and not a sparrow.", "split": "train"}
+{"domain": "farm and livestock", "prompt": "alert me if the cattle truck has more than one person on the loading ramp", "split": "train"}
+{"domain": "sports and gyms", "prompt": "make a thing for football", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Notify me if a resident leaves the care home through the garden gate.", "split": "train"}
+{"domain": "retail store", "prompt": "detect customers wearing sunglasses inside the store", "split": "train"}
+{"domain": "factory quality control", "prompt": "tell me when a box goes by without a label", "split": "train"}
+{"domain": "airports", "prompt": "detect birds on the runway", "split": "test"}
+{"domain": "construction site safety", "prompt": "are there people near the hole in the floor? flag them", "split": "train"}
+{"domain": "farm and livestock", "prompt": "goats on the roof of the shed", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Detect any open box with items showing on the packing line", "split": "train"}
+{"domain": "home and pets", "prompt": "cat in the bathtub", "split": "train"}
+{"domain": "construction site safety", "prompt": "need to know if somebody enters the restricted area after 6pm", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect people on the sofa in the lounge area", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "trash bin overflowing near the exit", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect lizards on the wall in the sun area of the picture.", "split": "train"}
+{"domain": "parking and traffic", "prompt": "trailers parked on the street", "split": "train"}
+{"domain": "airports", "prompt": "Tell me how much money each traveller has in their wallet.", "split": "test"}
+{"domain": "factory quality control", "prompt": "cups without handles", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect people without a ticket at the gate", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect backpacks on the floor next to desks", "split": "train"}
+{"domain": "parking and traffic", "prompt": "catch the people who park wrong", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect football players offside", "split": "train"}
+{"domain": "construction site safety", "prompt": "Highlight unsecured scaffolding planks", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "chef not wearing apron", "split": "train"}
+{"domain": "home and pets", "prompt": "Package on the porch that has not been picked up", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Recognise my boss by his face and send me a message", "split": "train"}
+{"domain": "retail store", "prompt": "dogs inside the store", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "help me with food safety stuff", "split": "test"}
+{"domain": "public transport stations", "prompt": "alert when a person stays in the same spot more than 20 minutes", "split": "train"}
+{"domain": "farm and livestock", "prompt": "turkeys that are not inside the shed", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "customers leaving without paying", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "cake in display case is missing slices", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "pallet jack parked in the fire exit", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find dirty dishes piled up in the sink", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "kids running around the dining room", "split": "train"}
+{"domain": "offices and coworking", "prompt": "find people eating at the quiet zone desks", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Spot anyone jumping on the box jumps without shoes", "split": "train"}
+{"domain": "farm and livestock", "prompt": "figure out what my dog is thinking", "split": "train"}
+{"domain": "airports", "prompt": "Mark every fuel truck that is parked closer than 15 meters to a plane.", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "students sitting on desks instead of chairs", "split": "train"}
+{"domain": "airports", "prompt": "Detect an airplane towed with no tail light on at night.", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "detect trash bags on the prep table", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "is there a cat on the worktop", "split": "test"}
+{"domain": "construction site safety", "prompt": "detect if workers are tired or having a bad day emotionally", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Find any barbell with weight plates not secured with clips", "split": "train"}
+{"domain": "sports and gyms", "prompt": "mat zone: count people with shoes on", "split": "train"}
+{"domain": "airports", "prompt": "Passengers without face masks in the terminal.", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "tell me the temperature of the soup from the camera", "split": "train"}
+{"domain": "home and pets", "prompt": "detect when the cat knocks something off the shelf", "split": "train"}
+{"domain": "farm and livestock", "prompt": "farm gate with a person standing at it", "split": "train"}
+{"domain": "factory quality control", "prompt": "eggs with cracks on the sorting belt", "split": "train"}
+{"domain": "airports", "prompt": "Alert me when a baggage cart is parked in the fire lane.", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "Find pallets with broken wooden boards", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "people running in the hallway", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "any strangers in the building", "split": "train"}
+{"domain": "airports", "prompt": "Detect any ladder or equipment left under the plane wing before pushback.", "split": "test"}
+{"domain": "retail store", "prompt": "count how many shoppers walk past the promo display", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "I'd like the camera to see when a magpie lands on the lawn without crows being around.", "split": "train"}
+{"domain": "home and pets", "prompt": "Dog without collar in the yard", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find out the name of the man in the blue coat at the entrance", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect people walking under the scaffolding without a helmet", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "boxes without a shipping label on them", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "find things that should not be there", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect when somebody is cheating at the gym by lying about their reps", "split": "train"}
+{"domain": "retail store", "prompt": "hey can u find the products with the sale sticker", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "customers and staff", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "bikes parked outside the bike rack", "split": "train"}
+{"domain": "construction site safety", "prompt": "Find any worker who is standing on top of a stack of pallets", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Is there a stag anywhere in the frame? Mark every stag, even if it is half hidden behind trees.", "split": "train"}
+{"domain": "construction site safety", "prompt": "track everything that could go wrong", "split": "train"}
+{"domain": "retail store", "prompt": "person in the fitting room corridor", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Is anyone smoking near the hay barn?", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "chef without a hat", "split": "test"}
+{"domain": "airports", "prompt": "Detect strollers left alone near the escalator.", "split": "test"}
+{"domain": "retail store", "prompt": "highlight the broken or open packages on the shelf", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect plants that are wilting on the windowsill", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "detect rabits in the vegetable patch", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "drink on the table without a straw", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Tell me how much each deer weighs in kilograms.", "split": "train"}
+{"domain": "retail store", "prompt": "I want to see when someone blocks the fire extinguisher", "split": "train"}
+{"domain": "construction site safety", "prompt": "Catch anyone who is not wearing a safety harness on the 3rd floor edge", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect staff without name badges", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Find photos with a hedgehog on the lawn at night.", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect pushchairs on the escalator", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Find out who is the owner of the dog that walks into the frame.", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect when the projector is on but no one is in the room", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect scaffolding that is missing guardrails on the upper level", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "fire exits blocked by chairs", "split": "train"}
+{"domain": "retail store", "prompt": "detect cleaning staff mopping in the aisle without a wet floor sign", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect broken or cracked plates", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "detect hairs or hair nets on the floor", "split": "test"}
+{"domain": "home and pets", "prompt": "hamster out of its cage", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "spot phones being used at the cooking station", "split": "test"}
+{"domain": "restaurant and cafe", "prompt": "cutting board with raw chicken next to vegetables", "split": "train"}
+{"domain": "parking and traffic", "prompt": "Detect cars parked in the red zone", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "full benches at the courtyard", "split": "train"}
+{"domain": "retail store", "prompt": "detect empty hangers on the clothes rack", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Make the camera watch the ward and tell me if something bad happens.", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect any person standing within 3 meters of the excavator arm", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Person in the operating theatre without a surgical cap", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "customer sleeping on the sofa", "split": "train"}
+{"domain": "farm and livestock", "prompt": "pigs lying on top of each other in the pen corner", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Something is eating my plants, find it.", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect the guest wifi sign missing from the reception desk", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect equipment left on treadmills like towels and bottles", "split": "train"}
+{"domain": "retail store", "prompt": "detect staff restocking shelves without a safety vest", "split": "train"}
+{"domain": "airports", "prompt": "Is the security belt tray stack empty? Warn me when the trays run out.", "split": "test"}
+{"domain": "factory quality control", "prompt": "Find jars where the label is missing the expiry date", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "know if the workers are happy", "split": "train"}
+{"domain": "farm and livestock", "prompt": "drone flying over the farm", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect any dog off leash in the protected dune area.", "split": "train"}
+{"domain": "airports", "prompt": "I need to see when a taxi is in the bus lane.", "split": "test"}
+{"domain": "sports and gyms", "prompt": "Flag people doing deadlifts with a rounded back", "split": "train"}
+{"domain": "home and pets", "prompt": "detect a leash hanging on the hook", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Know what the patient is thinking about before they fall.", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect clutter on desks at the end of the day", "split": "train"}
+{"domain": "home and pets", "prompt": "is my cat eating from the dog's bowl", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect two people sharing one desk", "split": "train"}
+{"domain": "airports", "prompt": "Detect people wearing a hi-vis vest on the apron, and flag those w/o helmet.", "split": "test"}
+{"domain": "university campus and lecture halls", "prompt": "umbrellas left in the corridor", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "projector screen pulled down", "split": "train"}
+{"domain": "public transport stations", "prompt": "Passengers using phones while walking near the platform edge", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Predict which resident will fall tomorrow.", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find luggage trolleys left outside the designated parking area", "split": "train"}
+{"domain": "parking and traffic", "prompt": "spot unattended bags near the car park entrance", "split": "train"}
+{"domain": "airports", "prompt": "Detect people taking photos of the secure areas.", "split": "test"}
+{"domain": "public transport stations", "prompt": "Detect open umbrellas inside the train carriage", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "detect staf smoking near the back door of the kitchen", "split": "test"}
+{"domain": "construction site safety", "prompt": "Identify John Smith from the crew on camera and tell me when he arrives late", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "Is anyone standing behind the bar who isn't wearing an apron?", "split": "train"}
+{"domain": "retail store", "prompt": "identify the customer named John Smith when he walks in", "split": "train"}
+{"domain": "airports", "prompt": "Tell me what the pilot is planning to do next.", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "person on a forklift without a hard hat", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "detect people not wearing steel toe boots", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Detect lifters not wearing a belt during deadlifts", "split": "train"}
+{"domain": "hospital and care home", "prompt": "detect a person lingering by the baby unit door who has no ID lanyard", "split": "train"}
+{"domain": "airports", "prompt": "can u find suitcases on the floor of the arrivals hall", "split": "test"}
+{"domain": "wildlife and nature cameras", "prompt": "Looking for wild cats in the barn, not the house cat.", "split": "train"}
+{"domain": "construction site safety", "prompt": "Detect hard hats that are worn backwards or not buckled", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "number of customers sitting at the bar stools", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "a waiter not wearing a uniform shirt", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "detect things that look off", "split": "train"}
+{"domain": "factory quality control", "prompt": "detect leaking bottles", "split": "train"}
+{"domain": "hospital and care home", "prompt": "i want to see when somebody is on the floor beside the bed", "split": "train"}
+{"domain": "offices and coworking", "prompt": "Detect coats hanging on the back of chairs", "split": "train"}
+{"domain": "factory quality control", "prompt": "Find out if the supplier is lying about the material quality.", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "aprons that are dirty or stained on the line cooks", "split": "test"}
+{"domain": "offices and coworking", "prompt": "Detect who is lying in the meeting", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "any boxes on the floor? yes or no", "split": "train"}
+{"domain": "home and pets", "prompt": "Detect a dog lying on the bed with a toy", "split": "train"}
+{"domain": "factory quality control", "prompt": "any forklift driving inside the pedestrian walkway", "split": "train"}
+{"domain": "offices and coworking", "prompt": "detect a person on the floor in the corridor", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect trash bins without a lid", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect any animal inside the red-marked zone by the pond", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "lights on in empty classrooms", "split": "train"}
+{"domain": "public transport stations", "prompt": "Find people drinking alcohol at the bus shelter", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Count sheep", "split": "train"}
+{"domain": "public transport stations", "prompt": "monitor entrance", "split": "train"}
+{"domain": "retail store", "prompt": "detect people on the floor, like someone who fell", "split": "train"}
+{"domain": "factory quality control", "prompt": "find pills that are broken or chipped in the blister pack", "split": "train"}
+{"domain": "public transport stations", "prompt": "detect drones flying above the station roof", "split": "train"}
+{"domain": "factory quality control", "prompt": "labels printed upside down", "split": "train"}
+{"domain": "retail store", "prompt": "Find any shopping cart blocking the aisle", "split": "train"}
+{"domain": "sports and gyms", "prompt": "dumbells in walkway", "split": "train"}
+{"domain": "public transport stations", "prompt": "Alert me when someone stands past the yellow line on the platform", "split": "train"}
+{"domain": "factory quality control", "prompt": "Is there any product on the floor instead of on the belt?", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "tell me which worker is the laziest", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "detect trucks parked in no parking zone by the dock", "split": "train"}
+{"domain": "home and pets", "prompt": "Highlight dogs wearing a raincoat", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect when people are about to commit a crime before they do it", "split": "train"}
+{"domain": "retail store", "prompt": "where are my staff", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Find people in the corridor lying on the floor", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "projector remote on the desk", "split": "train"}
+{"domain": "offices and coworking", "prompt": "find trash overflowing from the bin", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "fries without ketchup on the plate", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "package left on the ramp", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "find mops and buckets inside the food storage area", "split": "test"}
+{"domain": "factory quality control", "prompt": "Count how many boxes have no tape on top", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Warn me if a wheelchair is left in the hallway longer than normal, I think it's a trip hazard", "split": "train"}
+{"domain": "farm and livestock", "prompt": "dog in the sheep field", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Count the number of barbells on the rack so I know when one is missing", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "I have a camera on a salmon river. Count the bears standing in the water near the waterfall.", "split": "train"}
+{"domain": "construction site safety", "prompt": "find people not wearing hi-vis vests", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "wild turkeys in yard", "split": "train"}
+{"domain": "airports", "prompt": "Detect broken or fallen luggage stack on the cart.", "split": "test"}
+{"domain": "kitchens and food hygiene", "prompt": "find uncovered food on the buffet", "split": "test"}
+{"domain": "parking and traffic", "prompt": "cars parked within 2 meters of the gate", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "stacks of boxes leaning or about to topple", "split": "train"}
+{"domain": "construction site safety", "prompt": "detect a worker lying on the ground", "split": "train"}
+{"domain": "public transport stations", "prompt": "Detect fallen persons on the stairs and ask for help", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "is anyone standing under the raised load", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Flag cars parked in the ambulance bay", "split": "train"}
+{"domain": "public transport stations", "prompt": "find people lying down on the platform", "split": "train"}
+{"domain": "home and pets", "prompt": "pets", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "know whether a worker washed their hands yesterday", "split": "test"}
+{"domain": "public transport stations", "prompt": "Detect cyclists riding inside the concourse", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "Identify Professor Hughes in the video", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Spot rangers on the trail so I can ignore them and only show photos without any person.", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Please flag every image where a car is parked in the nature reserve zone and no ranger is visible.", "split": "train"}
+{"domain": "factory quality control", "prompt": "Identify that guy John from accounting when he walks onto the floor.", "split": "train"}
+{"domain": "home and pets", "prompt": "fish tank with no lid on top", "split": "train"}
+{"domain": "farm and livestock", "prompt": "haystack on fire", "split": "train"}
+{"domain": "retail store", "prompt": "find people in the stockroom door area who are not employees wearing uniform", "split": "train"}
+{"domain": "offices and coworking", "prompt": "person without lanyard at entrance", "split": "train"}
+{"domain": "sports and gyms", "prompt": "people using phone in the weights area", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Detect any fox near the hen house at night", "split": "train"}
+{"domain": "airports", "prompt": "Cones missing around the parked aircraft", "split": "test"}
+{"domain": "warehouse and logistics", "prompt": "boxes stacked on the floor outside the yellow lines", "split": "train"}
+{"domain": "retail store", "prompt": "detect carts left outside the parking cart corral", "split": "train"}
+{"domain": "factory quality control", "prompt": "Check the tray to see if all 12 chocolates are there", "split": "train"}
+{"domain": "restaurant and cafe", "prompt": "Alert me when a customer sits at a table and no waiter comes within 5 minutes", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "tell me when a bear is in the picture without a person", "split": "train"}
+{"domain": "kitchens and food hygiene", "prompt": "spot spilled liquids on the floor", "split": "test"}
+{"domain": "public transport stations", "prompt": "People walking in the opposite direction of the arrow in the corridor", "split": "train"}
+{"domain": "hospital and care home", "prompt": "Track when a stretcher is left unattended in the emergency bay", "split": "train"}
+{"domain": "wildlife and nature cameras", "prompt": "Detect deer with antlers only, not does.", "split": "train"}
+{"domain": "warehouse and logistics", "prompt": "Count the number of parcels on the sorting table", "split": "train"}
+{"domain": "retail store", "prompt": "detect cardboard boxes on the floor behind the checkout, i keep tripping", "split": "train"}
+{"domain": "factory quality control", "prompt": "Alert me if anyone is standing inside the yellow floor markings near the robot arm.", "split": "train"}
+{"domain": "retail store", "prompt": "see if the bread shelf has fewer than 5 loaves", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Count yoga mats rolled up in the corner basket", "split": "train"}
+{"domain": "university campus and lecture halls", "prompt": "cables lying across the floor in the lecture theatre", "split": "train"}
+{"domain": "offices and coworking", "prompt": "find empty coffee pots in the kitchen", "split": "train"}
+{"domain": "farm and livestock", "prompt": "Tell me which cow will get sick next week", "split": "train"}
+{"domain": "sports and gyms", "prompt": "someone dropping weights", "split": "train"}
+{"domain": "factory quality control", "prompt": "Missing barcode sticker on the box", "split": "train"}
+{"domain": "parking and traffic", "prompt": "spot a person lying on the road", "split": "train"}
+{"domain": "sports and gyms", "prompt": "Alert if a child is alone in the weight room", "split": "train"}
+{"domain": "public transport stations", "prompt": "Spot anyone climbing over the turnstile", "split": "train"}
+{"domain": "hospital and care home", "prompt": "dogs in the ward", "split": "train"}
+{"domain": "construction site safety", "prompt": "Tell me which workers are lying on their timesheets", "split": "train"}
+{"domain": "home and pets", "prompt": "kat on the table pls", "split": "train"}
+{"domain": "parking and traffic", "prompt": "gas cars parked in the EV charging spots", "split": "train"}

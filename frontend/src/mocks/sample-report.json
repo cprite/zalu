@@ -1,0 +1,1970 @@
+{
+ "id": "rep_sample",
+ "request": {
+  "model_ids": [
+   "model_sample_zeroshot",
+   "model_sample_real",
+   "model_sample_synth"
+  ],
+  "test_dataset_id": "ds_sample_test"
+ },
+ "per_model": {
+  "model_sample_zeroshot": {
+   "settings": {
+    "iou_threshold": 0.5,
+    "conf_threshold": 0.25,
+    "matching": "greedy per class by descending score, one prediction per object"
+   },
+   "test": {
+    "n_images": 48,
+    "n_images_without_objects": 4,
+    "n_sessions": 2,
+    "gt_per_class": {
+     "no_goggles": 34,
+     "goggles": 50
+    },
+    "classes": [
+     "no_goggles",
+     "goggles"
+    ],
+    "dataset_id": "ds_sample_test",
+    "split": "test"
+   },
+   "overall": {
+    "tp": 41,
+    "fp": 35,
+    "fn": 43,
+    "precision": 0.5395,
+    "recall": 0.4881,
+    "f1": 0.5125,
+    "precision_ci95": [
+     0.4282,
+     0.6469
+    ],
+    "recall_ci95": [
+     0.3841,
+     0.5931
+    ]
+   },
+   "per_class": {
+    "no_goggles": {
+     "tp": 13,
+     "fp": 17,
+     "fn": 21,
+     "precision": 0.4333,
+     "recall": 0.3824,
+     "f1": 0.4062,
+     "precision_ci95": [
+      0.2738,
+      0.608
+     ],
+     "recall_ci95": [
+      0.239,
+      0.5496
+     ],
+     "image_level": {
+      "tp": 19,
+      "fp": 3,
+      "fn": 9,
+      "precision": 0.8636,
+      "recall": 0.6786,
+      "f1": 0.76,
+      "precision_ci95": [
+       0.6667,
+       0.9525
+      ],
+      "recall_ci95": [
+       0.4934,
+       0.8207
+      ],
+      "tn": 17
+     }
+    },
+    "goggles": {
+     "tp": 28,
+     "fp": 18,
+     "fn": 22,
+     "precision": 0.6087,
+     "recall": 0.56,
+     "f1": 0.5833,
+     "precision_ci95": [
+      0.4646,
+      0.7361
+     ],
+     "recall_ci95": [
+      0.4231,
+      0.6884
+     ],
+     "image_level": {
+      "tp": 25,
+      "fp": 7,
+      "fn": 9,
+      "precision": 0.7812,
+      "recall": 0.7353,
+      "f1": 0.7576,
+      "precision_ci95": [
+       0.6125,
+       0.8898
+      ],
+      "recall_ci95": [
+       0.5688,
+       0.854
+      ],
+      "tn": 7
+     }
+    }
+   },
+   "failure_counts": {
+    "false_positive": {
+     "background": 19,
+     "wrong_class": 15,
+     "poor_localization": 1
+    },
+    "false_negative": {
+     "missed": 16,
+     "low_confidence": 12,
+     "wrong_class": 15
+    }
+   },
+   "failures": [
+    {
+     "image": "test/sess_lab_door_3/frame_023.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      327.6702656425564,
+      114.324158108469,
+      474.797127699302,
+      290.8763925765638
+     ],
+     "score": 0.953,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      332.6527580702747,
+      103.35317621049916,
+      490.61631177868065,
+      307.9326787841591
+     ],
+     "iou": 0.756,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_030.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      735.3006262373034,
+      161.61339257205415,
+      930.7118912425236,
+      396.1069105783184
+     ],
+     "score": 0.92,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      749.3890585343299,
+      162.77279527535094,
+      950.0421097876653,
+      376.6229456230522
+     ],
+     "iou": 0.776,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_012.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      585.8036081711028,
+      238.65308200517666,
+      690.2373989547654,
+      363.97363094557164
+     ],
+     "score": 0.865,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      577.0811171892378,
+      239.93909142806547,
+      702.2619153632868,
+      369.7068477140091
+     ],
+     "iou": 0.791,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_026.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      685.9443914151678,
+      84.65441147076496,
+      810.4349911252633,
+      234.04313112287946
+     ],
+     "score": 0.743,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      686.9831594221771,
+      77.33281739916806,
+      824.5333517856054,
+      241.48061972150373
+     ],
+     "iou": 0.811,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_029.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      356.06372898657355,
+      130.56721575188732,
+      496.9574119497782,
+      299.6396353077329
+     ],
+     "score": 0.743,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      356.7856517970594,
+      122.69884914264739,
+      494.64820509959344,
+      307.5949547184981
+     ],
+     "iou": 0.896,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_007.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      399.935864221377,
+      123.93177829121363,
+      566.1271365353638,
+      323.36130506799776
+     ],
+     "score": 0.679,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      404.187953341305,
+      114.17367509556475,
+      581.4138225574223,
+      336.8810607199124
+     ],
+     "iou": 0.801,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_016.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      91.37537295967198,
+      185.74749463375227,
+      220.2496818199725,
+      340.3966652661129
+     ],
+     "score": 0.526,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      80.67050968355724,
+      190.11556414216042,
+      219.9324128837021,
+      341.82161545145954
+     ],
+     "iou": 0.889,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_030.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      97.63071578284284,
+      340.37252622419123,
+      284.25663335613814,
+      564.3236273121456
+     ],
+     "score": 0.512,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      80.20996712878119,
+      322.70987358396144,
+      306.20115477045823,
+      559.8856699532071
+     ],
+     "iou": 0.753,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_046.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      656.9546716026609,
+      311.96914232798343,
+      785.2125688916235,
+      465.8786190747385
+     ],
+     "score": 0.5,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      653.1965454943571,
+      323.16120230018436,
+      796.4488895680289,
+      451.3845782009378
+     ],
+     "iou": 0.759,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_029.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      726.4634631138061,
+      401.7463234851505,
+      891.4178697118061,
+      599.6916114027505
+     ],
+     "score": 0.497,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      744.4044382925376,
+      386.7882626512201,
+      886.2113906984034,
+      588.4800693908322
+     ],
+     "iou": 0.762,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_038.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      193.77963695568363,
+      415.3950321840566,
+      388.328303276332,
+      648.8534317688348
+     ],
+     "score": 0.472,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      214.41120735226363,
+      420.4052017202274,
+      388.4502627190778,
+      656.4239209299157
+     ],
+     "iou": 0.85,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_025.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      994.8756736222869,
+      111.93553674619648,
+      1160.175875594465,
+      310.29577911281024
+     ],
+     "score": 0.46,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      993.1683475675147,
+      111.08776971817169,
+      1141.2113013308094,
+      326.092188581379
+     ],
+     "iou": 0.816,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_006.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      666.6705073468933,
+      231.85446518069003,
+      808.3051713504261,
+      401.81606198492943
+     ],
+     "score": 0.454,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      671.095282674098,
+      217.54328946863276,
+      814.846445261268,
+      403.140444304076
+     ],
+     "iou": 0.85,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_046.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      160.93862560088155,
+      257.9574676137512,
+      342.0893732834419,
+      475.3383648328236
+     ],
+     "score": 0.448,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      159.75968111249276,
+      271.61132816037656,
+      339.2828809025399,
+      461.83946296123236
+     ],
+     "iou": 0.857,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_015.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      560.0309217490835,
+      122.61278672458677,
+      651.5854278384036,
+      232.47819403177078
+     ],
+     "score": 0.431,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      554.9234667145486,
+      123.49872383553216,
+      648.4356053456069,
+      231.53981561932235
+     ],
+     "iou": 0.9,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_014.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      823.437958228671,
+      424.3067794004996,
+      947.0984341819461,
+      572.6993505444295
+     ],
+     "score": 0.211,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      810.4114017381636,
+      429.25251440431674,
+      933.2837939885161,
+      581.2916136543456
+     ],
+     "iou": 0.741,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_021.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      200.39067999439615,
+      394.6373845496937,
+      333.28753807568296,
+      554.1136142472379
+     ],
+     "score": 0.204,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      198.49216780640737,
+      408.92418990048134,
+      336.6878497279329,
+      541.0928140991449
+     ],
+     "iou": 0.802,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_040.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      373.609942700642,
+      149.8065101383351,
+      468.18468815532816,
+      263.2962046839585
+     ],
+     "score": 0.163,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      366.026047161597,
+      140.76153314982923,
+      465.5781053884087,
+      265.60122858694683
+     ],
+     "iou": 0.82,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_040.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      420.5818672402274,
+      444.5201875854797,
+      567.4074201904691,
+      620.7108511257696
+     ],
+     "score": 0.158,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      417.42599657163964,
+      437.34724576397224,
+      560.8231636194256,
+      609.0171511230598
+     ],
+     "iou": 0.841,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_008.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      492.9207044986678,
+      445.4126454657354,
+      689.3201608121842,
+      681.091993041955
+     ],
+     "score": 0.142,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      505.45165666128247,
+      435.919758574513,
+      688.4998653670734,
+      661.8001444953165
+     ],
+     "iou": 0.825,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_038.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      586.72452607012,
+      151.30624352353396,
+      755.3434115078708,
+      353.648906048835
+     ],
+     "score": 0.131,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      566.692955192496,
+      154.83759194554992,
+      739.0035648834821,
+      367.0823185817615
+     ],
+     "iou": 0.749,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_019.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      498.8172554837138,
+      137.99713302380803,
+      667.0143501897569,
+      339.83364667105974
+     ],
+     "score": 0.129,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      485.2461886651306,
+      125.53683406924563,
+      679.7887621099828,
+      336.7189120755982
+     ],
+     "iou": 0.803,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_007.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      473.06683154800044,
+      163.63714061210777,
+      592.6607844498143,
+      307.14988409428435
+     ],
+     "score": 0.127,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      478.26602048697623,
+      165.33511011594496,
+      581.4109895410161,
+      300.57340340019965
+     ],
+     "iou": 0.813,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_024.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      1001.1986207007227,
+      187.81906720658333,
+      1108.442124246597,
+      316.5112714616324
+     ],
+     "score": 0.115,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      996.726607064578,
+      181.50945833434312,
+      1113.127270974889,
+      315.50716790854045
+     ],
+     "iou": 0.872,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_003.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      763.1119747489287,
+      77.65928740895706,
+      912.2990939954518,
+      256.68383050478485
+     ],
+     "score": 0.107,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      753.5983562091898,
+      94.56813872348137,
+      914.4939325051777,
+      243.19383720724034
+     ],
+     "iou": 0.779,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_022.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      423.18534422598225,
+      118.62348887702603,
+      532.4017887107138,
+      249.68322225870395
+     ],
+     "score": 0.085,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      413.1160998968536,
+      107.58350837289774,
+      538.0322839239008,
+      252.88593689078013
+     ],
+     "iou": 0.789,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_023.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      160.1056206766653,
+      374.57303703109585,
+      337.7439404828357,
+      587.7390207985004
+     ],
+     "score": 0.062,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      177.74169488942292,
+      386.9132469282735,
+      328.6680418807515,
+      581.9932173707813
+     ],
+     "iou": 0.778,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_002.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      150.73654359012997,
+      383.039768197996,
+      290.198575172603,
+      550.3942060969637
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_004.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "no_goggles",
+     "box": [
+      130.6842008141675,
+      414.2068663686624,
+      281.67359444203504,
+      595.3941387221034
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_005.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "no_goggles",
+     "box": [
+      858.1321997112609,
+      444.3446080085509,
+      1005.6860196325065,
+      621.4091919140456
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    }
+   ],
+   "failures_total": 78,
+   "performance": {
+    "latency_ms_median": 16.7,
+    "latency_ms_p95": 17.7,
+    "fps": 60.0,
+    "n": 48,
+    "note": "model time on the backend GPU, excludes network and decoding"
+   },
+   "warnings": [
+    "Precision 95% interval is wide (0.43-0.65): more test data needed.",
+    "Recall 95% interval is wide (0.38-0.59): more test data needed."
+   ],
+   "readiness": {
+    "verdict": "not_ready",
+    "summary": "Does not meet: Recall (share of real objects found); Precision (share of alarms that are real). A small test set never proves production safety; monitor the model after deployment.",
+    "criteria": [
+     {
+      "name": "Recall (share of real objects found)",
+      "op": ">=",
+      "target": 0.8,
+      "value": 0.4881,
+      "passed": false
+     },
+     {
+      "name": "Precision (share of alarms that are real)",
+      "op": ">=",
+      "target": 0.7,
+      "value": 0.5395,
+      "passed": false
+     },
+     {
+      "name": "Speed, frames per second",
+      "op": ">=",
+      "target": 10.0,
+      "value": 60.0,
+      "passed": true
+     }
+    ],
+    "data_criteria": [
+     {
+      "name": "Test images",
+      "op": ">=",
+      "target": 20,
+      "value": 48,
+      "passed": true
+     },
+     {
+      "name": "Test 'no_goggles' objects",
+      "op": ">=",
+      "target": 30,
+      "value": 34,
+      "passed": true
+     },
+     {
+      "name": "Test 'goggles' objects",
+      "op": ">=",
+      "target": 30,
+      "value": 50,
+      "passed": true
+     }
+    ],
+    "criteria_config": {
+     "min_recall": 0.8,
+     "min_precision": 0.7,
+     "min_fps": 10.0,
+     "min_gt_per_class": 30,
+     "min_images": 20
+    }
+   },
+   "precision": 0.5395,
+   "recall": 0.4881,
+   "f1": 0.5125,
+   "fp": 35,
+   "fn": 43,
+   "fps": 60.0,
+   "model": {
+    "id": "model_sample_zeroshot",
+    "kind": "zero_shot",
+    "variant": null,
+    "base_model": "yoloe-11l-seg.pt",
+    "dataset_id": null,
+    "epochs": null,
+    "created_at": 1794700000.0,
+    "val_metrics": {}
+   },
+   "sample_data": true
+  },
+  "model_sample_real": {
+   "settings": {
+    "iou_threshold": 0.5,
+    "conf_threshold": 0.25,
+    "matching": "greedy per class by descending score, one prediction per object"
+   },
+   "test": {
+    "n_images": 48,
+    "n_images_without_objects": 4,
+    "n_sessions": 2,
+    "gt_per_class": {
+     "no_goggles": 34,
+     "goggles": 50
+    },
+    "classes": [
+     "no_goggles",
+     "goggles"
+    ],
+    "dataset_id": "ds_sample_test",
+    "split": "test"
+   },
+   "overall": {
+    "tp": 76,
+    "fp": 11,
+    "fn": 8,
+    "precision": 0.8736,
+    "recall": 0.9048,
+    "f1": 0.8889,
+    "precision_ci95": [
+     0.7876,
+     0.9279
+    ],
+    "recall_ci95": [
+     0.8232,
+     0.9509
+    ]
+   },
+   "per_class": {
+    "no_goggles": {
+     "tp": 31,
+     "fp": 5,
+     "fn": 3,
+     "precision": 0.8611,
+     "recall": 0.9118,
+     "f1": 0.8857,
+     "precision_ci95": [
+      0.7134,
+      0.9392
+     ],
+     "recall_ci95": [
+      0.7704,
+      0.9695
+     ],
+     "image_level": {
+      "tp": 26,
+      "fp": 3,
+      "fn": 2,
+      "precision": 0.8966,
+      "recall": 0.9286,
+      "f1": 0.9123,
+      "precision_ci95": [
+       0.7361,
+       0.9642
+      ],
+      "recall_ci95": [
+       0.7735,
+       0.9802
+      ],
+      "tn": 17
+     }
+    },
+    "goggles": {
+     "tp": 45,
+     "fp": 6,
+     "fn": 5,
+     "precision": 0.8824,
+     "recall": 0.9,
+     "f1": 0.8911,
+     "precision_ci95": [
+      0.7662,
+      0.9449
+     ],
+     "recall_ci95": [
+      0.7864,
+      0.9565
+     ],
+     "image_level": {
+      "tp": 32,
+      "fp": 1,
+      "fn": 2,
+      "precision": 0.9697,
+      "recall": 0.9412,
+      "f1": 0.9552,
+      "precision_ci95": [
+       0.8468,
+       0.9946
+      ],
+      "recall_ci95": [
+       0.8091,
+       0.9837
+      ],
+      "tn": 13
+     }
+    }
+   },
+   "failure_counts": {
+    "false_positive": {
+     "background": 9,
+     "wrong_class": 2
+    },
+    "false_negative": {
+     "missed": 4,
+     "low_confidence": 2,
+     "wrong_class": 2
+    }
+   },
+   "failures": [
+    {
+     "image": "test/sess_lab_bench_2/frame_046.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      147.3935171513063,
+      391.6136385886531,
+      245.43793675235813,
+      509.26694210991525
+     ],
+     "score": 0.681,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      141.85733649110713,
+      394.6386707529859,
+      249.11156653265272,
+      505.35056899487574
+     ],
+     "iou": 0.865,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_040.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      420.5818672402274,
+      444.5201875854797,
+      567.4074201904691,
+      620.7108511257696
+     ],
+     "score": 0.635,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      417.7721875606452,
+      440.72583688354246,
+      565.54125949962,
+      628.6128060606948
+     ],
+     "iou": 0.909,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_004.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      64.73930156077643,
+      338.5621802129949,
+      194.72894712174121,
+      494.54975488615264
+     ],
+     "score": 0.212,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      71.24637670753388,
+      333.1314501694353,
+      194.01582038431778,
+      500.6241285500595
+     ],
+     "iou": 0.883,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_037.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "goggles",
+     "box": [
+      383.6879505307453,
+      124.41134778697146,
+      513.1899285445547,
+      279.81372140354273
+     ],
+     "score": 0.144,
+     "predicted_cls": "goggles",
+     "predicted_box": [
+      377.9496626848894,
+      119.36040147262972,
+      508.77802640627164,
+      284.6296095723936
+     ],
+     "iou": 0.871,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_003.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      763.1119747489287,
+      77.65928740895706,
+      912.2990939954518,
+      256.68383050478485
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_016.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "no_goggles",
+     "box": [
+      91.37537295967198,
+      185.74749463375227,
+      220.2496818199725,
+      340.3966652661129
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_019.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "no_goggles",
+     "box": [
+      74.15268805245996,
+      311.8367934749371,
+      183.22271809332034,
+      442.72082952396954
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_046.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      656.9546716026609,
+      311.96914232798343,
+      785.2125688916235,
+      465.8786190747385
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_001.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "no_goggles",
+     "box": [
+      103.63483302008827,
+      212.24050570717236,
+      223.63483302008825,
+      352.24050570717236
+     ],
+     "score": 0.729,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_046.jpg",
+     "kind": "false_positive",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      141.85733649110713,
+      394.6386707529859,
+      249.11156653265272,
+      505.35056899487574
+     ],
+     "score": 0.681,
+     "iou": 0.865,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_013.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "no_goggles",
+     "box": [
+      237.3191900893759,
+      95.93530819931688,
+      357.31919008937587,
+      235.93530819931686
+     ],
+     "score": 0.665,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_040.jpg",
+     "kind": "false_positive",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      417.7721875606452,
+      440.72583688354246,
+      565.54125949962,
+      628.6128060606948
+     ],
+     "score": 0.635,
+     "iou": 0.909,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_037.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      423.5276889163998,
+      541.8715601457003,
+      543.5276889163998,
+      681.8715601457003
+     ],
+     "score": 0.505,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_020.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "no_goggles",
+     "box": [
+      594.6694948751227,
+      548.4820838178734,
+      714.6694948751227,
+      688.4820838178734
+     ],
+     "score": 0.386,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_025.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      1087.3888045336923,
+      72.41426716616618,
+      1207.3888045336923,
+      212.41426716616618
+     ],
+     "score": 0.375,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_033.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      788.0886205043165,
+      123.78182634065388,
+      908.0886205043165,
+      263.7818263406539
+     ],
+     "score": 0.375,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_045.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      517.9483223970847,
+      152.99924780426082,
+      637.9483223970847,
+      292.9992478042608
+     ],
+     "score": 0.358,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_047.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "no_goggles",
+     "box": [
+      0.8517332821086709,
+      118.01810597862172,
+      120.85173328210867,
+      258.01810597862175
+     ],
+     "score": 0.332,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_035.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      482.73562528565276,
+      410.02530252534626,
+      602.7356252856528,
+      550.0253025253462
+     ],
+     "score": 0.302,
+     "iou": 0.0,
+     "thumbnail": null
+    }
+   ],
+   "failures_total": 19,
+   "performance": {
+    "latency_ms_median": 4.7,
+    "latency_ms_p95": 5.5,
+    "fps": 211.6,
+    "n": 48,
+    "note": "model time on the backend GPU, excludes network and decoding"
+   },
+   "warnings": [],
+   "readiness": {
+    "verdict": "ready",
+    "summary": "Meets all acceptance criteria on independent test footage. A small test set never proves production safety; monitor the model after deployment.",
+    "criteria": [
+     {
+      "name": "Recall (share of real objects found)",
+      "op": ">=",
+      "target": 0.8,
+      "value": 0.9048,
+      "passed": true
+     },
+     {
+      "name": "Precision (share of alarms that are real)",
+      "op": ">=",
+      "target": 0.7,
+      "value": 0.8736,
+      "passed": true
+     },
+     {
+      "name": "Speed, frames per second",
+      "op": ">=",
+      "target": 10.0,
+      "value": 211.6,
+      "passed": true
+     }
+    ],
+    "data_criteria": [
+     {
+      "name": "Test images",
+      "op": ">=",
+      "target": 20,
+      "value": 48,
+      "passed": true
+     },
+     {
+      "name": "Test 'no_goggles' objects",
+      "op": ">=",
+      "target": 30,
+      "value": 34,
+      "passed": true
+     },
+     {
+      "name": "Test 'goggles' objects",
+      "op": ">=",
+      "target": 30,
+      "value": 50,
+      "passed": true
+     }
+    ],
+    "criteria_config": {
+     "min_recall": 0.8,
+     "min_precision": 0.7,
+     "min_fps": 10.0,
+     "min_gt_per_class": 30,
+     "min_images": 20
+    }
+   },
+   "precision": 0.8736,
+   "recall": 0.9048,
+   "f1": 0.8889,
+   "fp": 11,
+   "fn": 8,
+   "fps": 211.6,
+   "model": {
+    "id": "model_sample_real",
+    "kind": "trained",
+    "variant": "real_only",
+    "base_model": "yolo11n.pt",
+    "dataset_id": "ds_sample_real_only",
+    "epochs": 30,
+    "created_at": 1794700000.0,
+    "val_metrics": {
+     "precision": 0.91,
+     "recall": 0.9
+    }
+   },
+   "sample_data": true,
+   "delta_vs_baseline": {
+    "baseline_id": "model_sample_zeroshot",
+    "precision": 0.3341,
+    "recall": 0.4167,
+    "f1": 0.3764,
+    "fp": -24,
+    "fn": -35,
+    "recall_clear": true,
+    "precision_clear": true
+   }
+  },
+  "model_sample_synth": {
+   "settings": {
+    "iou_threshold": 0.5,
+    "conf_threshold": 0.25,
+    "matching": "greedy per class by descending score, one prediction per object"
+   },
+   "test": {
+    "n_images": 48,
+    "n_images_without_objects": 4,
+    "n_sessions": 2,
+    "gt_per_class": {
+     "no_goggles": 34,
+     "goggles": 50
+    },
+    "classes": [
+     "no_goggles",
+     "goggles"
+    ],
+    "dataset_id": "ds_sample_test",
+    "split": "test"
+   },
+   "overall": {
+    "tp": 70,
+    "fp": 5,
+    "fn": 14,
+    "precision": 0.9333,
+    "recall": 0.8333,
+    "f1": 0.8805,
+    "precision_ci95": [
+     0.8532,
+     0.9712
+    ],
+    "recall_ci95": [
+     0.7395,
+     0.898
+    ]
+   },
+   "per_class": {
+    "no_goggles": {
+     "tp": 26,
+     "fp": 2,
+     "fn": 8,
+     "precision": 0.9286,
+     "recall": 0.7647,
+     "f1": 0.8387,
+     "precision_ci95": [
+      0.7735,
+      0.9802
+     ],
+     "recall_ci95": [
+      0.6,
+      0.8756
+     ],
+     "image_level": {
+      "tp": 25,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.9259,
+      "recall": 0.8929,
+      "f1": 0.9091,
+      "precision_ci95": [
+       0.7663,
+       0.9794
+      ],
+      "recall_ci95": [
+       0.728,
+       0.9629
+      ],
+      "tn": 18
+     }
+    },
+    "goggles": {
+     "tp": 44,
+     "fp": 3,
+     "fn": 6,
+     "precision": 0.9362,
+     "recall": 0.88,
+     "f1": 0.9072,
+     "precision_ci95": [
+      0.8284,
+      0.9781
+     ],
+     "recall_ci95": [
+      0.762,
+      0.9438
+     ],
+     "image_level": {
+      "tp": 31,
+      "fp": 1,
+      "fn": 3,
+      "precision": 0.9688,
+      "recall": 0.9118,
+      "f1": 0.9394,
+      "precision_ci95": [
+       0.8426,
+       0.9945
+      ],
+      "recall_ci95": [
+       0.7704,
+       0.9695
+      ],
+      "tn": 13
+     }
+    }
+   },
+   "failure_counts": {
+    "false_positive": {
+     "background": 4,
+     "wrong_class": 1
+    },
+    "false_negative": {
+     "missed": 8,
+     "low_confidence": 5,
+     "wrong_class": 1
+    }
+   },
+   "failures": [
+    {
+     "image": "test/sess_lab_door_3/frame_009.jpg",
+     "kind": "false_negative",
+     "reason": "wrong_class",
+     "cls": "goggles",
+     "box": [
+      943.2636843504067,
+      195.4540850266685,
+      1054.6682114947691,
+      329.13951759990334
+     ],
+     "score": 0.612,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      948.6306409982657,
+      193.3818435045546,
+      1054.5380879417435,
+      327.9541909591202
+     ],
+     "iou": 0.929,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_024.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      149.69350204456163,
+      340.72526661901435,
+      300.8314754323773,
+      522.0908346843931
+     ],
+     "score": 0.209,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      151.94476749185657,
+      349.7782334580002,
+      301.57809401647575,
+      519.5250655706895
+     ],
+     "iou": 0.918,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_005.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      552.9494184105637,
+      378.17272045208495,
+      706.2562048635257,
+      562.1408641956393
+     ],
+     "score": 0.132,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      560.72722376029,
+      373.05386819115836,
+      697.5780916802607,
+      557.9797892712461
+     ],
+     "iou": 0.851,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_020.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      523.8407837669961,
+      325.0265217474334,
+      616.0924651112472,
+      435.72853936053474
+     ],
+     "score": 0.1,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      523.7076930180032,
+      320.76385382327544,
+      612.4792367172146,
+      435.14925632031213
+     ],
+     "iou": 0.92,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_016.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      91.37537295967198,
+      185.74749463375227,
+      220.2496818199725,
+      340.3966652661129
+     ],
+     "score": 0.091,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      86.41276920033374,
+      187.4686895606826,
+      223.95638984404397,
+      348.11245725388187
+     ],
+     "iou": 0.883,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_024.jpg",
+     "kind": "false_negative",
+     "reason": "low_confidence",
+     "cls": "no_goggles",
+     "box": [
+      1001.1986207007227,
+      187.81906720658333,
+      1108.442124246597,
+      316.5112714616324
+     ],
+     "score": 0.089,
+     "predicted_cls": "no_goggles",
+     "predicted_box": [
+      995.7695814139041,
+      190.11232091778112,
+      1112.1539644986815,
+      319.26099420587406
+     ],
+     "iou": 0.887,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_004.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      64.73930156077643,
+      338.5621802129949,
+      194.72894712174121,
+      494.54975488615264
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_008.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      847.9592766927889,
+      274.2919622275007,
+      1037.7585611337995,
+      502.05110355671343
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_009.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      186.35867960300152,
+      424.9218930743163,
+      286.49722881181793,
+      545.0881521248959
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_023.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      887.8699416989907,
+      137.16062144980165,
+      1082.7740682257277,
+      371.04557328188594
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_036.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "no_goggles",
+     "box": [
+      96.25574035843994,
+      393.0739418029183,
+      255.32013733284077,
+      583.9512181721993
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_036.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "no_goggles",
+     "box": [
+      510.54506136698205,
+      447.4813198534566,
+      675.250812726059,
+      645.1282214843491
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_040.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "goggles",
+     "box": [
+      1005.160634433936,
+      84.06701353136765,
+      1110.7687912087501,
+      210.7968016611445
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_042.jpg",
+     "kind": "false_negative",
+     "reason": "missed",
+     "cls": "no_goggles",
+     "box": [
+      852.1283186403673,
+      418.89343534499125,
+      1049.820839754008,
+      656.12446068136
+     ],
+     "score": null,
+     "predicted_cls": null,
+     "predicted_box": null,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_017.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      532.3914386606295,
+      301.03535325234,
+      652.3914386606295,
+      441.03535325234
+     ],
+     "score": 0.787,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_002.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      914.5274403079011,
+      91.51055346764261,
+      1034.527440307901,
+      231.5105534676426
+     ],
+     "score": 0.771,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_021.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "goggles",
+     "box": [
+      1083.086658662031,
+      340.7640017642926,
+      1203.086658662031,
+      480.7640017642926
+     ],
+     "score": 0.647,
+     "iou": 0.0,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_door_3/frame_009.jpg",
+     "kind": "false_positive",
+     "reason": "wrong_class",
+     "cls": "no_goggles",
+     "box": [
+      948.6306409982657,
+      193.3818435045546,
+      1054.5380879417435,
+      327.9541909591202
+     ],
+     "score": 0.612,
+     "iou": 0.929,
+     "thumbnail": null
+    },
+    {
+     "image": "test/sess_lab_bench_2/frame_012.jpg",
+     "kind": "false_positive",
+     "reason": "background",
+     "cls": "no_goggles",
+     "box": [
+      478.8281615292519,
+      272.47059776369315,
+      598.8281615292519,
+      412.47059776369315
+     ],
+     "score": 0.567,
+     "iou": 0.042,
+     "thumbnail": null
+    }
+   ],
+   "failures_total": 19,
+   "performance": {
+    "latency_ms_median": 4.2,
+    "latency_ms_p95": 5.4,
+    "fps": 237.5,
+    "n": 48,
+    "note": "model time on the backend GPU, excludes network and decoding"
+   },
+   "warnings": [],
+   "readiness": {
+    "verdict": "ready",
+    "summary": "Meets all acceptance criteria on independent test footage. Note: the lower end of the recall interval (0.74) is below the target. A small test set never proves production safety; monitor the model after deployment.",
+    "criteria": [
+     {
+      "name": "Recall (share of real objects found)",
+      "op": ">=",
+      "target": 0.8,
+      "value": 0.8333,
+      "passed": true
+     },
+     {
+      "name": "Precision (share of alarms that are real)",
+      "op": ">=",
+      "target": 0.7,
+      "value": 0.9333,
+      "passed": true
+     },
+     {
+      "name": "Speed, frames per second",
+      "op": ">=",
+      "target": 10.0,
+      "value": 237.5,
+      "passed": true
+     }
+    ],
+    "data_criteria": [
+     {
+      "name": "Test images",
+      "op": ">=",
+      "target": 20,
+      "value": 48,
+      "passed": true
+     },
+     {
+      "name": "Test 'no_goggles' objects",
+      "op": ">=",
+      "target": 30,
+      "value": 34,
+      "passed": true
+     },
+     {
+      "name": "Test 'goggles' objects",
+      "op": ">=",
+      "target": 30,
+      "value": 50,
+      "passed": true
+     }
+    ],
+    "criteria_config": {
+     "min_recall": 0.8,
+     "min_precision": 0.7,
+     "min_fps": 10.0,
+     "min_gt_per_class": 30,
+     "min_images": 20
+    }
+   },
+   "precision": 0.9333,
+   "recall": 0.8333,
+   "f1": 0.8805,
+   "fp": 5,
+   "fn": 14,
+   "fps": 237.5,
+   "model": {
+    "id": "model_sample_synth",
+    "kind": "trained",
+    "variant": "real_plus_synthetic",
+    "base_model": "yolo11n.pt",
+    "dataset_id": "ds_sample_real_plus_synthetic",
+    "epochs": 30,
+    "created_at": 1794700000.0,
+    "val_metrics": {
+     "precision": 0.91,
+     "recall": 0.9
+    }
+   },
+   "sample_data": true,
+   "delta_vs_baseline": {
+    "baseline_id": "model_sample_zeroshot",
+    "precision": 0.3938,
+    "recall": 0.3452,
+    "f1": 0.368,
+    "fp": -30,
+    "fn": -29,
+    "recall_clear": true,
+    "precision_clear": true
+   }
+  }
+ },
+ "notes": [
+  "SAMPLE DATA: simulated predictions for UI development, not an experimental result.",
+  "Test split 'test' of dataset ds_sample_test: 48 images.",
+  "Matching at IoU >= 0.5, confidence >= 0.25 (fixed before testing).",
+  "Synthetic data did NOT improve results on real test footage. (F1 real-only 0.8889, real+synthetic 0.8805)"
+ ],
+ "mock": false,
+ "created_at": 1794678820.407,
+ "image_size": [
+  1280,
+  720
+ ]
+}

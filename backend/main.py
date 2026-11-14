@@ -119,14 +119,15 @@ def _store_manifest(res: dict) -> schemas.DatasetManifest:
 
 
 @app.post("/api/datasets", response_model=schemas.DatasetManifest, dependencies=[Depends(auth)])
-async def create_dataset(task_id: str = Form(...), kind: str = Form("train"), files: list[UploadFile] = File(...)):
+async def create_dataset(task_id: str = Form(...), kind: str = Form("train"), files: list[UploadFile] = File(...),
+                         fps: float = Form(1.0), max_frames: int = Form(200)):
     """Upload footage (videos/images) -> frames -> auto-labels -> YOLO dataset. kind=test makes the independent
     test set (never used for training)."""
     task = _get("tasks", task_id, schemas.TaskSpec)
     payload = [("files", (Path(f.filename or "upload.bin").name, await f.read(), f.content_type or "application/octet-stream"))
                for f in files]
     up = _gpu(gpu_client.post, "/upload", data={"subdir": task.task_id}, files=payload, timeout=600)
-    res = _gpu(gpu_client.post, "/datasets/process", json={"task": task.model_dump(), "files": up["paths"], "kind": kind},
+    res = _gpu(gpu_client.post, "/datasets/process", json={"task": task.model_dump(), "files": up["paths"], "kind": kind, "fps": fps, "max_frames": max_frames},
                timeout=1800)
     return _store_manifest(res)
 

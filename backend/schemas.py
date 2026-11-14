@@ -55,6 +55,8 @@ class TrainingRequest(BaseModel):
     imgsz: int = Field(640, ge=320, le=1920)
     batch: int = Field(16, ge=1, le=128)
     export_onnx: bool = True
+    baseline: bool = True                     # validate the pretrained model first (adds ~5-10 s); off in demo mode
+    verify_export: bool = True                # ONNX vs .pt check after export (adds ~3 s)
 
 
 class TrainingJob(BaseModel):

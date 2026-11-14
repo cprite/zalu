@@ -58,9 +58,10 @@ def train(
     )
     out_dir = storage.path("runs", art.id, "x").parent
 
-    if progress:
-        progress(0.01, "baseline: pretrained model on val split")
-    art.baseline_metrics = baseline_val(req.base_model, dataset.data_yaml, dataset.class_names, req.imgsz)
+    if req.baseline:
+        if progress:
+            progress(0.01, "baseline: pretrained model on val split")
+        art.baseline_metrics = baseline_val(req.base_model, dataset.data_yaml, dataset.class_names, req.imgsz)
 
     model = YOLO(req.base_model)
 
@@ -97,7 +98,8 @@ def train(
             progress(0.97, "exporting ONNX")
         onnx_path = YOLO(str(weights)).export(format="onnx", imgsz=req.imgsz)
         art.onnx = str(onnx_path)
-        art.export_check = verify_onnx(str(weights), art.onnx, dataset.data_yaml, req.imgsz)
+        if req.verify_export:
+            art.export_check = verify_onnx(str(weights), art.onnx, dataset.data_yaml, req.imgsz)
 
     return art
 
