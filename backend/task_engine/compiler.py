@@ -110,13 +110,15 @@ def compile_task(
     raise TaskCompilationError(f"TaskSpec still invalid after {max_repairs + 1} attempts: {errors}")
 
 
-def create_task_spec(prompt: str) -> TaskSpec:
+def create_task_spec(prompt: str, llm: Optional[LLMBackend] = None) -> TaskSpec:
     """Backend hook (POST /api/tasks). Never raises on bad LLM output: if Claude refuses
     or keeps returning an inconsistent spec, the user gets a needs_clarification spec
-    explaining why. Network/auth errors from the Anthropic SDK still raise."""
+    explaining why. Transport errors (SDK network/auth, Claude CLI failures) still raise.
+    `llm`: any backend with the claude_backend signature, e.g. the backend's Claude CLI one."""
     try:
-        return compile_task(prompt)
+        return compile_task(prompt, llm=llm)
     except TaskCompilationError as e:
         return _placeholder(prompt.strip()[:MAX_PROMPT_CHARS], "needs_clarification",
                             [f"Task Engine could not build a valid spec: {e}"],
-                            ["Please rephrase the task, naming the objects to detect."], "claude:error")
+                            ["Please rephrase the task, naming the objects to detect."],
+                            f"{getattr(llm, 'name', 'claude')}:error")

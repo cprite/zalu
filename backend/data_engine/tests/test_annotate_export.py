@@ -242,3 +242,22 @@ def test_calibration_picks_phrase_detector_responds_to(tmp_path, vest_task):
     texts = {p.key: p.text for p in task.labeling.detector_prompts}
     assert texts == {"person": "person", "vest": "hi-vis vest"}
     assert report["vest"]["scores"]["vest"] == 0.0
+
+
+def test_single_session_synthetic_from_val_frame_is_dropped(tmp_path, vest_task):
+    """With one recording, val is a later time block of the SAME session: session checks are not enough."""
+    frames = _frames(tmp_path, ["only"], 10)
+    aset = _annotate(frames, vest_task)
+    syn_frames = []
+    for parent in (frames[0], frames[-1]):  # first frame -> train block, last frame -> val block
+        a = aset.annotations[frames.index(parent)].model_copy(deep=True)
+        a.frame_id, a.synthetic = f"syn_{parent.frame_id}", True
+        aset.annotations.append(a)
+        syn_frames.append(parent.model_copy(update={"frame_id": a.frame_id, "synthetic": True,
+                                                    "parent_frame_id": parent.frame_id}))
+    m = export_dataset(aset, vest_task, tmp_path / "ds", frames=frames + syn_frames)
+    assert [i.frame_id for i in m.images if i.synthetic] == ["syn_only_0"]
+
+    # without provenance, a single-session dataset must not accept synthetic images at all
+    m2 = export_dataset(aset, vest_task, tmp_path / "ds2", frames=frames)
+    assert not any(i.synthetic for i in m2.images)

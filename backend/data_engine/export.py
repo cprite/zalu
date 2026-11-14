@@ -171,13 +171,23 @@ def export_dataset(
                         "so val metrics are optimistic. Record a second session for honest validation.")
 
     train_sessions = {a.session_id for a in train}
+    train_ids = {a.frame_id for a in train}
     synth_used: List[Annotation] = []
     if include_synthetic:
-        # Synthetic frames inherit their parent's session_id (see synthetic.py).
-        synth_used = [a for a in synth if a.session_id in train_sessions]
+        # A synthetic image may enter train only if its parent frame is itself in train. With
+        # provenance (frames) we check the exact parent; without it, fall back to the session,
+        # which is only safe when val is a different session (not a time block of the same one).
+        for a in synth:
+            parent = getattr(fidx.get(a.frame_id), "parent_frame_id", None)
+            if parent is not None:
+                ok = parent in train_ids
+            else:
+                ok = a.session_id in train_sessions and not strategy.startswith("temporal_block")
+            if ok:
+                synth_used.append(a)
         dropped = len(synth) - len(synth_used)
         if dropped:
-            warnings.append(f"{dropped} synthetic image(s) dropped: parent frame not in a train session")
+            warnings.append(f"{dropped} synthetic image(s) dropped: parent frame not in train (or provenance missing)")
 
     images: List[ManifestImage] = []
     splits = {

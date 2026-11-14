@@ -188,3 +188,34 @@ def test_plan_reports_edits_without_parents(tmp_path, vest_task):
     syn = generate_synthetic(real, frames, vest_task, tmp_path / "syn", editor=FakeEditor(), detector=det,
                              edits=counterfactual_edits(vest_task), max_images=2)
     assert any("no eligible parent frame containing person_without_vest" in r.reason for r in syn.rejected)
+
+
+def test_add_synthetic_variant_keeps_split(tmp_path, vest_task, monkeypatch):
+    from backend.data_engine import service
+    from backend.data_engine.tests.helpers import make_video
+
+    monkeypatch.setenv("ZALU_DATA", str(tmp_path / "data"))
+    det = ColourBoxDetector()
+    service.set_detector(det)
+    try:
+        vids = []
+        for i in (1, 2, 3):  # coloured boxes so ColourBoxDetector finds "people"
+            v = make_video(tmp_path / f"cam{i}.mp4", n_frames=40, fps=10, seed=i)
+            vids.append(str(v))
+        ds = service.process_upload(vest_task, vids)
+        frames = service.FrameCollection.model_validate_json((Path(ds.root).parent / "work" / "frames.json").read_text())
+        aset = service.get_annotations(ds)
+        train_ids = {i.frame_id for i in ds.images if i.split == "train"}
+        syn = generate_synthetic(aset, [f for f in frames.frames if f.frame_id in train_ids], vest_task,
+                                 Path(ds.root).parent / "work" / "synthetic_1", editor=FakeEditor(),
+                                 detector=det, conditions=["dim light"], max_images=3)
+        assert syn.frames
+        v = service.add_synthetic(ds)
+        assert v.dataset_id != ds.dataset_id and v.variant == "real_plus_synthetic"
+        assert v.splits["val"].sessions == ds.splits["val"].sessions
+        real = lambda m, split: sorted(i.frame_id for i in m.images if i.split == split and not i.synthetic)  # noqa: E731
+        assert real(v, "train") == real(ds, "train") and real(v, "val") == real(ds, "val")
+        assert v.splits["train"].synthetic_images == len(syn.frames)
+        assert validate_dataset(v.root).ok
+    finally:
+        service.set_detector(None)
