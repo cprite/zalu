@@ -1,0 +1,393 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ZALU DashboardSpec v1",
+  "description": "Configuration for a dashboard driven by the current ZALU inference session.",
+  "type": "object",
+  "required": [
+    "version",
+    "title",
+    "description",
+    "layout",
+    "data_sources",
+    "metrics",
+    "widgets"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "1"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "\\S"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "\\S"
+    },
+    "layout": {
+      "type": "object",
+      "required": [
+        "columns"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "columns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        }
+      }
+    },
+    "data_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "type": {
+            "const": "inference_session"
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 1
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/metric"
+      },
+      "minItems": 0,
+      "maxItems": 24
+    },
+    "widgets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/widget"
+      },
+      "minItems": 1,
+      "maxItems": 24
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,47}$"
+    },
+    "metric": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "source_id",
+        "operation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S"
+        },
+        "source_id": {
+          "$ref": "#/$defs/id"
+        },
+        "operation": {
+          "enum": [
+            "detection_count",
+            "class_count",
+            "inference_latency_ms"
+          ]
+        },
+        "class_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "operation": {
+                "const": "class_count"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "class_name"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "class_name"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "widget": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "type",
+            "title",
+            "source_id",
+            "span",
+            "config"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "type": {
+              "const": "live_preview"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "\\S"
+            },
+            "source_id": {
+              "$ref": "#/$defs/id"
+            },
+            "span": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "config": {
+              "type": "object",
+              "required": [
+                "show_boxes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "show_boxes": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "type",
+            "title",
+            "source_id",
+            "span",
+            "config"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "type": {
+              "const": "kpi"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "\\S"
+            },
+            "source_id": {
+              "$ref": "#/$defs/id"
+            },
+            "span": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "config": {
+              "type": "object",
+              "required": [
+                "metric_id"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "metric_id": {
+                  "$ref": "#/$defs/id"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "type",
+            "title",
+            "source_id",
+            "span",
+            "config"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "type": {
+              "const": "time_series"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "\\S"
+            },
+            "source_id": {
+              "$ref": "#/$defs/id"
+            },
+            "span": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "config": {
+              "type": "object",
+              "required": [
+                "metric_id",
+                "window_seconds"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "metric_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "window_seconds": {
+                  "type": "integer",
+                  "minimum": 5,
+                  "maximum": 600
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "type",
+            "title",
+            "source_id",
+            "span",
+            "config"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "type": {
+              "const": "detection_table"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "\\S"
+            },
+            "source_id": {
+              "$ref": "#/$defs/id"
+            },
+            "span": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "config": {
+              "type": "object",
+              "required": [
+                "rows",
+                "max_rows"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "rows": {
+                  "enum": [
+                    "detections",
+                    "events"
+                  ]
+                },
+                "max_rows": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "type",
+            "title",
+            "source_id",
+            "span",
+            "config"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "type": {
+              "const": "class_distribution"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "\\S"
+            },
+            "source_id": {
+              "$ref": "#/$defs/id"
+            },
+            "span": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "config": {
+              "type": "object",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  }
+}
