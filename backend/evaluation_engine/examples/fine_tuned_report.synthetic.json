@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "task_type": "object_detection",
+  "dataset": {
+    "id": "synthetic-fixture-1",
+    "split": "test",
+    "source": "synthetic_fixture",
+    "class_names": [
+      "person",
+      "vest"
+    ],
+    "fingerprint": "6004433c2f22b36e2a028724cdde1f37cbdd1c4409371c030c9e9920c1392f4e",
+    "image_count": 4,
+    "background_image_count": 1,
+    "ground_truth_count": 4
+  },
+  "model": {
+    "id": "synthetic-fine_tuned",
+    "variant": "fine_tuned"
+  },
+  "config": {
+    "iou_threshold": 0.5,
+    "confidence_threshold": 0.5
+  },
+  "summary": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 0,
+    "support": 4,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "predictions_below_threshold": 0,
+    "images_without_prediction_rows": 1,
+    "failure_image_count": 0
+  },
+  "per_class": {
+    "person": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "support": 2,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "vest": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "support": 2,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "confusion": [
+    {
+      "actual": "person",
+      "predicted": "person",
+      "count": 2
+    },
+    {
+      "actual": "vest",
+      "predicted": "vest",
+      "count": 2
+    }
+  ],
+  "error_counts": {},
+  "failures": [],
+  "readiness": {
+    "status": "ineligible",
+    "thresholds": {
+      "min_precision": 0.8,
+      "min_recall": 0.8,
+      "min_f1": 0.8,
+      "min_images": 4,
+      "min_ground_truth": 4,
+      "min_class_support": {
+        "person": 2,
+        "vest": 2
+      }
+    },
+    "checks": [
+      {
+        "metric": "image_count",
+        "class_name": null,
+        "actual": 4,
+        "minimum": 4,
+        "passed": true
+      },
+      {
+        "metric": "ground_truth_count",
+        "class_name": null,
+        "actual": 4,
+        "minimum": 4,
+        "passed": true
+      },
+      {
+        "metric": "precision",
+        "class_name": null,
+        "actual": 1.0,
+        "minimum": 0.8,
+        "passed": true
+      },
+      {
+        "metric": "recall",
+        "class_name": null,
+        "actual": 1.0,
+        "minimum": 0.8,
+        "passed": true
+      },
+      {
+        "metric": "f1",
+        "class_name": null,
+        "actual": 1.0,
+        "minimum": 0.8,
+        "passed": true
+      },
+      {
+        "metric": "support",
+        "class_name": "person",
+        "actual": 2,
+        "minimum": 2,
+        "passed": true
+      },
+      {
+        "metric": "support",
+        "class_name": "vest",
+        "actual": 2,
+        "minimum": 2,
+        "passed": true
+      }
+    ]
+  }
+}

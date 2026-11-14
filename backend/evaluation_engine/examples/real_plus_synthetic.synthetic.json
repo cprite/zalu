@@ -1,0 +1,46 @@
+{
+  "model_id": "synthetic-real_plus_synthetic",
+  "variant": "real_plus_synthetic",
+  "images": [
+    {
+      "image_id": "synthetic-01",
+      "boxes": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "confidence": 0.9
+        },
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20,
+            0,
+            30,
+            10
+          ],
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-02",
+      "boxes": [
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20,
+            0,
+            30,
+            10
+          ],
+          "confidence": 0.8
+        }
+      ]
+    }
+  ]
+}

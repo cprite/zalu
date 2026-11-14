@@ -1,0 +1,86 @@
+{
+  "model_id": "synthetic-pretrained_baseline",
+  "variant": "pretrained_baseline",
+  "images": [
+    {
+      "image_id": "synthetic-01",
+      "boxes": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "confidence": 0.9
+        },
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "confidence": 0.8
+        },
+        {
+          "class_name": "person",
+          "xyxy": [
+            20,
+            0,
+            30,
+            10
+          ],
+          "confidence": 0.85
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-02",
+      "boxes": [
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20,
+            0,
+            30,
+            4
+          ],
+          "confidence": 0.7
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-03",
+      "boxes": [
+        {
+          "class_name": "unknown",
+          "xyxy": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "confidence": 0.6
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-04",
+      "boxes": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "confidence": 0.49
+        }
+      ]
+    }
+  ]
+}

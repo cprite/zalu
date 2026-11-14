@@ -1,0 +1,335 @@
+{
+  "schema_version": "1.0",
+  "task_type": "object_detection",
+  "dataset": {
+    "id": "synthetic-fixture-1",
+    "split": "test",
+    "source": "synthetic_fixture",
+    "class_names": [
+      "person",
+      "vest"
+    ],
+    "fingerprint": "6004433c2f22b36e2a028724cdde1f37cbdd1c4409371c030c9e9920c1392f4e",
+    "image_count": 4,
+    "background_image_count": 1,
+    "ground_truth_count": 4
+  },
+  "model": {
+    "id": "synthetic-pretrained_baseline",
+    "variant": "pretrained_baseline"
+  },
+  "config": {
+    "iou_threshold": 0.5,
+    "confidence_threshold": 0.5
+  },
+  "summary": {
+    "tp": 1,
+    "fp": 4,
+    "fn": 3,
+    "support": 4,
+    "precision": 0.2,
+    "recall": 0.25,
+    "f1": 0.2222222222222222,
+    "predictions_below_threshold": 1,
+    "images_without_prediction_rows": 0,
+    "failure_image_count": 4
+  },
+  "per_class": {
+    "person": {
+      "tp": 1,
+      "fp": 2,
+      "fn": 1,
+      "support": 2,
+      "precision": 0.3333333333333333,
+      "recall": 0.5,
+      "f1": 0.4
+    },
+    "unknown": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "support": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "vest": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 2,
+      "support": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "confusion": [
+    {
+      "actual": null,
+      "predicted": "person",
+      "count": 1
+    },
+    {
+      "actual": null,
+      "predicted": "unknown",
+      "count": 1
+    },
+    {
+      "actual": null,
+      "predicted": "vest",
+      "count": 1
+    },
+    {
+      "actual": "person",
+      "predicted": null,
+      "count": 1
+    },
+    {
+      "actual": "person",
+      "predicted": "person",
+      "count": 1
+    },
+    {
+      "actual": "vest",
+      "predicted": null,
+      "count": 1
+    },
+    {
+      "actual": "vest",
+      "predicted": "person",
+      "count": 1
+    }
+  ],
+  "error_counts": {
+    "background": 1,
+    "class_mismatch": 1,
+    "duplicate": 1,
+    "localization": 1,
+    "missed": 2
+  },
+  "failures": [
+    {
+      "image_id": "synthetic-01",
+      "ground_truth": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0.0,
+            0.0,
+            10.0,
+            10.0
+          ]
+        },
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20.0,
+            0.0,
+            30.0,
+            10.0
+          ]
+        }
+      ],
+      "predictions": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0.0,
+            0.0,
+            10.0,
+            10.0
+          ],
+          "confidence": 0.9
+        },
+        {
+          "class_name": "person",
+          "xyxy": [
+            20.0,
+            0.0,
+            30.0,
+            10.0
+          ],
+          "confidence": 0.85
+        },
+        {
+          "class_name": "person",
+          "xyxy": [
+            0.0,
+            0.0,
+            10.0,
+            10.0
+          ],
+          "confidence": 0.8
+        }
+      ],
+      "errors": [
+        {
+          "type": "class_mismatch",
+          "ground_truth_index": 1,
+          "prediction_index": 1,
+          "iou": 1.0
+        },
+        {
+          "type": "duplicate",
+          "ground_truth_index": 0,
+          "prediction_index": 2,
+          "iou": 1.0
+        }
+      ],
+      "width": 40,
+      "height": 40
+    },
+    {
+      "image_id": "synthetic-02",
+      "ground_truth": [
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20.0,
+            0.0,
+            30.0,
+            10.0
+          ]
+        }
+      ],
+      "predictions": [
+        {
+          "class_name": "vest",
+          "xyxy": [
+            20.0,
+            0.0,
+            30.0,
+            4.0
+          ],
+          "confidence": 0.7
+        }
+      ],
+      "errors": [
+        {
+          "type": "localization",
+          "ground_truth_index": 0,
+          "prediction_index": 0,
+          "iou": 0.4
+        },
+        {
+          "type": "missed",
+          "ground_truth_index": 0,
+          "prediction_index": null,
+          "iou": null
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-03",
+      "ground_truth": [],
+      "predictions": [
+        {
+          "class_name": "unknown",
+          "xyxy": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "confidence": 0.6
+        }
+      ],
+      "errors": [
+        {
+          "type": "background",
+          "ground_truth_index": null,
+          "prediction_index": 0,
+          "iou": null
+        }
+      ]
+    },
+    {
+      "image_id": "synthetic-04",
+      "ground_truth": [
+        {
+          "class_name": "person",
+          "xyxy": [
+            0.0,
+            0.0,
+            10.0,
+            10.0
+          ]
+        }
+      ],
+      "predictions": [],
+      "errors": [
+        {
+          "type": "missed",
+          "ground_truth_index": 0,
+          "prediction_index": null,
+          "iou": null
+        }
+      ]
+    }
+  ],
+  "readiness": {
+    "status": "ineligible",
+    "thresholds": {
+      "min_precision": 0.8,
+      "min_recall": 0.8,
+      "min_f1": 0.8,
+      "min_images": 4,
+      "min_ground_truth": 4,
+      "min_class_support": {
+        "person": 2,
+        "vest": 2
+      }
+    },
+    "checks": [
+      {
+        "metric": "image_count",
+        "class_name": null,
+        "actual": 4,
+        "minimum": 4,
+        "passed": true
+      },
+      {
+        "metric": "ground_truth_count",
+        "class_name": null,
+        "actual": 4,
+        "minimum": 4,
+        "passed": true
+      },
+      {
+        "metric": "precision",
+        "class_name": null,
+        "actual": 0.2,
+        "minimum": 0.8,
+        "passed": false
+      },
+      {
+        "metric": "recall",
+        "class_name": null,
+        "actual": 0.25,
+        "minimum": 0.8,
+        "passed": false
+      },
+      {
+        "metric": "f1",
+        "class_name": null,
+        "actual": 0.2222222222222222,
+        "minimum": 0.8,
+        "passed": false
+      },
+      {
+        "metric": "support",
+        "class_name": "person",
+        "actual": 2,
+        "minimum": 2,
+        "passed": true
+      },
+      {
+        "metric": "support",
+        "class_name": "vest",
+        "actual": 2,
+        "minimum": 2,
+        "passed": true
+      }
+    ]
+  }
+}
