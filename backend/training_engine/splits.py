@@ -50,7 +50,16 @@ def _hash(p: Path) -> str:
     return hashlib.sha1(p.read_bytes()).hexdigest()
 
 
-def check_splits(data_yaml: str) -> dict[str, Any]:
+def check_splits(data_yaml: str, variant: str = "real_only") -> dict[str, Any]:
+    """variant="test": an independent test set (Kirill's export points val at the test images so YOLO can
+    validate on it). It must contain NO train images; val == test is expected there."""
+    if variant == "test":
+        cfg = resolve(data_yaml)
+        root = Path(cfg.get("path") or Path(data_yaml).parent)
+        tr = _images(root, cfg.get("train")) if cfg.get("train") else []
+        te = _images(root, cfg.get("test") or cfg.get("val"))
+        errors = (["test dataset contains train images"] if tr and set(tr) - set(te) else []) + ([] if te else ["test split is empty"])
+        return {"counts": {"train": 0, "val": 0, "test": len(te)}, "errors": errors, "warnings": [], "ok": not errors}
     cfg = resolve(data_yaml)
     root = Path(cfg.get("path") or Path(data_yaml).parent)
     splits = {k: _images(root, cfg.get(k)) for k in ("train", "val", "test")}

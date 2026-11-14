@@ -79,7 +79,7 @@ async def datasets_process(body: dict):
                                         body.get("val_sessions"), fps, mx)
     except (ValueError, FileExistsError) as e:
         raise HTTPException(422, str(e))
-    check = check_splits(m.data_yaml)
+    check = check_splits(m.data_yaml, m.variant)
     return {"manifest": m.model_dump(), "split_check": check}
 
 
