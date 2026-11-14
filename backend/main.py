@@ -166,6 +166,19 @@ def get_model(model_id: str):
     return _get("models", model_id, schemas.ModelArtifact)
 
 
+@app.get("/api/models/{model_id}/onnx", dependencies=[Depends(auth)])
+def download_onnx(model_id: str):
+    """Exported ONNX weights for offline inference on the demo laptop (tools/webcam_client.py --onnx)."""
+    from fastapi.responses import FileResponse
+
+    art = _get("models", model_id, schemas.ModelArtifact)
+    if not art.onnx or not Path(art.onnx).exists():
+        raise HTTPException(404, f"model {model_id} has no ONNX export")
+    names = ",".join(art.classes)
+    return FileResponse(art.onnx, media_type="application/octet-stream", filename=f"{model_id}.onnx",
+                        headers={"X-Class-Names": names})
+
+
 # ---------- evaluation (route: Kolyan, logic: Damir) ----------
 @app.post("/api/evaluations", response_model=schemas.EvaluationReport, dependencies=[Depends(auth)])
 def evaluate(req: schemas.EvaluationRequest):
