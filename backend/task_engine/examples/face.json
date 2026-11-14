@@ -1,0 +1,74 @@
+{
+  "status": "unsupported",
+  "issues": [
+    "Recognising which specific employee is at the door and logging their name requires identifying individuals (face recognition / person re-identification), which the platform does not support.",
+    "The platform can only detect generic visible things (e.g. 'a person is at the door'), not who that person is.",
+    "Placeholder spec below assumes a fallback of detecting any person at the door; this does not satisfy the original request."
+  ],
+  "clarification_questions": [
+    "Would it be useful instead to detect when any person is present at the door (without identifying them), e.g. to trigger a recording or notification?"
+  ],
+  "task_type": "object_detection",
+  "summary": "Identify which named employee is at the door and log their name (unsupported: requires individual identification).",
+  "classes": [
+    {
+      "name": "person_at_door",
+      "description": "Any person visible standing at or passing through the door area, without identity information."
+    }
+  ],
+  "target_event": "person_at_door",
+  "event_rules": [
+    {
+      "trigger_class": "person_at_door",
+      "min_consecutive_frames": 3,
+      "description": "Placeholder: a person is present at the door (no identity recognition)."
+    }
+  ],
+  "visual_conditions": [
+    "Daytime and night-time lighting at the door",
+    "Backlighting from door opening",
+    "People facing toward and away from the camera",
+    "Partial occlusion by the door frame or door itself",
+    "Different clothing including coats and hats"
+  ],
+  "requires_tracking": false,
+  "primary_metric": "recall",
+  "secondary_metrics": [
+    "precision",
+    "map50"
+  ],
+  "test_scenarios": [
+    "Separate recording session at the door with different people",
+    "Recording at a different time of day with changed lighting",
+    "Empty door scenes to check false alarms"
+  ],
+  "synthetic_targets": [
+    "Low-light / night lighting at the door",
+    "Strong backlight from outside",
+    "Rainy-weather clothing such as umbrellas and hoods"
+  ],
+  "labeling": {
+    "detector_prompts": [
+      {
+        "key": "person",
+        "text": "person",
+        "min_confidence": 0.3
+      }
+    ],
+    "rules": [
+      {
+        "kind": "direct",
+        "subject": "person",
+        "attribute": null,
+        "class_if_present": "person_at_door",
+        "class_if_absent": null,
+        "min_overlap": 0.5,
+        "subject_padding": 0.0
+      }
+    ]
+  },
+  "spec_version": "1.0",
+  "task_id": "task_ef09783113fc",
+  "prompt": "Recognise which employee is at the door and log their name",
+  "compiler": "claude:claude-opus-5-5"
+}

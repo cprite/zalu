@@ -1,0 +1,89 @@
+{
+  "status": "ok",
+  "issues": [
+    "Assumed 'free' means no person is seated or standing at the table; dishes, bags or reserved signs left on an empty table are not treated as occupied.",
+    "Occupancy is judged per frame from person-table overlap, so a waiter or guest walking past may briefly mark a table as occupied. A short debounce reduces this.",
+    "Assumed a fixed camera covering the dining area, with tables visible from an elevated angle."
+  ],
+  "clarification_questions": [],
+  "task_type": "object_detection",
+  "summary": "Detect restaurant tables in a fixed camera view and classify each as free (no one at it) or occupied (people seated at it).",
+  "classes": [
+    {
+      "name": "table_free",
+      "description": "A restaurant table with no person seated or standing at it."
+    },
+    {
+      "name": "table_occupied",
+      "description": "A restaurant table with at least one person seated or standing directly at it."
+    }
+  ],
+  "target_event": "table_free",
+  "event_rules": [
+    {
+      "trigger_class": "table_free",
+      "min_consecutive_frames": 15,
+      "description": "Report a table as free once it has had no person at it for several consecutive frames, so passers-by do not cause flicker."
+    }
+  ],
+  "visual_conditions": [
+    "Daytime natural light and evening artificial or dim ambient lighting",
+    "Tables of different sizes and shapes (round, square, long, booth)",
+    "Partially occluded tables behind seated guests, staff or chairs",
+    "Tables at near and far distances from the camera",
+    "Empty tables with leftover dishes, glasses or bags",
+    "Staff walking past or standing beside tables",
+    "Busy periods with crowded dining room and quiet periods with mostly empty tables",
+    "Single guests and large groups at a table"
+  ],
+  "requires_tracking": false,
+  "primary_metric": "f1",
+  "secondary_metrics": [
+    "precision",
+    "recall",
+    "map50"
+  ],
+  "test_scenarios": [
+    "Recording of a full lunch service on a different day from training footage",
+    "Evening dinner service with dim, warm lighting",
+    "Footage from a second camera angle or a different section of the dining room",
+    "Clean-up period with empty tables that still have dishes on them",
+    "Busy period with waiters frequently walking between tables"
+  ],
+  "synthetic_targets": [
+    "Dim evening or candle-lit lighting variants",
+    "Strong window glare and backlit daytime scenes",
+    "Empty tables with leftover plates, cups and napkins",
+    "Different table cloths, colours and furniture styles",
+    "Crowded scenes with heavy occlusion of tables by people"
+  ],
+  "labeling": {
+    "detector_prompts": [
+      {
+        "key": "table",
+        "text": "dining table",
+        "min_confidence": 0.25
+      },
+      {
+        "key": "person",
+        "text": "person",
+        "min_confidence": 0.3
+      }
+    ],
+    "rules": [
+      {
+        "kind": "attribute",
+        "subject": "table",
+        "attribute": "person",
+        "class_if_present": "table_occupied",
+        "class_if_absent": "table_free",
+        "min_overlap": 0.25,
+        "subject_padding": 0.4
+      }
+    ]
+  },
+  "spec_version": "1.0",
+  "task_id": "task_f71c2ba15bac",
+  "prompt": "Which restaurant tables are free?",
+  "compiler": "claude:claude-opus-5-5"
+}

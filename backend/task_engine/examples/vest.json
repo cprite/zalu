@@ -1,0 +1,97 @@
+{
+  "status": "ok",
+  "issues": [
+    "Assumed 'safety vests' means high-visibility/reflective vests worn on the torso.",
+    "Assumed a fixed camera over a work area such as a warehouse or construction site; any person in view is treated as a worker."
+  ],
+  "clarification_questions": [],
+  "task_type": "object_detection",
+  "summary": "Detect people in camera view and flag those not wearing a high-visibility safety vest.",
+  "classes": [
+    {
+      "name": "person_with_vest",
+      "description": "A person whose torso is covered by a visible high-visibility safety vest."
+    },
+    {
+      "name": "person_without_vest",
+      "description": "A person with no safety vest visible on their torso."
+    }
+  ],
+  "target_event": "person_without_vest",
+  "event_rules": [
+    {
+      "trigger_class": "person_without_vest",
+      "min_consecutive_frames": 5,
+      "description": "Alert when a person without a safety vest is detected for several consecutive frames."
+    }
+  ],
+  "visual_conditions": [
+    "Bright daylight and dim indoor/night lighting",
+    "Workers near and far from the camera",
+    "Front, side and back views of workers",
+    "Partial occlusion by shelves, machinery, pallets or other workers",
+    "Vests in different colors (yellow, orange, green)",
+    "Workers wearing similarly colored clothing that is not a vest",
+    "Workers carrying objects that cover the torso",
+    "Multiple workers in the same frame, mixed compliance"
+  ],
+  "requires_tracking": false,
+  "primary_metric": "violation_recall",
+  "secondary_metrics": [
+    "precision",
+    "f1"
+  ],
+  "test_scenarios": [
+    "Separate recording session with different workers, some with and some without vests",
+    "Different camera angle or height than the training footage",
+    "Low-light or evening shift footage",
+    "Crowded scene with several workers at varying distances",
+    "Workers in yellow/orange shirts without vests (hard negatives)"
+  ],
+  "synthetic_targets": [
+    "Low-light and night conditions",
+    "Strong backlight and glare",
+    "Workers at far distance (small in frame)",
+    "Vests in less common colors",
+    "Rain or dust haze for outdoor sites"
+  ],
+  "labeling": {
+    "detector_prompts": [
+      {
+        "key": "person",
+        "text": "person",
+        "alternatives": [
+          "worker",
+          "man",
+          "pedestrian"
+        ],
+        "min_confidence": 0.3
+      },
+      {
+        "key": "vest",
+        "text": "vest",
+        "alternatives": [
+          "safety vest",
+          "hi-vis vest",
+          "reflective vest"
+        ],
+        "min_confidence": 0.15
+      }
+    ],
+    "rules": [
+      {
+        "kind": "attribute",
+        "subject": "person",
+        "attribute": "vest",
+        "class_if_present": "person_with_vest",
+        "class_if_absent": "person_without_vest",
+        "min_overlap": 0.5,
+        "subject_padding": 0.0
+      }
+    ]
+  },
+  "spec_version": "1.0",
+  "task_id": "task_e5be16b5dd4f",
+  "prompt": "Detect workers without safety vests.",
+  "compiler": "claude:claude-opus-5-5"
+}

@@ -1,0 +1,68 @@
+{
+  "status": "needs_clarification",
+  "issues": [
+    "The request 'watch the shop' does not say what should be detected or what situation should trigger an alert; no reasonable default exists.",
+    "Placeholder spec assumes generic person detection inside a shop until the user clarifies.",
+    "If the intent is identifying specific people (e.g. known shoplifters) or judging intent/behaviour such as theft, that would be unsupported (identity recognition and intent inference are not possible)."
+  ],
+  "clarification_questions": [
+    "What specific objects or situations should the camera detect in the shop (e.g. people behind the counter, empty shelves, unattended cash register, customers at the checkout)?",
+    "Which situation should trigger an alert (e.g. a person present after closing hours, no staff at the counter, a shelf area empty)?",
+    "Where is the camera pointed (entrance, counter/till, shelves, stockroom)?"
+  ],
+  "task_type": "object_detection",
+  "summary": "Placeholder: detect people in a shop camera view (task needs clarification).",
+  "classes": [
+    {
+      "name": "person",
+      "description": "Any person visible in the shop camera frame, fully or partially."
+    }
+  ],
+  "target_event": null,
+  "event_rules": [],
+  "visual_conditions": [
+    "Daytime store lighting and dim after-hours lighting",
+    "Crowded and empty shop floor",
+    "Partial occlusion by shelves, displays and counters",
+    "People near and far from the camera"
+  ],
+  "requires_tracking": false,
+  "primary_metric": "map50",
+  "secondary_metrics": [
+    "precision",
+    "recall"
+  ],
+  "test_scenarios": [
+    "Separate recording during busy opening hours with different customers",
+    "Separate recording during quiet hours or after closing with low lighting",
+    "Recording from a second camera angle if available"
+  ],
+  "synthetic_targets": [
+    "Low-light / night conditions in the shop",
+    "Crowded scenes with heavy occlusion"
+  ],
+  "labeling": {
+    "detector_prompts": [
+      {
+        "key": "person",
+        "text": "person",
+        "min_confidence": 0.3
+      }
+    ],
+    "rules": [
+      {
+        "kind": "direct",
+        "subject": "person",
+        "attribute": null,
+        "class_if_present": "person",
+        "class_if_absent": null,
+        "min_overlap": 0.5,
+        "subject_padding": 0.0
+      }
+    ]
+  },
+  "spec_version": "1.0",
+  "task_id": "task_489478684b96",
+  "prompt": "watch the shop",
+  "compiler": "claude:claude-opus-5-5"
+}
