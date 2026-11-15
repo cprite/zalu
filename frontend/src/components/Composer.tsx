@@ -2,7 +2,7 @@
 // Message-box style input: text plus image/video attachments, one send button.
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { t } from "@/lib/motion";
+import { t, usePointerFine } from "@/lib/motion";
 import { Spinner } from "./ui";
 
 const MAX_PREVIEWS = 7;
@@ -36,6 +36,7 @@ export function Composer({
   const area = useRef<HTMLTextAreaElement>(null);
   const [over, setOver] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const pointerFine = usePointerFine();
 
   const add = (list: FileList | File[] | null) => {
     if (!list || busy) return;
@@ -53,14 +54,20 @@ export function Composer({
   const previews = useMemo(() => (expanded ? files : files.slice(0, MAX_PREVIEWS)).map((f) => ({ f, url: previewUrl(f) })), [expanded, files]);
 
   return (
-    <div className={`composer ${over ? "over" : ""}`} style={{ position: "relative" }}
+    <div className={`composer ${over ? "over" : ""} ${busy ? "busy" : ""}`} style={{ position: "relative" }} aria-busy={busy}
       onDragOver={(e) => { e.preventDefault(); if (!busy) setOver(true); }}
       onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOver(false); }}
       onDrop={(e) => { e.preventDefault(); setOver(false); add(e.dataTransfer.files); }}>
       <AnimatePresence>
         {over && (
-          <motion.div className="drop-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")} aria-hidden>
-            Drop to attach
+          <motion.div className="drop-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: t("fast") }} transition={t("base")} aria-hidden>
+            <span className="row" style={{ gap: 8 }}>
+              <motion.svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                initial={{ y: -6, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={t("slow")}>
+                <path d="M12 4v12M7 11l5 5 5-5M5 20h14" />
+              </motion.svg>
+              Drop to attach
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -71,7 +78,7 @@ export function Composer({
               <motion.li key={`${f.name}-${f.size}-${f.lastModified}`} layout className="attachment" title={f.name}
                 initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }} transition={t("base")}>
                 {/* eslint-disable-next-line @next/next/no-img-element -- local blob: preview, next/image cannot optimise it */}
-                {url ? <img src={url} alt="" /> : <span>🎬<br />{f.name.slice(0, 14)}</span>}
+                {url ? <img src={url} alt="" data-loaded="false" onLoad={(e) => { e.currentTarget.dataset.loaded = "true"; }} /> : <span>🎬<br />{f.name.slice(0, 14)}</span>}
                 <button className="x" aria-label={`Remove ${f.name}`} disabled={busy} onClick={() => onFiles(files.filter((x) => x !== f))}>×</button>
               </motion.li>
             ))}
@@ -83,7 +90,7 @@ export function Composer({
       {!textless && (
         <>
           <label htmlFor="composer-text" className="sr-only">{placeholder}</label>
-          <textarea id="composer-text" ref={area} rows={1} disabled={busy} value={value} placeholder={placeholder} autoFocus={autoFocus}
+          <textarea id="composer-text" ref={area} rows={1} disabled={busy} value={value} placeholder={placeholder} autoFocus={autoFocus && pointerFine}
             onChange={(e) => onChange?.(e.target.value)}
             onPaste={(e) => add(e.clipboardData.files)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && canSubmit && !busy) { e.preventDefault(); onSubmit(); } }} />

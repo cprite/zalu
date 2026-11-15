@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useApi, type ZaluApi } from "@/lib/api";
 import { BRAND } from "@/lib/explain";
 import { STAGES, stageFill, stageOf, unlocked, useFlow } from "@/lib/flow";
-import { t } from "@/lib/motion";
+import { SPRING } from "@/lib/motion";
 import type { Health } from "@/lib/types";
 
 export function Topbar() {
@@ -105,7 +105,7 @@ export function StoryProgress() {
               <button className={`story-seg ${i === cur ? "active" : ""}`} disabled={!reachable} onClick={() => set({ step: first })}
                 aria-current={i === cur ? "step" : undefined}>
                 <span className="track" aria-hidden>
-                  <motion.span initial={false} animate={{ width: `${Math.round(fill[i] * 100)}%` }} transition={t("slow")} />
+                  <motion.span initial={false} animate={{ scaleX: fill[i] }} transition={SPRING} />
                 </span>
                 <span className="story-label">{st.label}</span>
                 <span className="sr-only">, {state}</span>

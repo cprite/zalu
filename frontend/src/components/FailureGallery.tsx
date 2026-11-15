@@ -1,4 +1,6 @@
 "use client";
+import { motion } from "motion/react";
+import { SPRING } from "@/lib/motion";
 import { useState } from "react";
 import { REASONS } from "@/lib/explain";
 import type { Failure, ModelEvaluation } from "@/lib/types";
@@ -16,10 +18,13 @@ export function FailureGallery({ e, imageSize }: { e: ModelEvaluation; imageSize
         <h3 id="gallery-title">Failure gallery</h3>
         <SampleBadge show={e.sample_data} label="Sample, no real images" />
         <div className="spacer" />
-        <div className="tabs" role="group" aria-label="Filter failures">
-          <button aria-pressed={filter === "all"} className={filter === "all" ? "on" : ""} onClick={() => setFilter("all")}>All ({e.failures.length})</button>
-          <button aria-pressed={filter === "false_negative"} className={filter === "false_negative" ? "on" : ""} onClick={() => setFilter("false_negative")}>Missed ({nfn})</button>
-          <button aria-pressed={filter === "false_positive"} className={filter === "false_positive" ? "on" : ""} onClick={() => setFilter("false_positive")}>False alarms ({e.failures.length - nfn})</button>
+        <div className="tabs has-pill" role="group" aria-label="Filter failures">
+          {([["all", `All (${e.failures.length})`], ["false_negative", `Missed (${nfn})`], ["false_positive", `False alarms (${e.failures.length - nfn})`]] as const).map(([key, text]) => (
+            <button key={key} aria-pressed={filter === key} className={filter === key ? "on" : ""} onClick={() => setFilter(key)}>
+              {filter === key && <motion.span layoutId="failure-filter" className="tab-pill" transition={SPRING} aria-hidden />}
+              <span className="tab-label">{text}</span>
+            </button>
+          ))}
         </div>
       </div>
       <p className="small ink2">Real test frames the model got wrong, with the likely cause and what to do about it.</p>

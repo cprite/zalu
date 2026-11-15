@@ -5,7 +5,7 @@ import { Annotator, classColor } from "@/components/Annotator";
 import { Banner, ErrorBox, SampleBadge, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
-import { TextShimmer, t } from "@/lib/motion";
+import { StatusLine, t } from "@/lib/motion";
 import type { Annotation } from "@/lib/types";
 
 /** Stage 1 · Describe → prepare / verify the auto-labels. One primary action: continue to training. */
@@ -89,7 +89,7 @@ export function Prepare() {
         <SampleBadge show={api.mode === "mock"} label="Sample labels" />
       </div>
 
-      {loading && <p className="hint" role="status"><TextShimmer>Loading frames and labels…</TextShimmer></p>}
+      {loading && <p className="hint"><StatusLine state="working">Loading frames and labels…</StatusLine></p>}
       <ErrorBox error={err} />
       {!loading && !s.frames.length && !err && (
         <Banner kind="info">No frames to preview for this dataset. You can continue to training.</Banner>
@@ -101,8 +101,10 @@ export function Prepare() {
             <span className="muted" aria-live="polite">Frame {cur + 1} of {s.frames.length}</span>
             <div className="spacer" />
             <span className="tiny muted" aria-hidden>← → to browse</span>
-            <button className="btn sm" aria-label="Previous frame" aria-keyshortcuts="ArrowLeft" disabled={cur === 0} onClick={() => setCur(cur - 1)}>←</button>
-            <button className="btn sm" aria-label="Next frame" aria-keyshortcuts="ArrowRight" disabled={cur >= s.frames.length - 1} onClick={() => setCur(cur + 1)}>→</button>
+            <motion.button className="btn sm" aria-label="Previous frame" aria-keyshortcuts="ArrowLeft" disabled={cur === 0} onClick={() => setCur(cur - 1)}
+              whileTap={{ x: -2 }} transition={t("fast")}>←</motion.button>
+            <motion.button className="btn sm" aria-label="Next frame" aria-keyshortcuts="ArrowRight" disabled={cur >= s.frames.length - 1} onClick={() => setCur(cur + 1)}
+              whileTap={{ x: 2 }} transition={t("fast")}>→</motion.button>
           </div>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={frame.name} initial={{ opacity: 0.35 }} animate={{ opacity: 1 }} exit={{ opacity: 0.35 }} transition={t("fast")}>

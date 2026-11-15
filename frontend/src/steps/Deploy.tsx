@@ -9,7 +9,7 @@ import { ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { pct, variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
-import { TextShimmer, t } from "@/lib/motion";
+import { StatusLine, t } from "@/lib/motion";
 
 export function Deploy() {
   const { s, set } = useFlow();
@@ -107,7 +107,7 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
     <AnimatePresence initial={false}>
       {planning && (
         <motion.div key="planning" className="hero compact" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("base")}>
-          <h1><TextShimmer>Preparing your dashboard…</TextShimmer></h1>
+          <StatusLine state="working">Preparing your dashboard…</StatusLine>
         </motion.div>
       )}
     </AnimatePresence>
@@ -118,7 +118,13 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
       <DashboardRenderer spec={plan.spec} classes={classes} samples={session.samples} preview={session.preview}
         loading={session.loading} error={session.error} sampleMode={sampleMode} />
       <div className="row deploy-tools">
-        <button className="btn primary" onClick={session.running ? session.stop : session.start}>
+        <button className="btn primary" onClick={session.running ? session.stop : session.start} aria-pressed={session.running}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span key={session.running ? "stop" : "play"} aria-hidden style={{ display: "inline-grid" }}
+              initial={{ opacity: 0, scale: 0.6, rotate: -45 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} exit={{ opacity: 0, scale: 0.6 }} transition={t("fast")}>
+              {session.running ? "■" : "▶"}
+            </motion.span>
+          </AnimatePresence>
           {session.running ? "Stop inference" : sampleMode ? "Run sample inference" : "Start camera"}
         </button>
         {!sampleMode && <label className="btn">Choose image

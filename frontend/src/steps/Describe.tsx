@@ -5,7 +5,7 @@ import { Composer } from "@/components/Composer";
 import { Banner, ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
-import { TextShimmer, reveal, rise, stagger, t } from "@/lib/motion";
+import { StatusLine, reveal, rise, stagger, t } from "@/lib/motion";
 
 const EXAMPLES = [
   "Find people without safety goggles",
@@ -74,7 +74,7 @@ export function Describe() {
         <AnimatePresence mode="wait" initial={false}>
           {busy ? (
             <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
-              <TextShimmer>{busy === "task" ? "Understanding the task…" : "Uploading and labelling your footage. Longer videos take a few minutes."}</TextShimmer>
+              <StatusLine state="working">{busy === "task" ? "Understanding the task…" : "Uploading and labelling your footage…"}</StatusLine>
             </motion.p>
           ) : !prompt ? (
             <motion.div key="examples" className="suggestions" aria-label="Examples" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>

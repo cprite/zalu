@@ -5,7 +5,7 @@ import { ErrorBox, Progress, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
-import { reveal, t } from "@/lib/motion";
+import { AnimatedNumber, CheckDraw, Disclosure, EXIT, SPRING, StatusLine, reveal, t } from "@/lib/motion";
 import type { DatasetManifest } from "@/lib/types";
 
 const PRESETS = [
@@ -78,6 +78,9 @@ export function Train() {
   }
 
   const done = s.models.some((m) => m.kind === "trained") && !running;
+  // real training time reported by the backend (slowest trained model), shown only when present
+  const seconds = s.models.filter((m) => m.kind === "trained" && m.train_seconds != null).map((m) => m.train_seconds as number);
+  const trainedIn = seconds.length ? (Math.max(...seconds) >= 90 ? `${Math.round(Math.max(...seconds) / 60)} min` : `${Math.round(Math.max(...seconds))} s`) : null;
   const nothingPicked = !zeroShot && !datasets.some((d) => pick[d.id]);
 
   const overall = s.jobs.length ? s.jobs.reduce((t, j) => t + (j.status === "failed" ? 0 : j.progress), 0) / s.jobs.length : 0;
@@ -89,14 +92,17 @@ export function Train() {
           <motion.div key={done ? "done" : running ? "running" : "idle"} className="col" style={{ alignItems: "center", gap: 8 }}
             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={t("base")}>
             {done && (
-              <span className="done-mark" aria-hidden>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  <motion.path d="M5 12.5l4.5 4.5L19 7.5" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={t("slow", { delay: 0.08 })} />
-                </svg>
+              <span className="done-wrap" aria-hidden>
+                <motion.span className="done-ring" initial={{ opacity: 0.5, scale: 1 }} animate={{ opacity: 0, scale: 1.8 }} transition={{ duration: 0.9, ease: [0.2, 0, 0, 1], delay: 0.2 }} />
+                <motion.span className="done-mark" initial={{ scale: 0.7 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 420, damping: 26 }}>
+                  <CheckDraw size={22} delay={0.08} />
+                </motion.span>
               </span>
             )}
             <h1>{done ? "Your model is ready" : running ? "Training your model…" : "Train your model"}</h1>
-            <p>{done ? "Next, ZALU checks it on footage it has never seen." : "A small, fast detector trained on your labelled frames. It takes a few minutes."}</p>
+            <p>{done
+              ? (trainedIn ? `Trained in ${trainedIn}. Next, ZALU checks it on footage it has never seen.` : "Next, ZALU checks it on footage it has never seen.")
+              : "A small, fast detector trained on your labelled frames. It takes a few minutes."}</p>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -106,18 +112,23 @@ export function Train() {
           {s.jobs.length > 1 && <Progress value={overall} label="Overall training progress" />}
           {s.jobs.map((j) => {
             const d = datasets.find((x) => x.id === j.request.dataset_id);
-            const icon = j.status === "succeeded" ? "✓" : j.status === "failed" ? "✕" : "";
+            const epoch = /epoch\s+(\d+)\s*\/\s*(\d+)/i.exec(j.message ?? "");   // only when the backend reports it
+            const state = j.status === "succeeded" ? "done" : j.status === "failed" ? "error" : "working";
+            const label = j.status === "queued" ? "Waiting for the GPU…" : j.status === "running" ? (epoch ? "Training…" : (j.message.split("\n")[0] || "Training…")) : j.status === "succeeded" ? "Done" : "Failed";
             return (
               <div key={j.id} className="col" style={{ gap: 4 }}>
                 <div className="row small">
                   <b>{variantLabel("trained", d?.variant)}</b>
                   <div className="spacer" />
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.span key={j.status} className={j.status === "failed" ? "negv" : j.status === "succeeded" ? "pos" : "muted"}
-                      initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={t("fast")}>
-                      {icon} {j.status === "running" || j.status === "queued" ? j.message.split("\n")[0] : j.status}
-                    </motion.span>
-                  </AnimatePresence>
+                  {epoch && j.status === "running" && (
+                    <span className="epoch small">epoch <AnimatedNumber value={Number(epoch[1])} format={(x) => String(Math.round(x))} duration={0.15} /> of {epoch[2]}</span>
+                  )}
+                  {j.status === "running" && (
+                    <span className="small num muted" style={{ minWidth: 40, textAlign: "right" }}>
+                      <AnimatedNumber value={Math.round(j.progress * 100)} format={(x) => `${Math.round(x)}%`} duration={0.22} />
+                    </span>
+                  )}
+                  <StatusLine state={state} className="small">{label}</StatusLine>
                 </div>
                 {j.status !== "failed"
                   ? <Progress value={j.progress} label={`${variantLabel("trained", d?.variant)} progress`} />
@@ -149,12 +160,12 @@ export function Train() {
 
       {!running && (
         <div className="actions-center">
-          <button className="toggle" aria-expanded={showOptions} onClick={() => setShowOptions(!showOptions)}>{showOptions ? "Hide options" : "Options"}</button>
+          <Disclosure open={showOptions} onToggle={() => setShowOptions(!showOptions)} controls="train-options">Options</Disclosure>
         </div>
       )}
       <AnimatePresence initial={false}>
       {showOptions && !running && (
-        <motion.section key="options" className="card col" {...reveal} style={{ overflow: "hidden" }}>
+        <motion.section key="options" id="train-options" className="card col" {...reveal} exit={{ ...reveal.exit, transition: EXIT }} style={{ overflow: "hidden" }}>
           <fieldset className="col" style={{ border: 0, padding: 0, margin: 0, gap: 8 }}>
             <legend className="text-[15px] font-semibold" style={{ marginBottom: 8 }}>Models to compare</legend>
             {datasets.map((d) => (
@@ -171,7 +182,7 @@ export function Train() {
           <div className="tabs has-pill" role="radiogroup" aria-label="Training time">
             {PRESETS.map((p) => (
               <button key={p.epochs} role="radio" aria-checked={epochs === p.epochs} className={epochs === p.epochs ? "on" : ""} onClick={() => setEpochs(p.epochs)}>
-                {epochs === p.epochs && <motion.span layoutId="train-preset" className="tab-pill" transition={t("base")} aria-hidden />}
+                {epochs === p.epochs && <motion.span layoutId="train-preset" className="tab-pill" transition={SPRING} aria-hidden />}
                 <span className="tab-label">{p.label} <span className="muted">{p.note}</span></span>
               </button>
             ))}
