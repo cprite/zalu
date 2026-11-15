@@ -202,7 +202,9 @@ def test_failed_recording_reported_and_retry(env, monkeypatch):
 
 def test_tracker_splits_on_gap():
     from backend.video_search.service import build_tracks
-    fr = lambda i, boxes: {"frame_index": i, "t_s": i / 2, "detections": [{"cls": "person", "score": .8, "box": b} for b in boxes]}
+
+    def fr(i, boxes):
+        return {"frame_index": i, "t_s": i / 2, "detections": [{"cls": "person", "score": .8, "box": b} for b in boxes]}
     frames = [fr(0, [[0, 0, 10, 10]]), fr(1, [[1, 0, 11, 10], [100, 100, 120, 130]]), fr(2, []), fr(3, []), fr(4, []),
               fr(5, [[1, 0, 11, 10]])]
     tracks = build_tracks(frames)
