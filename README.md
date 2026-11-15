@@ -60,7 +60,6 @@ Plus two features built on the same backend:
 | **YOLOE** (`yoloe-11l-seg.pt`, Ultralytics) | Zero-shot baseline in Verify; person detector in Video Search | NVIDIA GX10 |
 | **YOLO11n** (`yolo11n.pt`, Ultralytics) | The small model ZALU fine-tunes and deploys (exported to ONNX) | trained on GX10, runs anywhere ONNX runs |
 | **CLIP ViT-B/32** (OpenAI) | Video Search: image and text embeddings | NVIDIA GX10 |
-| **FLUX.1 Kontext [pro]** via fal (`fal-ai/flux-pro/kontext`) | Synthetic rare cases: edits real train frames (e.g. remove the hard hat) | fal cloud |
 | **Qwen3.5-4B** + LoRA fine-tuned with **Adaption** | Experiment: a small local task-spec planner (see below) | vLLM on GX10 |
 
 ### Adaption experiment
@@ -91,7 +90,6 @@ No dataset is shipped with test frames that also appear in training: the backend
 | Service | Used for |
 |---|---|
 | Claude (Anthropic) via Claude Code CLI | Task Engine and Dashboard Planner |
-| fal (`fal-ai/flux-pro/kontext`) | Synthetic frame generation (optional, paid per image) |
 | Adaption | Fine-tuning Qwen3.5-4B (experiment) |
 | Figma | Design tokens synced into the frontend (`design/`) |
 
@@ -102,7 +100,7 @@ FastAPI, bearer-token auth. Full details: [`backend/README.md`](backend/README.m
 | Area | Endpoints |
 |---|---|
 | Tasks | `POST /api/tasks` (prompt → task spec), `GET /api/tasks/{id}` |
-| Datasets | `POST /api/datasets` (upload video/images → auto-labelled dataset), `GET /api/datasets[/{id}]`, `GET …/annotations`, `POST …/labels` (corrections), `POST …/synthesize` (fal), `POST /api/datasets/register` |
+| Datasets | `POST /api/datasets` (upload video/images → auto-labelled dataset), `GET /api/datasets[/{id}]`, `GET …/annotations`, `POST …/labels` (corrections), `POST /api/datasets/register` |
 | Training | `POST /api/training`, `GET /api/jobs[/{id}]` |
 | Models | `GET /api/models[/{id}]`, `POST /api/models/zero-shot`, `GET /api/models/{id}/onnx` |
 | Evaluation | `POST /api/evaluations` (trained vs baseline on a test set), `GET /api/reports/{id}` |
