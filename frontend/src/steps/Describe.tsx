@@ -1,9 +1,11 @@
 "use client";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Composer } from "@/components/Composer";
 import { Banner, ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
+import { TextShimmer, reveal, rise, stagger, t } from "@/lib/motion";
 
 const EXAMPLES = [
   "Find people without safety goggles",
@@ -57,28 +59,44 @@ export function Describe() {
   }
 
   return (
-    <div className="center-col fade-in">
+    <motion.div className="center-col" variants={stagger} initial="hidden" animate="show">
       <div className="hero">
-        <h1>What should your camera detect?</h1>
-        <p>Describe it in one sentence and add a few minutes of footage. ZALU labels it, trains a small model and tests it for you.</p>
+        <motion.h1 variants={rise}>What should your camera detect?</motion.h1>
+        <motion.p variants={rise}>Describe it in one sentence and add a few minutes of footage. ZALU labels it, trains a small model and tests it for you.</motion.p>
       </div>
+      <motion.div variants={rise}>
       <Composer value={prompt} onChange={setPrompt} files={s.trainFiles} onFiles={(trainFiles) => set({ trainFiles, trainDataset: null, frames: [], labels: [], labelsSaved: false, annotationsLoaded: false, annotationsDirty: false,
           jobs: [], models: [], report: null, deployModelId: null, dashboardPlans: {} })}
         onSubmit={go} canSubmit={!!prompt.trim()} busy={!!busy} autoFocus
         placeholder="e.g. Find people without safety goggles" submitLabel="Create task" />
-      {busy && <p className="hint" role="status">{busy === "task" ? "Understanding the task…" : "Uploading and labelling your footage. Longer videos take a few minutes."}</p>}
-      {!busy && !prompt && (
-        <div className="suggestions" aria-label="Examples">
-          {EXAMPLES.map((x) => <button key={x} className="chip" onClick={() => { setPrompt(x); document.getElementById("composer-text")?.focus(); }}>{x}</button>)}
-        </div>
-      )}
-      {clarify && (
-        <Banner kind="warn">
-          <b>Could you be a bit more specific?</b>
-          {clarify.map((q) => <div key={q}>• {q}</div>)}
-        </Banner>
-      )}
+      </motion.div>
+      <motion.div variants={rise} style={{ minHeight: 40 }}>
+        <AnimatePresence mode="wait" initial={false}>
+          {busy ? (
+            <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
+              <TextShimmer>{busy === "task" ? "Understanding the task…" : "Uploading and labelling your footage. Longer videos take a few minutes."}</TextShimmer>
+            </motion.p>
+          ) : !prompt ? (
+            <motion.div key="examples" className="suggestions" aria-label="Examples" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
+              {EXAMPLES.map((x) => (
+                <motion.button key={x} className="chip" whileTap={{ scale: 0.97 }} transition={t("fast")}
+                  onClick={() => { setPrompt(x); document.getElementById("composer-text")?.focus(); }}>{x}</motion.button>
+              ))}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </motion.div>
+      <AnimatePresence>
+        {clarify && (
+          <motion.div key="clarify" {...reveal} style={{ overflow: "hidden" }}>
+            <Banner kind="warn">
+              <b>Could you be a bit more specific?</b>
+              {clarify.map((q) => <div key={q}>• {q}</div>)}
+            </Banner>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <ErrorBox error={err} />
-    </div>
+    </motion.div>
   );
 }

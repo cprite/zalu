@@ -1,9 +1,21 @@
 "use client";
 // Message-box style input: text plus image/video attachments, one send button.
-import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/lib/motion";
 import { Spinner } from "./ui";
 
 const MAX_PREVIEWS = 7;
+
+// One object URL per attached File for the life of the page. Revoking on unmount breaks previews under React
+// StrictMode (effects run twice); the number of attached files per session is small, so we keep them.
+const previewUrls = new WeakMap<File, string>();
+function previewUrl(f: File): string | null {
+  if (!f.type.startsWith("image/")) return null;
+  let url = previewUrls.get(f);
+  if (!url) { url = URL.createObjectURL(f); previewUrls.set(f, url); }
+  return url;
+}
 
 export function Composer({
   value, onChange, files, onFiles, onSubmit, placeholder, busy = false, canSubmit, submitLabel = "Send", textless = false, autoFocus = false,
@@ -23,6 +35,7 @@ export function Composer({
   const input = useRef<HTMLInputElement>(null);
   const area = useRef<HTMLTextAreaElement>(null);
   const [over, setOver] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const add = (list: FileList | File[] | null) => {
     if (!list || busy) return;
@@ -31,34 +44,38 @@ export function Composer({
   };
 
   useEffect(() => {  // auto-grow like a chat box
-    const t = area.current;
-    if (!t) return;
-    t.style.height = "auto";
-    t.style.height = `${Math.min(200, t.scrollHeight)}px`;
+    const el = area.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(200, el.scrollHeight)}px`;
   }, [value]);
 
-  const [expanded, setExpanded] = useState(false);
-  const [previews, setPreviews] = useState<{ f: File; url: string | null }[]>([]);
-  useEffect(() => {
-    const next = (expanded ? files : files.slice(0, MAX_PREVIEWS)).map((f) => ({
-      f, url: f.type.startsWith("image/") ? URL.createObjectURL(f) : null,
-    }));
-    setPreviews(next);
-    return () => next.forEach((preview) => preview.url && URL.revokeObjectURL(preview.url));
-  }, [expanded, files]);
+  const previews = useMemo(() => (expanded ? files : files.slice(0, MAX_PREVIEWS)).map((f) => ({ f, url: previewUrl(f) })), [expanded, files]);
 
   return (
-    <div className={`composer ${over ? "over" : ""}`}
-      onDragOver={(e) => { e.preventDefault(); setOver(true); }} onDragLeave={() => setOver(false)}
+    <div className={`composer ${over ? "over" : ""}`} style={{ position: "relative" }}
+      onDragOver={(e) => { e.preventDefault(); if (!busy) setOver(true); }}
+      onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOver(false); }}
       onDrop={(e) => { e.preventDefault(); setOver(false); add(e.dataTransfer.files); }}>
+      <AnimatePresence>
+        {over && (
+          <motion.div className="drop-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")} aria-hidden>
+            Drop to attach
+          </motion.div>
+        )}
+      </AnimatePresence>
       {files.length > 0 && (
         <ul className="attachments" aria-label="Attached footage" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-          {previews.map(({ f, url }, i) => (
-            <li key={f.name + i} className="attachment" title={f.name}>
-              {url ? <img src={url} alt="" /> : <span>🎬<br />{f.name.slice(0, 14)}</span>}
-              <button className="x" aria-label={`Remove ${f.name}`} disabled={busy} onClick={() => onFiles(files.filter((x) => x !== f))}>×</button>
-            </li>
-          ))}
+          <AnimatePresence initial={false}>
+            {previews.map(({ f, url }) => (
+              <motion.li key={`${f.name}-${f.size}-${f.lastModified}`} layout className="attachment" title={f.name}
+                initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }} transition={t("base")}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- local blob: preview, next/image cannot optimise it */}
+                {url ? <img src={url} alt="" /> : <span>🎬<br />{f.name.slice(0, 14)}</span>}
+                <button className="x" aria-label={`Remove ${f.name}`} disabled={busy} onClick={() => onFiles(files.filter((x) => x !== f))}>×</button>
+              </motion.li>
+            ))}
+          </AnimatePresence>
           {files.length > MAX_PREVIEWS && <li><button type="button" className="btn sm" aria-expanded={expanded}
             onClick={() => setExpanded(!expanded)}>{expanded ? "Show fewer files" : `Show all ${files.length} files`}</button></li>}
         </ul>
@@ -73,22 +90,28 @@ export function Composer({
         </>
       )}
       <div className="composer-bar">
-        <button type="button" className="icon-btn" aria-label="Attach images or video" title="Attach images or video" disabled={busy} onClick={() => input.current?.click()}>
+        <motion.button type="button" whileTap={{ scale: 0.92 }} transition={t("fast")} className="icon-btn" aria-label="Attach images or video" title="Attach images or video" disabled={busy} onClick={() => input.current?.click()}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M12 5v14M5 12h14" />
           </svg>
-        </button>
+        </motion.button>
         <input ref={input} type="file" multiple accept="image/*,video/*" hidden onChange={(e) => { add(e.target.files); e.target.value = ""; }} />
-        <span className="small muted" style={{ flex: 1 }}>
+        <span className="small muted" style={{ flex: 1 }} aria-live="polite">
           {files.length ? `${files.length} file${files.length > 1 ? "s" : ""} attached` : textless ? "Drop images or a video, or press +" : "Add footage now or in the next step"}
         </span>
-        <button type="button" className="icon-btn send" aria-label={submitLabel} title={submitLabel} disabled={!canSubmit || busy} onClick={onSubmit}>
-          {busy ? <Spinner /> : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <path d="M12 19V5M5 12l7-7 7 7" />
-            </svg>
-          )}
-        </button>
+        <motion.button type="button" whileTap={canSubmit && !busy ? { scale: 0.92 } : undefined} transition={t("fast")}
+          className="icon-btn send" aria-label={submitLabel} title={submitLabel} disabled={!canSubmit || busy} onClick={onSubmit}>
+          <AnimatePresence mode="wait" initial={false}>
+            {busy ? (
+              <motion.span key="busy" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }} transition={t("fast")} style={{ display: "grid" }}><Spinner /></motion.span>
+            ) : (
+              <motion.svg key="send" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={t("fast")}
+                width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M12 19V5M5 12l7-7 7 7" />
+              </motion.svg>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
     </div>
   );

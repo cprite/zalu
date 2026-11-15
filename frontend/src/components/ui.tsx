@@ -1,6 +1,8 @@
 "use client";
+import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { ApiError } from "@/lib/api";
+import { t } from "@/lib/motion";
 
 export function SampleBadge({ show = true, label = "Sample data" }: { show?: boolean; label?: string }) {
   if (!show) return null;
@@ -14,11 +16,12 @@ const LABEL: Record<Kind, string> = { info: "Note", warn: "Warning", bad: "Error
 /** Status is always conveyed by icon + hidden label + text, never by colour alone. */
 export function Banner({ kind = "info", children, id }: { kind?: Kind; children: ReactNode; id?: string }) {
   return (
-    <div className={`banner ${kind}`} id={id} role={kind === "bad" ? "alert" : "status"}>
+    <motion.div className={`banner ${kind}`} id={id} role={kind === "bad" ? "alert" : "status"}
+      initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} transition={t("base")}>
       <span className="ic" aria-hidden>{ICON[kind]}</span>
       <span className="sr-only">{LABEL[kind]}:</span>
       <div className="small" style={{ flex: 1 }}>{children}</div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -67,7 +70,7 @@ export function Progress({ value, label }: { value: number; label: string }) {
   const pctv = Math.round(value * 100);
   return (
     <div className="bar" role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pctv}>
-      <span style={{ width: `${pctv}%` }} />
+      <motion.span initial={false} animate={{ width: `${pctv}%` }} transition={t("slow")} />
     </div>
   );
 }

@@ -10,10 +10,12 @@
     "prepare:export": "node scripts/prepare-dashboard-export.mjs",
     "predev": "npm run prepare:export",
     "prebuild": "npm run prepare:export",
-    "pretypecheck": "npm run prepare:export"
+    "pretypecheck": "npm run prepare:export",
+    "lint": "eslint ."
   },
   "dependencies": {
     "fflate": "0.8.2",
+    "motion": "^14.14.0",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
@@ -23,6 +25,8 @@
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.6",
     "postcss": "^8.5.33",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.9.3"

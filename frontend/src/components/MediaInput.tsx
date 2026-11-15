@@ -47,6 +47,7 @@ export function CameraCapture({ onFrames, sessionId }: { onFrames: (f: File[]) =
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [rec, setRec] = useState(0);
+  const [recording, setRecording] = useState(false);
   const timer = useRef<number | null>(null);
   const buf = useRef<File[]>([]);
 
@@ -81,9 +82,11 @@ export function CameraCapture({ onFrames, sessionId }: { onFrames: (f: File[]) =
       onFrames(buf.current);
       buf.current = [];
       setRec(0);
+      setRecording(false);
     } else {
       timer.current = window.setInterval(grab, 500);
-      setRec(0.0001);
+      setRec(0);
+      setRecording(true);
     }
   }
   return (
@@ -96,7 +99,7 @@ export function CameraCapture({ onFrames, sessionId }: { onFrames: (f: File[]) =
       {stream && (
         <div className="row">
           <button className="btn sm" onClick={() => { grab(); setTimeout(() => { onFrames(buf.current); buf.current = []; setRec(0); }, 200); }}>Snap one frame</button>
-          <button className={`btn sm ${timer.current ? "danger" : "primary"}`} onClick={toggleRec}>{timer.current ? `■ Stop (${Math.floor(rec)} frames)` : "● Record frames (2 per second)"}</button>
+          <button className={`btn sm ${recording ? "danger" : "primary"}`} onClick={toggleRec} aria-pressed={recording}>{recording ? `■ Stop (${rec} frames)` : "● Record frames (2 per second)"}</button>
           <span className="small muted">Move around: different distances and angles make a better model.</span>
         </div>
       )}

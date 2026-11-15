@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, type FormEvent } from "react";
 import { DashboardRenderer } from "@/dashboard/DashboardRenderer";
 import { samplePlan, type DashboardPlan } from "@/dashboard/samplePlan";
@@ -8,6 +9,7 @@ import { ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { pct, variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
+import { TextShimmer, t } from "@/lib/motion";
 
 export function Deploy() {
   const { s, set } = useFlow();
@@ -15,7 +17,7 @@ export function Deploy() {
     ?? s.models.find((item) => item.kind === "trained") ?? s.models[0];
   if (!model || !s.task) return <p className="hint">Train a detection model first.</p>;
   return (
-    <div className="wide-col fade-in" style={{ maxWidth: 1120 }}>
+    <div className="wide-col" style={{ maxWidth: 1120 }}>
       <div className="row deploy-tools">
         <button className="btn ghost sm" onClick={() => set({ step: 4 })}>← Evaluation</button>
         {s.models.length > 1 && <label>Model <select className="select" value={model.id}
@@ -41,8 +43,9 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
     || (evalEntry?.test?.split != null && evalEntry.test.split !== "test");
   const measured = s.report?.mock || evaluationInvalid ? undefined : evalEntry?.overall;
   const plan = s.dashboardPlans[modelId];
-  const [planning, setPlanning] = useState(!plan);
-  const [planError, setPlanError] = useState<unknown>(null);
+  const [createError, setCreateError] = useState<unknown>(null);   // dashboard generation failed
+  const [planError, setPlanError] = useState<unknown>(null);       // refine / export failed
+  const planning = !plan && !createError;                          // derived, so the effect never sets state synchronously
   const [refining, setRefining] = useState(false);
   const [instruction, setInstruction] = useState("");
   const [attempt, setAttempt] = useState(0);
@@ -58,19 +61,16 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
     let active = true;
     if (sampleMode) {
       savePlan(samplePlan(prompt, classes, activeTarget));
-      setPlanning(false);
       return;
     }
-    setPlanning(true);
-    setPlanError(null);
     api.createDashboard(prompt, taskId, modelId).then((next) => {
       if (active) savePlan(next);
     }).catch((error) => {
-      if (active) setPlanError(error);
-    }).finally(() => {
-      if (active) setPlanning(false);
+      if (active) setCreateError(error);
     });
     return () => { active = false; };
+    // classes / activeTarget / savePlan are re-created every render; the plan only depends on the ids below
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api, attempt, modelId, plan, prompt, sampleMode, taskId]);
 
   async function refine(event: FormEvent) {
@@ -104,9 +104,16 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
   }
 
   return <>
-    {planning && <div className="hero compact" role="status"><h1>Preparing your dashboard…</h1></div>}
+    <AnimatePresence initial={false}>
+      {planning && (
+        <motion.div key="planning" className="hero compact" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("base")}>
+          <h1><TextShimmer>Preparing your dashboard…</TextShimmer></h1>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    <ErrorBox error={createError} />
     <ErrorBox error={planError} />
-    {!plan && !planning && <button className="btn" onClick={() => setAttempt((value) => value + 1)}>Retry dashboard</button>}
+    {!plan && !planning && <button className="btn" onClick={() => { setCreateError(null); setAttempt((value) => value + 1); }}>Retry dashboard</button>}
     {plan && <>
       <DashboardRenderer spec={plan.spec} classes={classes} samples={session.samples} preview={session.preview}
         loading={session.loading} error={session.error} sampleMode={sampleMode} />
