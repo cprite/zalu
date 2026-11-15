@@ -6,6 +6,7 @@ import { ScreenActivity } from "@/components/ScreenActivity";
 import { Banner, ErrorBox, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
+import { getPrefs } from "@/lib/prefs";
 import { t, useLessMotion } from "@/lib/motion";
 import type { Annotation } from "@/lib/types";
 
@@ -48,6 +49,7 @@ export function Prepare() {
   // ← / → move between frames (ignored while typing or choosing a class)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (!total || !getPrefs().keyboardShortcuts || (e.target as HTMLElement).closest?.("header, [role=dialog], [contenteditable]")) return;
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.altKey || e.metaKey || e.ctrlKey) return;
       if (e.key === "ArrowRight") { e.preventDefault(); setCur((c) => Math.min(total - 1, c + 1)); }

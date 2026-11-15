@@ -25,11 +25,10 @@ interface RawBox { class_name: string; xyxy: number[]; confidence: number | null
 interface RawAnnotation { frame_id: string; image_path: string; width: number; height: number; session_id: string; synthetic: boolean; boxes: RawBox[]; status: string }
 
 function toTask(r: RawTask): TaskSpec {
-  const mock = (r.compiler || "").toUpperCase().startsWith("MOCK");
   return {
     id: r.task_id, prompt: r.prompt, task_type: "object_detection", classes: r.classes.map((c) => c.name),
     target_event: r.target_event, negative_classes: [], requires_tracking: r.requires_tracking, primary_metric: r.primary_metric,
-    notes: mock ? `MOCK task spec from the backend (${r.compiler}).` : `Compiled by ${r.compiler}.`, created_at: Date.now() / 1000,
+    notes: `Compiled by ${r.compiler}.`, created_at: Date.now() / 1000,
     summary: r.summary, status: r.status, issues: r.issues, clarification_questions: r.clarification_questions,
     visual_conditions: r.visual_conditions, test_scenarios: r.test_scenarios, compiler: r.compiler,
     class_descriptions: Object.fromEntries(r.classes.map((c) => [c.name, c.description])),
@@ -48,26 +47,24 @@ function toDataset(r: RawDataset): DatasetManifest {
   };
 }
 
-export function createLiveApi(baseUrl: string, token: string): ZaluApi {
-  const base = baseUrl.replace(/\/+$/, "");
+export function createLiveApi(): ZaluApi {
   const annotationCache = new Map<string, RawAnnotation[]>();
 
   async function raw(path: string, init: RequestInit = {}): Promise<Response> {
     const headers = new Headers(init.headers);
-    if (token) headers.set("Authorization", `Bearer ${token}`);
     if (init.body && !(init.body instanceof FormData)) headers.set("Content-Type", "application/json");
     let res: Response;
     try {
-      res = await fetch(base + path, { ...init, headers });
-    } catch (e) {
-      throw new ApiError(0, `Backend unreachable at ${base} (${(e as Error).message})`, path);
+      res = await fetch(path, { ...init, headers, redirect: "error" });
+    } catch {
+      throw new ApiError(0, "Could not reach the ZALU service.", path);
     }
     if (!res.ok) {
       let detail = res.statusText;
       try {
         const j = await res.json();
         detail = typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail ?? j);
-      } catch { /* not JSON */ }
+      } catch { detail = "The ZALU service is unavailable."; }
       throw new ApiError(res.status, detail, path);
     }
     return res;
@@ -86,14 +83,24 @@ export function createLiveApi(baseUrl: string, token: string): ZaluApi {
   return {
     mode: "live",
     health: () => call("/api/health"),
-    createTask: async (prompt) => toTask(await call<RawTask>("/api/tasks", json({ prompt }))),
+    createTask: async (prompt) => {
+      const task = await call<RawTask>("/api/tasks", json({ prompt }));
+      if (task.compiler?.toUpperCase().startsWith("MOCK")) {
+        throw new ApiError(503, "Task planning is unavailable.", "/api/tasks");
+      }
+      return toTask(task);
+    },
     createDataset: async (taskId, files, meta) => {
       // Recording sessions are derived from the uploaded file names by the Data Engine.
       const fd = new FormData();
       fd.append("task_id", taskId);
       fd.append("kind", meta.role === "test" ? "test" : "train");
       files.forEach((f) => fd.append("files", f, f.name));
-      return toDataset(await call<RawDataset>("/api/datasets", { method: "POST", body: fd }));
+      const dataset = await call<RawDataset>("/api/datasets", { method: "POST", body: fd });
+      if (dataset.warnings?.some((warning) => /^mock\s*:/i.test(warning))) {
+        throw new ApiError(503, "Footage preparation is unavailable.", "/api/datasets");
+      }
+      return toDataset(dataset);
     },
     listDatasets: async () => (await call<RawDataset[]>("/api/datasets")).map(toDataset),
     getLabels: async (dsId) =>

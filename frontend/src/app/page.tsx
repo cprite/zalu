@@ -2,7 +2,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { StoryProgress, Topbar } from "@/components/Shell";
-import { ApiProvider } from "@/lib/api";
 import { FlowProvider, STAGES, STEPS, stageOf, useFlow } from "@/lib/flow";
 import { enter } from "@/lib/motion";
 import { Deploy } from "@/steps/Deploy";
@@ -37,15 +36,13 @@ function Journey() {
 
 export default function Page() {
   return (
-    <ApiProvider>
-      <FlowProvider>
-        <a href="#main" className="skip">Skip to content</a>
-        <div className="shell">
-          <Topbar />
-          <StoryProgress />
-          <Journey />
-        </div>
-      </FlowProvider>
-    </ApiProvider>
+    <FlowProvider>
+      <a href="#main" className="skip">Skip to content</a>
+      <div className="shell">
+        <Topbar />
+        <StoryProgress />
+        <Journey />
+      </div>
+    </FlowProvider>
   );
 }
