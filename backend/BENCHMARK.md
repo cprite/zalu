@@ -20,7 +20,7 @@ Gotchas found:
 
 ## Timed user workflow through the public URL (2026-11-14 ~17:40 UTC, `tests/timed_workflow.py`)
 Prompt "Alert me when a worker is not wearing a hi-vis safety vest", footage = Intel `worker-zone-detection.mp4` (76 s, CC-BY-4.0),
-yolo11n 40 epochs. nikopi5 was busy (load ~20) generating Adaption data at the same time.
+yolo11n 40 epochs. nikopi5 was busy (load ~20) generating LLM training data at the same time.
 
 | Stage | Wall time |
 |---|---|

@@ -25,7 +25,7 @@ const db = {
   reports: new Map<string, EvaluationReport>(),
 };
 
-/** Very small rule-based "planner" standing in for Kirill's Task Engine (fine-tuned with Adaption). */
+/** Very small rule-based "planner" standing in for Kirill's Task Engine. */
 export function mockPlan(prompt: string): Pick<TaskSpec, "classes" | "negative_classes" | "target_event" | "requires_tracking" | "primary_metric"> {
   const p = prompt.toLowerCase();
   const rules: [RegExp, string[], string[], boolean][] = [

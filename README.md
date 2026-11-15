@@ -60,15 +60,6 @@ Plus two features built on the same backend:
 | **YOLOE** (`yoloe-11l-seg.pt`, Ultralytics) | Zero-shot baseline in Verify; person detector in Video Search | NVIDIA GX10 |
 | **YOLO11n** (`yolo11n.pt`, Ultralytics) | The small model ZALU fine-tunes and deploys (exported to ONNX) | trained on GX10, runs anywhere ONNX runs |
 | **CLIP ViT-B/32** (OpenAI) | Video Search: image and text embeddings | NVIDIA GX10 |
-| **Qwen3.5-4B** + LoRA fine-tuned with **Adaption** | Experiment: a small local task-spec planner (see below) | vLLM on GX10 |
-
-### Adaption experiment
-
-We fine-tuned Qwen3.5-4B with Adaption AutoScientist to replace Claude in the Task Engine with a small local model.
-Training data: 576 prompt → task-spec pairs written by Claude (plus 474 Adaption augmentation rows); 73 held out for
-testing. The run finished all 3 iterations with a best win rate of **67.9%** as judged by Adaption (target was 70%).
-Baselines and code are in [`experiments/adaption/`](experiments/adaption/README.md). The fine-tuned model is not yet
-wired into the production path; Claude still runs the Task Engine.
 
 ## Datasets and footage
 
@@ -90,7 +81,6 @@ No dataset is shipped with test frames that also appear in training: the backend
 | Service | Used for |
 |---|---|
 | Claude (Anthropic) via Claude Code CLI | Task Engine and Dashboard Planner |
-| Adaption | Fine-tuning Qwen3.5-4B (experiment) |
 | Figma | Design tokens synced into the frontend (`design/`) |
 
 ### ZALU REST API
@@ -121,7 +111,6 @@ Browser (Next.js UI) ──► App API (FastAPI, Raspberry Pi 5 "nikopi5")  ─�
 - `backend/`: app API (`main.py`), GPU worker (`gpu_worker.py`), Task / Data / Training / Evaluation / Deployment engines, Video Search.
 - `shared/`: shared contracts (DashboardSpec v1).
 - `design/`: Figma tokens and plugin.
-- `experiments/adaption/`: the Adaption fine-tuning experiment.
 - `tests/`, `tools/`: end-to-end API tests, timed workflow, webcam client.
 
 ## Run it yourself
