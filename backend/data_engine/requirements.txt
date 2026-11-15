@@ -4,5 +4,4 @@ opencv-python-headless>=4.9
 pyyaml
 ultralytics>=8.3
 clip @ git+https://github.com/ultralytics/CLIP.git   # YOLO-World text encoder
-fal-client>=1.0          # P1 synthetic data (needs FAL_KEY)
 pytest

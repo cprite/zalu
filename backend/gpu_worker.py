@@ -112,45 +112,6 @@ def datasets_annotations(body: dict):
     return get_annotations(schemas.DatasetManifest(**body["manifest"])).model_dump()
 
 
-_fal_lock = __import__("threading").Lock()
-
-
-@app.post("/datasets/synthesize")
-def datasets_synthesize(body: dict):
-    """Kirill's fal synthetic generation on TRAIN frames only (val/test frames are never parents).
-    body: {manifest, fal_key, max_images?, conditions?}. The fal key is used for this call only and never stored."""
-    import json as _json
-
-    from backend.data_engine import service
-    from backend.data_engine.schema import AnnotationSet, FrameCollection
-    from backend.data_engine.synthetic import generate_synthetic
-
-    m = schemas.DatasetManifest(**body["manifest"])
-    work = Path(m.root).parent / "work"
-    if not (work / "annotations.json").exists():
-        raise HTTPException(422, f"dataset {m.dataset_id} was not produced by the Data Engine")
-    task = schemas.TaskSpec.model_validate_json((work / "task_spec.json").read_text())
-    frames = FrameCollection.model_validate_json((work / "frames.json").read_text())
-    aset = AnnotationSet.model_validate_json((work / "annotations.json").read_text())
-    train_ids = {im.frame_id for im in m.images if im.split == "train"}
-    train_frames = [f for f in frames.frames if f.frame_id in train_ids]
-    if not train_frames:
-        raise HTTPException(422, "no train frames in this dataset")
-    out = work / f"synthetic_{int(time.time())}"
-    with _fal_lock:
-        os.environ["FAL_KEY"] = body["fal_key"]
-        try:
-            syn = generate_synthetic(aset, train_frames, task, out, detector=service._get_detector(),
-                                     conditions=body.get("conditions"), max_images=int(body.get("max_images", 4)))
-        finally:
-            os.environ.pop("FAL_KEY", None)
-    return {"out_dir": str(out), "editor": syn.editor, "stats": syn.annotations.stats,
-            "kept": [{"frame_id": f.frame_id, "path": f.path, "parent": f.parent_frame_id,
-                      "condition": (f.generation or {}).get("condition")} for f in syn.frames],
-            "rejected": [r.model_dump() for r in syn.rejected],
-            "parents_pool": {"train_frames": len(train_frames), "excluded_non_train": len(frames.frames) - len(train_frames)}}
-
-
 # ---------- training ----------
 @app.post("/train")
 def train(body: dict):
