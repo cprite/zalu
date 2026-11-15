@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, type FormEvent } from "react";
+import { ScreenActivity } from "@/components/ScreenActivity";
 import { DashboardRenderer } from "@/dashboard/DashboardRenderer";
 import { samplePlan, type DashboardPlan } from "@/dashboard/samplePlan";
 import { useInferenceSession } from "@/dashboard/useInferenceSession";
@@ -9,7 +10,7 @@ import { ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { pct, variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
-import { StatusLine, t } from "@/lib/motion";
+import { t } from "@/lib/motion";
 
 export function Deploy() {
   const { s, set } = useFlow();
@@ -106,8 +107,8 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
   return <>
     <AnimatePresence initial={false}>
       {planning && (
-        <motion.div key="planning" className="hero compact" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("base")}>
-          <StatusLine state="working">Preparing your dashboard…</StatusLine>
+        <motion.div key="planning" className="hero compact" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("base")}>
+          <ScreenActivity message="Preparing dashboard" />
         </motion.div>
       )}
     </AnimatePresence>
@@ -142,7 +143,7 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
             setPlanError(error);
           }
         }}>Export dashboard</button>
-        {!sampleMode && !plan.ai_generated && <span className="small muted">Default layout · planner fallback</span>}
+        {!sampleMode && !plan.ai_generated && <span className="small muted">Default layout</span>}
         {measured && <span className="small muted">
           {sampleMode ? "Sample evaluation" : "Test evaluation"} · precision {pct(measured.precision)} · recall {pct(measured.recall)}
         </span>}
@@ -150,14 +151,15 @@ function DashboardStage({ modelId, classes, taskId, prompt, target }: {
       {[...plan.limitations, ...plan.clarification_questions].length > 0 && (
         <ul className="small muted">{[...plan.limitations, ...plan.clarification_questions].map((message, i) => <li key={i}>{message}</li>)}</ul>
       )}
-      <form className="dash-refine" onSubmit={refine}>
+      <form className="dash-refine" aria-busy={refining} onSubmit={refine}>
         <label htmlFor="dashboard-refinement">Refine dashboard</label>
         <div className="row">
           <input id="dashboard-refinement" className="input" value={instruction} maxLength={500}
             placeholder={sampleMode ? "e.g. Rename to Loading dock" : "e.g. Put the detection table first"}
             onChange={(event) => setInstruction(event.target.value)} />
-          <button className="btn" disabled={refining || !instruction.trim()}>{refining ? "Updating…" : "Apply"}</button>
+          <button className="btn" disabled={refining || !instruction.trim()}>Apply</button>
         </div>
+        <ScreenActivity slot message={refining ? "Updating dashboard" : undefined} />
       </form>
     </>}
   </>;

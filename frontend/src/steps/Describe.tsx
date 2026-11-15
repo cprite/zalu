@@ -1,11 +1,12 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import { ScreenActivity } from "@/components/ScreenActivity";
 import { Composer } from "@/components/Composer";
 import { Banner, ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
-import { StatusLine, reveal, rise, stagger, t } from "@/lib/motion";
+import { reveal, rise, stagger, t } from "@/lib/motion";
 
 const EXAMPLES = [
   "Find people without safety goggles",
@@ -61,8 +62,8 @@ export function Describe() {
   return (
     <motion.div className="center-col" variants={stagger} initial="hidden" animate="show">
       <div className="hero">
-        <motion.h1 variants={rise}>What should your camera detect?</motion.h1>
-        <motion.p variants={rise}>Describe it in one sentence and add a few minutes of footage. ZALU labels it, trains a small model and tests it for you.</motion.p>
+        <motion.h1 variants={rise}>What would you like to detect?</motion.h1>
+        <motion.p variants={rise}>Describe what to look for and attach footage from your camera.</motion.p>
       </div>
       <motion.div variants={rise}>
       <Composer value={prompt} onChange={setPrompt} files={s.trainFiles} onFiles={(trainFiles) => set({ trainFiles, trainDataset: null, frames: [], labels: [], labelsSaved: false, annotationsLoaded: false, annotationsDirty: false,
@@ -73,9 +74,7 @@ export function Describe() {
       <motion.div variants={rise} style={{ minHeight: 40 }}>
         <AnimatePresence mode="wait" initial={false}>
           {busy ? (
-            <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
-              <StatusLine state="working">{busy === "task" ? "Understanding the task…" : "Uploading and labelling your footage…"}</StatusLine>
-            </motion.p>
+            <ScreenActivity key="busy" message={busy === "task" ? "Reading your request" : "Preparing footage"} />
           ) : !prompt ? (
             <motion.div key="examples" className="suggestions" aria-label="Examples" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
               {EXAMPLES.map((x) => (

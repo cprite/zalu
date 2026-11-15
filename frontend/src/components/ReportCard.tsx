@@ -3,12 +3,10 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { METRIC_HELP, REASONS, VERDICT, pct, variantLabel } from "@/lib/explain";
 import type { Check, ModelEvaluation } from "@/lib/types";
-import { AnimatedNumber, Disclosure, EXIT, reveal, t } from "@/lib/motion";
-import { CiBar, Kpi, SampleBadge } from "./ui";
+import { Disclosure, EXIT, reveal } from "@/lib/motion";
+import { CiBar, Kpi } from "./ui";
 
-const percent = (x: number) => `${Math.round(x)}%`;
-const whole = (x: number) => String(Math.round(x));
-const kpiIn = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: t("slow") } };
+import styles from "./reportCard.module.css";
 
 /** Model Report Card: everything needed to decide "deploy or not", with limitations stated next to the numbers. */
 export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?: () => void }) {
@@ -23,38 +21,37 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
     <div className="card col fade-in" style={{ gap: 18 }}>
       <div className="row">
         <h3>{variantLabel(e.model?.kind, e.model?.variant)}</h3>
-        <SampleBadge show={e.sample_data} />
+        {e.sample_data && <span className="small muted">Demo results</span>}
         <div className="spacer" />
         <span className="small muted">{e.test.n_images} new frames</span>
       </div>
 
-      <motion.div className={`verdict ${r.verdict}`} initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={t("slow")}>
-        <motion.div className="icon" initial={{ scale: 0.6 }} animate={{ scale: 1 }} transition={t("slow", { delay: 0.06 })}>{v.icon}</motion.div>
+      <div className={styles.result} data-verdict={r.verdict}>
+        <span className={styles.statusIcon} aria-hidden>{v.icon}</span>
         <div className="col" style={{ gap: 2 }}>
-          <b>{v.label}</b>
-          <span className="small">{r.summary}</span>
+          <b>{r.verdict === "ready" ? "Met test targets" : v.label}</b>
+          <span className="small">{r.verdict === "ready" ? "This test covers limited footage. Keep monitoring after deployment." : r.summary}</span>
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div className="kpis" initial="hidden" animate="show" variants={{ hidden: {}, show: { transition: { delayChildren: 0.18, staggerChildren: 0.06 } } }}>
-        {/* numbers count up to the measured values; null stays "—" (never invented) */}
-        <motion.div variants={kpiIn}><Kpi k="Objects found" v={o.recall == null ? "—" : <AnimatedNumber value={o.recall * 100} format={percent} />} ci={ci(o.recall_ci95)} /></motion.div>
-        <motion.div variants={kpiIn}><Kpi k="Alerts that are real" v={o.precision == null ? "—" : <AnimatedNumber value={o.precision * 100} format={percent} />} ci={ci(o.precision_ci95)} /></motion.div>
-        <motion.div variants={kpiIn}><Kpi k="Missed" v={<AnimatedNumber value={o.fn} format={whole} />} ci={`${o.fp} false alarms`} /></motion.div>
-        <motion.div variants={kpiIn}><Kpi k="Speed" v={e.performance?.fps ? <AnimatedNumber value={e.performance.fps} format={(x) => `${Math.round(x)} FPS`} /> : "—"} ci={e.performance ? `${e.performance.latency_ms_median} ms per frame` : "not measured"} /></motion.div>
-      </motion.div>
+      <div className="kpis">
+        <Kpi k="Recall" v={pct(o.recall)} ci={ci(o.recall_ci95)} help={METRIC_HELP.recall} />
+        <Kpi k="Precision" v={pct(o.precision)} ci={ci(o.precision_ci95)} help={METRIC_HELP.precision} />
+        <Kpi k="Missed objects" v={o.fn} ci={`${o.fp} false alarms`} />
+        <Kpi k="Inference speed" v={e.performance?.fps != null ? `${e.performance.fps} FPS` : "—"} ci={e.performance ? `${e.performance.latency_ms_median} ms per frame` : "Not measured"} />
+      </div>
 
       <div className="actions-center">
         <Disclosure open={details} onToggle={() => setDetails(!details)} controls="report-details">{details ? "Hide details" : "Show details"}</Disclosure>
       </div>
       <AnimatePresence initial={false}>
       {details && (<motion.div key="details" id="report-details" className="col" style={{ gap: 18, overflow: "hidden" }} {...reveal} exit={{ ...reveal.exit, transition: EXIT }}>
-      <div className="tiny muted mono" style={{ textAlign: "center" }}>version {e.model?.id} · base {e.model?.base_model} · tested on {e.test.dataset_id} ({e.test.split ?? "test"} split)
+      <div className={`tiny muted mono ${styles.metadata}`}>version {e.model?.id} · base {e.model?.base_model} · tested on {e.test.dataset_id} ({e.test.split ?? "test"} split)
         {onDownload && <> · <button className="toggle tiny" onClick={onDownload}>Download JSON</button></>}</div>
 
       <div className="grid2">
         <div className="col">
-          <h4>Against your acceptance criteria</h4>
+          <h4>Test targets</h4>
           {[["Recall", o.recall, o.recall_ci95], ["Precision", o.precision, o.precision_ci95]].map(([n, val, c]) => (
             <div key={n as string} className="col" style={{ gap: 2 }}>
               <div className="row small"><span>{n as string}</span><div className="spacer" /><span className="num">{pct(val as number)} <span className="muted">target {pct(target(n as string))}</span></span></div>
@@ -65,7 +62,7 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
           <Checklist items={[...r.criteria, ...r.data_criteria]} />
         </div>
         <div className="col">
-          <h4>Errors on the test footage</h4>
+          <h4>Detection errors</h4>
           <div className="grid2">
             <Kpi k="False alarms" v={o.fp} help={METRIC_HELP.fp} />
             <Kpi k="Missed objects" v={o.fn} help={METRIC_HELP.fn} />
@@ -78,15 +75,15 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
       <div className="grid2">
         <div className="col">
           <h4>Per class</h4>
-          <table className="tbl">
-            <thead><tr><th>Class</th><th>Test objects</th><th>Recall</th><th>Precision</th><th>Frames flagged correctly</th></tr></thead>
+          <div className={styles.detailsTable} tabIndex={0} role="region" aria-label="Per-class results"><table className="tbl">
+            <thead><tr><th>Class</th><th>Test objects</th><th>Recall</th><th>Precision</th><th>Frame recall</th></tr></thead>
             <tbody>
               {Object.entries(e.per_class).map(([c, m]) => (
                 <tr key={c}><td>{c}</td><td className="num">{e.test.gt_per_class[c]}</td><td className="num">{pct(m.recall)}</td><td className="num">{pct(m.precision)}</td>
                   <td className="num">{pct(m.image_level.recall)}</td></tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
         <div className="col">
           <h4>Test data and limitations</h4>
@@ -94,8 +91,9 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
             {e.test.n_images} independent frames ({e.test.n_images_without_objects} with nothing to detect) from {e.test.n_sessions ?? "an unknown number of"} recording session(s) never used for training.
             Box counted correct at overlap ≥ {e.settings.iou_threshold}, confidence ≥ {e.settings.conf_threshold}.
           </div>
-          {e.warnings.map((w) => <div key={w} className="small" style={{ color: "#6b4000" }}>⚠ {w}</div>)}
-          <div className="small muted">A small test set shows how the model behaves here; it does not prove production safety. Keep monitoring after deployment.</div>
+          {r.verdict === "ready" && <p className="small ink2">{r.summary}</p>}
+          {e.warnings.map((w) => <div key={w} className={`small ${styles.warning}`}>⚠ {w}</div>)}
+          <div className="small muted">Limited test footage cannot establish production safety.</div>
           {e.performance && <div className="tiny muted">Speed: {e.performance.note}; median of {e.performance.n} frames, p95 {e.performance.latency_ms_p95} ms.</div>}
           {e.model?.val_metrics && Object.keys(e.model.val_metrics).length > 0 && (
             <div className="tiny muted">Validation during training (used for model selection only, not the score above): recall {pct(e.model.val_metrics.recall)}, precision {pct(e.model.val_metrics.precision)}.</div>
@@ -126,7 +124,7 @@ const fmt = (v: number | null) => (v == null ? "—" : v <= 1 && !Number.isInteg
 
 function ReasonList({ title, kind, counts }: { title: string; kind: "false_positive" | "false_negative"; counts: Record<string, number> }) {
   const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  if (!rows.length) return <div className="small muted">{title}: none 🎉</div>;
+  if (!rows.length) return <div className="small muted">{title}: none</div>;
   return (
     <div className="col" style={{ gap: 6 }}>
       <div className="small" style={{ fontWeight: 600 }}>{title}</div>

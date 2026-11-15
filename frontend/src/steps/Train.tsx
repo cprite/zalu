@@ -1,11 +1,13 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { ErrorBox, Progress, Spinner } from "@/components/ui";
+import { ErrorBox } from "@/components/ui";
+import { ScreenActivity, TrainingComplete, TrainingProgress } from "@/components/ScreenActivity";
+import styles from "./train.module.css";
 import { useApi } from "@/lib/api";
 import { variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
-import { AnimatedNumber, CheckDraw, Disclosure, EXIT, SPRING, StatusLine, reveal, t } from "@/lib/motion";
+import { Disclosure, EXIT, SPRING, reveal, t } from "@/lib/motion";
 import type { DatasetManifest } from "@/lib/types";
 
 const PRESETS = [
@@ -91,49 +93,41 @@ export function Train() {
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={done ? "done" : running ? "running" : "idle"} className="col" style={{ alignItems: "center", gap: 8 }}
             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={t("base")}>
-            {done && (
-              <span className="done-wrap" aria-hidden>
-                <motion.span className="done-ring" initial={{ opacity: 0.5, scale: 1 }} animate={{ opacity: 0, scale: 1.8 }} transition={{ duration: 0.9, ease: [0.2, 0, 0, 1], delay: 0.2 }} />
-                <motion.span className="done-mark" initial={{ scale: 0.7 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 420, damping: 26 }}>
-                  <CheckDraw size={22} delay={0.08} />
-                </motion.span>
-              </span>
-            )}
-            <h1>{done ? "Your model is ready" : running ? "Training your model…" : "Train your model"}</h1>
-            <p>{done
-              ? (trainedIn ? `Trained in ${trainedIn}. Next, ZALU checks it on footage it has never seen.` : "Next, ZALU checks it on footage it has never seen.")
-              : "A small, fast detector trained on your labelled frames. It takes a few minutes."}</p>
+            {done && <TrainingComplete />}
+            <h1>{done ? "Training complete" : s.jobs.some((job) => job.status === "running") ? "Training your model" : running ? "Training queued" : "Train your model"}</h1>
+            <p>{done ? `${trainedIn ? `Trained in ${trainedIn}. ` : ""}Test it on fresh footage.` : !running ? "Use your labelled footage to train a detector." : null}</p>
+            {api.mode === "mock" && <span className="small muted">Demo training</span>}
           </motion.div>
         </AnimatePresence>
       </div>
 
+      <ScreenActivity message={busy ? "Submitting training" : undefined} />
+
       {(s.jobs.length > 0) && (
-        <motion.section className="card col" aria-live="polite" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t("base")}>
-          {s.jobs.length > 1 && <Progress value={overall} label="Overall training progress" />}
+        <motion.section className={`card ${styles.jobs}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t("base")}>
+          {s.jobs.length > 1 && <TrainingProgress value={overall} active={s.jobs.some((job) => job.status === "running")} label="Overall training progress" />}
           {s.jobs.map((j) => {
             const d = datasets.find((x) => x.id === j.request.dataset_id);
             const epoch = /epoch\s+(\d+)\s*\/\s*(\d+)/i.exec(j.message ?? "");   // only when the backend reports it
-            const state = j.status === "succeeded" ? "done" : j.status === "failed" ? "error" : "working";
-            const label = j.status === "queued" ? "Waiting for the GPU…" : j.status === "running" ? (epoch ? "Training…" : (j.message.split("\n")[0] || "Training…")) : j.status === "succeeded" ? "Done" : "Failed";
+            const name = variantLabel("trained", d?.variant);
+            const repeated = s.jobs.filter((job) => job.request.dataset_id === j.request.dataset_id);
+            const attempt = repeated.length > 1 ? ` · Run ${repeated.indexOf(j) + 1}` : "";
+            const active = j.status === "running";
+            const message = j.message?.split("\n")[0].replace(/\s*\(sample\)$/i, "").trim();
             return (
-              <div key={j.id} className="col" style={{ gap: 4 }}>
-                <div className="row small">
-                  <b>{variantLabel("trained", d?.variant)}</b>
-                  <div className="spacer" />
-                  {epoch && j.status === "running" && (
-                    <span className="epoch small">epoch <AnimatedNumber value={Number(epoch[1])} format={(x) => String(Math.round(x))} duration={0.15} /> of {epoch[2]}</span>
-                  )}
-                  {j.status === "running" && (
-                    <span className="small num muted" style={{ minWidth: 40, textAlign: "right" }}>
-                      <AnimatedNumber value={Math.round(j.progress * 100)} format={(x) => `${Math.round(x)}%`} duration={0.22} />
-                    </span>
-                  )}
-                  <StatusLine state={state} className="small">{label}</StatusLine>
+              <article key={j.id} className={styles.job} data-job-status={j.status}>
+                <div className={styles.jobHeader}>
+                  <b>{name}{attempt}</b>
+                  {active && <span className="small muted num">{Math.round(j.progress * 100)}%</span>}
                 </div>
+                {active ? <ScreenActivity message={epoch ? `Epoch ${epoch[1]} of ${epoch[2]}` : message || "Training model"} />
+                  : <span className={`small ${j.status === "failed" ? "negv" : "muted"}`}>
+                    {j.status === "queued" ? "Queued" : j.status === "succeeded" ? "Complete" : "Failed"}
+                  </span>}
                 {j.status !== "failed"
-                  ? <Progress value={j.progress} label={`${variantLabel("trained", d?.variant)} progress`} />
+                  ? <TrainingProgress value={j.progress} active={active} label={`${name}${attempt} progress`} />
                   : <p className="small negv">{j.error} <button className="btn sm" onClick={train}>Retry</button></p>}
-              </div>
+              </article>
             );
           })}
         </motion.section>
@@ -152,7 +146,7 @@ export function Train() {
           ) : (
             <>
               <button className="btn ghost" onClick={() => set({ step: 2 })}>← Labels</button>
-              <button className="btn primary" disabled={busy || nothingPicked} onClick={train}>{busy && <Spinner />}Start training</button>
+              <button className="btn primary" disabled={busy || nothingPicked} onClick={train}>Start training</button>
             </>
           )}
         </div>
@@ -176,7 +170,7 @@ export function Train() {
             ))}
             <label className="flex gap-2 items-start small">
               <input type="checkbox" checked={zeroShot} onChange={(e) => setZeroShot(e.target.checked)} />
-              <span>Zero-shot baseline (no training, for comparison)</span>
+              <span>Pretrained baseline for comparison</span>
             </label>
           </fieldset>
           <div className="tabs has-pill" role="radiogroup" aria-label="Training time">

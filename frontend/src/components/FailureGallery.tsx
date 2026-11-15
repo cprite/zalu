@@ -4,7 +4,6 @@ import { SPRING } from "@/lib/motion";
 import { useState } from "react";
 import { REASONS } from "@/lib/explain";
 import type { Failure, ModelEvaluation } from "@/lib/types";
-import { SampleBadge } from "./ui";
 
 /** Failure Gallery: the actual test frames the model got wrong, with the reason in plain language. */
 export function FailureGallery({ e, imageSize }: { e: ModelEvaluation; imageSize?: [number, number] }) {
@@ -16,7 +15,7 @@ export function FailureGallery({ e, imageSize }: { e: ModelEvaluation; imageSize
     <section className="card col fade-in" aria-labelledby="gallery-title">
       <div className="row">
         <h3 id="gallery-title">Failure gallery</h3>
-        <SampleBadge show={e.sample_data} label="Sample, no real images" />
+        {e.sample_data && <span className="small muted">Demo frames</span>}
         <div className="spacer" />
         <div className="tabs has-pill" role="group" aria-label="Filter failures">
           {([["all", `All (${e.failures.length})`], ["false_negative", `Missed (${nfn})`], ["false_positive", `False alarms (${e.failures.length - nfn})`]] as const).map(([key, text]) => (

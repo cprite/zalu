@@ -1,21 +1,11 @@
 "use client";
 // Message-box style input: text plus image/video attachments, one send button.
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { t, usePointerFine } from "@/lib/motion";
-import { Spinner } from "./ui";
+import { useEffect, useRef, useState } from "react";
+import { Dots, t, usePointerFine } from "@/lib/motion";
+import { AttachmentPreview } from "./AttachmentPreview";
 
 const MAX_PREVIEWS = 7;
-
-// One object URL per attached File for the life of the page. Revoking on unmount breaks previews under React
-// StrictMode (effects run twice); the number of attached files per session is small, so we keep them.
-const previewUrls = new WeakMap<File, string>();
-function previewUrl(f: File): string | null {
-  if (!f.type.startsWith("image/")) return null;
-  let url = previewUrls.get(f);
-  if (!url) { url = URL.createObjectURL(f); previewUrls.set(f, url); }
-  return url;
-}
 
 export function Composer({
   value, onChange, files, onFiles, onSubmit, placeholder, busy = false, canSubmit, submitLabel = "Send", textless = false, autoFocus = false,
@@ -51,7 +41,7 @@ export function Composer({
     el.style.height = `${Math.min(200, el.scrollHeight)}px`;
   }, [value]);
 
-  const previews = useMemo(() => (expanded ? files : files.slice(0, MAX_PREVIEWS)).map((f) => ({ f, url: previewUrl(f) })), [expanded, files]);
+  const previews = expanded ? files : files.slice(0, MAX_PREVIEWS);
 
   return (
     <div className={`composer ${over ? "over" : ""} ${busy ? "busy" : ""}`} style={{ position: "relative" }} aria-busy={busy}
@@ -74,12 +64,10 @@ export function Composer({
       {files.length > 0 && (
         <ul className="attachments" aria-label="Attached footage" style={{ listStyle: "none", margin: 0, padding: 0 }}>
           <AnimatePresence initial={false}>
-            {previews.map(({ f, url }) => (
-              <motion.li key={`${f.name}-${f.size}-${f.lastModified}`} layout className="attachment" title={f.name}
+            {previews.map((f, index) => (
+              <motion.li key={`${index}-${f.name}-${f.size}-${f.lastModified}`} layout className="attachment" title={f.name}
                 initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }} transition={t("base")}>
-                {/* eslint-disable-next-line @next/next/no-img-element -- local blob: preview, next/image cannot optimise it */}
-                {url ? <img src={url} alt="" data-loaded="false" onLoad={(e) => { e.currentTarget.dataset.loaded = "true"; }} /> : <span>🎬<br />{f.name.slice(0, 14)}</span>}
-                <button className="x" aria-label={`Remove ${f.name}`} disabled={busy} onClick={() => onFiles(files.filter((x) => x !== f))}>×</button>
+                <AttachmentPreview file={f} busy={busy} onRemove={() => onFiles(files.filter((_, i) => i !== index))} />
               </motion.li>
             ))}
           </AnimatePresence>
@@ -93,7 +81,7 @@ export function Composer({
           <textarea id="composer-text" ref={area} rows={1} disabled={busy} value={value} placeholder={placeholder} autoFocus={autoFocus && pointerFine}
             onChange={(e) => onChange?.(e.target.value)}
             onPaste={(e) => add(e.clipboardData.files)}
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && canSubmit && !busy) { e.preventDefault(); onSubmit(); } }} />
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing && canSubmit && !busy) { e.preventDefault(); onSubmit(); } }} />
         </>
       )}
       <div className="composer-bar">
@@ -104,13 +92,13 @@ export function Composer({
         </motion.button>
         <input ref={input} type="file" multiple accept="image/*,video/*" hidden onChange={(e) => { add(e.target.files); e.target.value = ""; }} />
         <span className="small muted" style={{ flex: 1 }} aria-live="polite">
-          {files.length ? `${files.length} file${files.length > 1 ? "s" : ""} attached` : textless ? "Drop images or a video, or press +" : "Add footage now or in the next step"}
+          {files.length ? `${files.length} file${files.length > 1 ? "s" : ""} attached` : textless ? "Attach images or video" : "Attach footage"}
         </span>
         <motion.button type="button" whileTap={canSubmit && !busy ? { scale: 0.92 } : undefined} transition={t("fast")}
           className="icon-btn send" aria-label={submitLabel} title={submitLabel} disabled={!canSubmit || busy} onClick={onSubmit}>
           <AnimatePresence mode="wait" initial={false}>
             {busy ? (
-              <motion.span key="busy" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }} transition={t("fast")} style={{ display: "grid" }}><Spinner /></motion.span>
+              <motion.span key="busy" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }} transition={t("fast")} style={{ display: "grid" }}><Dots /></motion.span>
             ) : (
               <motion.svg key="send" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={t("fast")}
                 width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
