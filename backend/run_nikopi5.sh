@@ -8,7 +8,7 @@ CRED="$HOME/.openclaw/credentials/hackathons/imperial-ai-hack-2026"
 mkdir -p "$DATA"
 [ -x "$VENV/bin/python" ] || python3 -m venv "$VENV"
 "$VENV/bin/pip" install -q fastapi "uvicorn[standard]" "pydantic>=2.7" pyyaml requests python-multipart \
-  opencv-python-headless numpy "fal-client>=1.0"
+  opencv-python-headless numpy
 cat > "$HOME/.config/systemd/user/zalu-api.service" <<UNIT
 [Unit]
 Description=ZALU hackathon app API (nikopi5); GPU work goes to the GX10 worker via zalu-tunnel
