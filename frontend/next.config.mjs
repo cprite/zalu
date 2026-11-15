@@ -16,6 +16,8 @@ const nextConfig = {
   reactStrictMode: true,
   devIndicators: false,
   turbopack: { root },
+  // video uploads pass through src/proxy.ts; the default 10 MB body limit is too small
+  experimental: { proxyClientMaxBodySize: "1gb" },
   async rewrites() {
     return apiDestination ? [{ source: "/api/:path*", destination: `${apiDestination}/api/:path*` }] : [];
   },
