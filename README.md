@@ -6,20 +6,11 @@ on footage it has never seen.
 
 Imperial AI Hackathon 2026 · Track 02: Voice, Vision & Generative Media · Team MIRAZH (Nikolay, Damir, Kirill).
 
-## Try it live
+## Try it
 
-**👉 https://nikopi5.tail4aaac7.ts.net:8443/**
-
-This is the real product, not a mock-up. Everything you do there runs live on our own remote GPU server (an NVIDIA
-GX10 with a GB10 chip): auto-labelling, training, evaluation and inference. Nothing is pre-recorded.
-
-1. Download the sample videos from [`examples/`](examples/README.md) (or use your own footage).
-2. Open the link, type a prompt such as `Alert me when a person on site is not wearing a hard hat` and attach
-   `examples/helmet/helmet-train.mp4`.
-3. Follow the six steps. Training takes about a minute; on Verify upload `examples/helmet/helmet-test.mp4`.
-
-The full walkthrough is in [`examples/README.md`](examples/README.md). It is one GPU shared by everyone, so if
-someone else is training at the same moment your job waits in the queue for a minute.
+The hackathon demo server is offline now. To run ZALU yourself, see [Run it yourself](#run-it-yourself) below; sample
+videos for the hard-hat and hi-vis vest scenarios are in [`examples/`](examples/README.md), with a step-by-step
+walkthrough.
 
 ---
 
