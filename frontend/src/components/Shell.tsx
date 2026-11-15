@@ -1,8 +1,10 @@
 "use client";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { useApi } from "@/lib/api";
+import { useApi, type ZaluApi } from "@/lib/api";
 import { BRAND } from "@/lib/explain";
-import { STEPS, unlocked, useFlow } from "@/lib/flow";
+import { STAGES, stageFill, stageOf, unlocked, useFlow } from "@/lib/flow";
+import { SPRING } from "@/lib/motion";
 import type { Health } from "@/lib/types";
 
 export function Topbar() {
@@ -10,19 +12,33 @@ export function Topbar() {
   const { reset } = useFlow();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(config);
-  const [health, setHealth] = useState<Health | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const { s } = useFlow();
+  // health probe result is tagged with the api it belongs to, so a new data source shows "checking" without a reset in the effect
+  const [probe, setProbe] = useState<{ api: ZaluApi; health?: Health; err?: string } | null>(null);
+  const current = probe?.api === api ? probe : null;
+  const health = current?.health ?? null;
+  const err = current?.err ?? null;
 
-  useEffect(() => { setDraft(config); }, [config]);
+  /** Prefill the source form when it opens (remembered URL, then the build-time default). */
+  function openSource() {
+    try {
+      const remembered = JSON.parse(localStorage.getItem("zalu.api") ?? "{}").baseUrl;
+      setDraft(config.baseUrl ? config : { ...config, baseUrl: remembered || process.env.NEXT_PUBLIC_ZALU_API || "" });
+    } catch { setDraft(config); }
+    setOpen(true);
+  }
   useEffect(() => {
     let live = true;
-    setHealth(null);
-    setErr(null);
-    api.health().then((h) => live && setHealth(h)).catch((e) => live && setErr(e.message));
+    api.health().then((h) => live && setProbe({ api, health: h })).catch((e) => live && setProbe({ api, err: e.message }));
     return () => { live = false; };
   }, [api]);
 
-  const switchTo = (c: typeof config) => { setConfig(c); reset(); setOpen(false); };
+  const switchTo = (c: typeof config) => {
+    if ((s.task || s.trainFiles.length) && !window.confirm("Switch data source and start a new session?")) return;
+    setConfig(c);
+    reset();
+    setOpen(false);
+  };
 
   return (
     <header className="topbar">
@@ -32,10 +48,9 @@ export function Topbar() {
         </div>
         {BRAND}
       </div>
-      <span className="muted small hidden md:inline">Describe it. Train it. Prove it works.</span>
       <div className="spacer" />
       <div style={{ position: "relative" }}>
-        <button className="btn sm" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="source-pop"
+        <button className="btn sm" onClick={() => (open ? setOpen(false) : openSource())} aria-expanded={open} aria-controls="source-pop"
           aria-label={`Data source: ${api.mode === "mock" ? "sample mode" : "live backend"}. Change`}>
           {api.mode === "mock" ? <span className="badge sample">◆ Sample mode</span> : <span className="badge live">● Live backend</span>}
           {api.mode === "live" && (err ? <span className="badge bad">✕ offline</span> : health ? <span className="badge good">✓ connected</span> : <span className="spin" />)}
@@ -72,21 +87,27 @@ export function Topbar() {
   );
 }
 
-export function Stepper() {
+/** Stories-style progress: one thin segment per stage, filled by progress inside the stage. */
+export function StoryProgress() {
   const { s, set } = useFlow();
   const open = unlocked(s);
+  const cur = stageOf(s.step);
+  const fill = stageFill(s.step);
   return (
-    <nav aria-label="Progress">
-      <ol className="stepper">
-        {STEPS.map((st, i) => {
-          const done = i < s.step && open[i];
-          const state = i === s.step ? "current step" : done ? "completed" : open[i] ? "available" : "locked";
+    <nav aria-label="Progress" className="story">
+      <ol className="story-bar">
+        {STAGES.map((st, i) => {
+          const first = st.steps[0];
+          const reachable = open[first] && i !== cur;
+          const state = i === cur ? "current stage" : i < cur ? "completed" : open[first] ? "available" : "not started";
           return (
-            <li key={st.key}>
-              <button className={`step ${i === s.step ? "active" : ""} ${done ? "done" : ""}`} disabled={!open[i]}
-                onClick={() => set({ step: i })} aria-current={i === s.step ? "step" : undefined} title={`${st.label}: ${st.sub}`}>
-                <span className="num" aria-hidden>{done ? "✓" : i + 1}</span>
-                <span><span className="lbl block">{st.label}</span><span className="sub block">{st.sub}</span></span>
+            <li key={st.label}>
+              <button className={`story-seg ${i === cur ? "active" : ""}`} disabled={!reachable} onClick={() => set({ step: first })}
+                aria-current={i === cur ? "step" : undefined}>
+                <span className="track" aria-hidden>
+                  <motion.span initial={false} animate={{ scaleX: fill[i] }} transition={SPRING} />
+                </span>
+                <span className="story-label">{st.label}</span>
                 <span className="sr-only">, {state}</span>
               </button>
             </li>
@@ -94,43 +115,5 @@ export function Stepper() {
         })}
       </ol>
     </nav>
-  );
-}
-
-/** P2: make clear which parts are working, experimental or mocked. */
-export function StatusFooter() {
-  const { api } = useApi();
-  const [engines, setEngines] = useState<Record<string, string>>({});
-  const [gpuOk, setGpuOk] = useState(false);
-  useEffect(() => {
-    api.health().then((h) => { setEngines(h.engines ?? {}); setGpuOk(!!h.gpu_worker?.ok); }).catch(() => { setEngines({}); setGpuOk(false); });
-  }, [api]);
-  const mock = api.mode === "mock";
-  // live: an engine string containing "MOCK" means the backend answers with clearly labelled mock data
-  const eng = (k: string): [string, string] => {
-    const v = engines[k];
-    if (!v) return ["warn", "unknown"];
-    return /mock/i.test(v) ? ["sample", v] : ["live", v];
-  };
-  const gpu: [string, string] = gpuOk ? ["live", "GX10 worker"] : ["warn", "GPU worker unreachable"];
-  const pick = (sample: string, live: [string, string]): [string, string] => (mock ? ["sample", sample] : live);
-  const rows: [string, string, string][] = [
-    ["Task planner", ...pick("rule-based sample", eng("task_engine"))],
-    ["Upload & auto-label", ...pick("sample labels", eng("data_engine"))],
-    ["Training (GPU)", ...pick("simulated progress", gpu)],
-    ["Evaluation engine", ...pick("real engine, sample predictions", eng("evaluation_engine"))],
-    ["Live inference", ...pick("simulated boxes", gpu)],
-    ["Data coach", "exp", "rule-based on your frames"],
-  ];
-  const label: Record<string, string> = { sample: "Sample", live: "Working", exp: "Experimental", warn: "Not connected" };
-  return (
-    <footer className="status card flat">
-      <div className="row" style={{ marginBottom: 8 }}><h4>What is real in this demo</h4><span className="muted small">updates from the backend health check</span></div>
-      <div className="row" style={{ gap: 18 }}>
-        {rows.map(([n, k, d]) => (
-          <div key={n} className="small"><span className={`badge ${k === "warn" ? "warn" : k}`}>{label[k]}</span> <b>{n}</b> <span className="muted">· {d}</span></div>
-        ))}
-      </div>
-    </footer>
   );
 }

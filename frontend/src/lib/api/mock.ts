@@ -1,5 +1,6 @@
 // SAMPLE DATA ONLY. In-memory mock of the backend so the UI works with no server.
 // Every object it returns is marked as sample (notes / ids / sample_data) and the UI shows a SAMPLE badge.
+import { samplePlan } from "../../dashboard/samplePlan";
 import sampleReport from "@/mocks/sample-report.json";
 import { extractFrames, type Frame } from "../frames";
 import { SAMPLE_TRUTH } from "../sampleFrames";
@@ -206,6 +207,13 @@ export function createMockApi(): ZaluApi {
       const r = db.reports.get(rid);
       if (!r) throw notFound("report", rid);
       return r;
+    },
+    async createDashboard(prompt, taskId, modelId) {
+      const task = db.tasks.get(taskId);
+      return samplePlan(prompt, db.models.get(modelId)?.classes ?? task?.classes ?? [], task?.target_event);
+    },
+    async refineDashboard() {
+      throw new ApiError(501, "The Sample dashboard uses local refinements.", "/api/dashboards");
     },
     async inference(modelId, _image, opts = {}) {
       const m = db.models.get(modelId);

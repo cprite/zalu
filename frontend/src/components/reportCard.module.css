@@ -1,0 +1,8 @@
+.result { display: flex; align-items: flex-start; gap: .65rem; padding: .8rem 1rem; border-radius: var(--radius-lg); background: var(--color-surface-2); color: var(--color-ink); }
+.result[data-verdict="ready"] { background: var(--color-success-soft); color: var(--color-success-ink); }
+.result[data-verdict="not_ready"], .result[data-verdict="insufficient_data"] { background: var(--color-warning-soft); color: var(--color-warning-ink); }
+.result[data-verdict="invalid_test_set"] { background: var(--color-error-soft); color: var(--color-error-ink); }
+.statusIcon { width: 1.65rem; height: 1.65rem; flex: none; border: 1px solid currentColor; border-radius: 50%; display: grid; place-items: center; font-weight: 700; }
+.warning { color: var(--color-warning-ink); overflow-wrap: anywhere; }
+.detailsTable { overflow-x: auto; max-width: 100%; min-width: 0; }
+.metadata { overflow-wrap: anywhere; }

@@ -1,162 +1,166 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { classColor } from "@/components/Annotator";
-import { Banner, SampleBadge, SectionHead } from "@/components/ui";
+
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState, type FormEvent } from "react";
+import { ScreenActivity } from "@/components/ScreenActivity";
+import { DashboardRenderer } from "@/dashboard/DashboardRenderer";
+import { samplePlan, type DashboardPlan } from "@/dashboard/samplePlan";
+import { useInferenceSession } from "@/dashboard/useInferenceSession";
+import { ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
-import { VERDICT, pct, variantLabel } from "@/lib/explain";
+import { pct, variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
-import { grabJpeg } from "@/lib/frames";
-import type { InferenceResult } from "@/lib/types";
+import { t } from "@/lib/motion";
 
 export function Deploy() {
-  const { api } = useApi();
   const { s, set } = useFlow();
-  const modelId = s.deployModelId ?? s.models.find((m) => m.kind === "trained")?.id ?? s.models[0]?.id;
-  const model = s.models.find((m) => m.id === modelId);
-  const evalEntry = modelId ? s.report?.per_model[modelId] : undefined;
-  const classes = model?.classes ?? s.task?.classes ?? [];
-  const [target, setTarget] = useState<string>(s.task?.target_event ?? classes[0] ?? "");
-  const [conf, setConf] = useState(evalEntry?.settings.conf_threshold ?? 0.25);
-
-  const video = useRef<HTMLVideoElement>(null);
-  const [on, setOn] = useState(false);
-  const [camErr, setCamErr] = useState<string | null>(null);
-  const [res, setRes] = useState<InferenceResult | null>(null);
-  const [fps, setFps] = useState(0);
-  const [alerts, setAlerts] = useState(0);
-  const [loopErr, setLoopErr] = useState<string | null>(null);
-  const runId = useRef(0);
-
-  async function start() {
-    setCamErr(null);
-    setLoopErr(null);
-    try {
-      const st = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: false });
-      video.current!.srcObject = st;
-      await video.current!.play();
-    } catch (e) {
-      if (api.mode !== "mock") { setCamErr(`Camera not available: ${(e as Error).message}`); return; }
-      setCamErr("No camera found: showing simulated sample detections.");
-    }
-    setOn(true);
-  }
-  function stop() {
-    runId.current++;
-    setOn(false);
-    const st = video.current?.srcObject as MediaStream | null;
-    st?.getTracks().forEach((t) => t.stop());
-    if (video.current) video.current.srcObject = null;
-  }
-  useEffect(() => () => stop(), []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (!on || !modelId) return;
-    const my = ++runId.current;
-    let last = performance.now();
-    (async () => {
-      while (runId.current === my) {
-        const v = video.current;
-        const blob = (v && v.videoWidth ? await grabJpeg(v) : null) ?? new Blob();
-        try {
-          const r = await api.inference(modelId, blob, { conf, targetEvent: target || null });
-          if (runId.current !== my) break;
-          setRes(r);
-          if (r.events.length) setAlerts((a) => a + 1);
-          const t = performance.now();
-          const inst = 1000 / Math.max(1, t - last);  // computed now: the state updater runs later, after `last` changes
-          last = t;
-          setFps((f) => (f === 0 ? inst : 0.85 * f + 0.15 * inst));
-        } catch (e) {
-          setLoopErr((e as Error).message);
-          await new Promise((r) => setTimeout(r, 1000));
-        }
-        if (api.mode === "mock") await new Promise((r) => setTimeout(r, 60));
-      }
-    })();
-  }, [on, modelId, conf, target, api]);
-
-  const firing = !!res?.events.length;
-  const readiness = evalEntry?.readiness;
-
+  const model = s.models.find((item) => item.id === s.deployModelId)
+    ?? s.models.find((item) => item.kind === "trained") ?? s.models[0];
+  if (!model || !s.task) return <p className="hint">Train a detection model first.</p>;
   return (
-    <div className="fade-in">
-      <SectionHead title="Run it on your camera" sub="Live detections from the trained model. The same model is exported to ONNX to run fully offline on a laptop or edge device." />
-      <div className="split">
-        <div className="col">
-          <div className="stage" style={{ aspectRatio: "16/9", outline: firing ? "4px solid var(--color-error)" : undefined }}>
-            <video ref={video} muted playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            {res && on && (
-              <svg className="overlay" viewBox={`0 0 ${res.width} ${res.height}`} preserveAspectRatio="xMidYMid slice">
-                {res.detections.map((d, i) => (
-                  <g key={i}>
-                    <rect x={d.box[0]} y={d.box[1]} width={d.box[2] - d.box[0]} height={d.box[3] - d.box[1]} fill="none" stroke={classColor(classes, d.cls)} strokeWidth={res.width / 260} />
-                    <text x={d.box[0] + 6} y={d.box[1] - 8} className="box-label" style={{ fontSize: res.width / 45 }}>{d.cls} {Math.round(d.score * 100)}%</text>
-                  </g>
-                ))}
-              </svg>
-            )}
-            {!on && <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}><button className="btn primary" disabled={!modelId} onClick={start}>▶ Start live detection</button></div>}
-            {on && <div style={{ position: "absolute", left: 12, top: 12 }} className="row">
-              <span className="badge live">● LIVE</span>
-              <span className="badge" style={{ background: "rgba(0,0,0,.6)", color: "#fff" }}>{fps.toFixed(1)} FPS end-to-end</span>
-              {res && <span className="badge" style={{ background: "rgba(0,0,0,.6)", color: "#fff" }}>model {res.latency_ms} ms</span>}
-              <SampleBadge show={api.mode === "mock"} label="Simulated" />
-            </div>}
-          </div>
-          {firing && <Banner kind="bad"><b>Alert: {res!.events.join(", ")} detected</b></Banner>}
-          {camErr && <Banner kind={api.mode === "mock" ? "sample" : "bad"}><span className="small">{camErr}</span></Banner>}
-          {loopErr && <Banner kind="bad"><span className="small">Inference error: {loopErr}</span></Banner>}
-          <div className="card row">
-            <label className="field" style={{ flex: 1 }}>Alert on
-              <select className="select" value={target} onChange={(e) => setTarget(e.target.value)}>
-                <option value="">No alerts</option>
-                {classes.map((c) => <option key={c}>{c}</option>)}
-              </select>
-            </label>
-            <label className="field" style={{ flex: 1 }}>Confidence threshold: {Math.round(conf * 100)}%
-              <input type="range" min={0.05} max={0.95} step={0.05} value={conf} onChange={(e) => setConf(Number(e.target.value))} />
-            </label>
-            {on && <button className="btn" onClick={stop}>■ Stop</button>}
-          </div>
-          {evalEntry && conf !== evalEntry.settings.conf_threshold && (
-            <div className="tiny muted">The report card was measured at {Math.round(evalEntry.settings.conf_threshold * 100)}%. Changing the threshold changes precision and recall.</div>
-          )}
-        </div>
-
-        <div className="col">
-          <div className="card col">
-            <h4>Model</h4>
-            <select className="select" value={modelId ?? ""} onChange={(e) => { stop(); set({ deployModelId: e.target.value }); }}>
-              {s.models.map((m) => <option key={m.id} value={m.id}>{variantLabel(m.kind, m.variant)} · {m.id}</option>)}
-            </select>
-            {model && (
-              <div className="small ink2 col" style={{ gap: 2 }}>
-                <div>Version <code>{model.id}</code></div>
-                <div>Base <code>{model.base_model}</code>{model.epochs ? ` · ${model.epochs} epochs` : ""}{model.train_seconds ? ` · trained in ${model.train_seconds}s` : ""}</div>
-                <div>Classes: {model.classes.join(", ")}</div>
-                {model.onnx && <div>ONNX: <code className="tiny">{model.onnx}</code></div>}
-                {model.device && <div className="tiny muted">Trained on {model.device}</div>}
-              </div>
-            )}
-            {readiness ? (
-              <div className={`verdict ${readiness.verdict}`} style={{ padding: 10 }}>
-                <div className="icon" style={{ width: 32, height: 32, fontSize: 16 }}>{VERDICT[readiness.verdict].icon}</div>
-                <div className="small"><b>{VERDICT[readiness.verdict].label}</b><div>recall {pct(evalEntry!.overall.recall)} · precision {pct(evalEntry!.overall.precision)} on independent test</div></div>
-              </div>
-            ) : (
-              <Banner kind="warn"><span className="small">Not verified yet. Run the independent test before relying on this model.</span></Banner>
-            )}
-            <div className="small muted">Alerts this session: <b>{alerts}</b></div>
-          </div>
-          <div className="card flat col small">
-            <h4>Run offline on a laptop</h4>
-            <div className="ink2">Download the ONNX file and run the camera client, no network needed:</div>
-            <code className="tiny" style={{ background: "var(--color-surface-2)", padding: 8, borderRadius: 8, wordBreak: "break-all" }}>
-              python tools/webcam_client.py --onnx best.onnx --names {classes.join(",")}
-            </code>
-          </div>
-        </div>
+    <div className="wide-col" style={{ maxWidth: 1120 }}>
+      <div className="row deploy-tools">
+        <button className="btn ghost sm" onClick={() => set({ step: 4 })}>← Evaluation</button>
+        {s.models.length > 1 && <label>Model <select className="select" value={model.id}
+          onChange={(event) => set({ deployModelId: event.target.value })}>
+          {s.models.map((item) => <option key={item.id} value={item.id}>{variantLabel(item.kind, item.variant)}</option>)}
+        </select></label>}
       </div>
+      <DashboardStage key={model.id} modelId={model.id} classes={model.classes} taskId={s.task.id}
+        prompt={s.task.prompt} target={s.task.target_event ?? ""} />
     </div>
   );
+}
+
+function DashboardStage({ modelId, classes, taskId, prompt, target }: {
+  modelId: string; classes: string[]; taskId: string; prompt: string; target: string;
+}) {
+  const { api } = useApi();
+  const { s, set } = useFlow();
+  const sampleMode = api.mode === "mock";
+  const activeTarget = classes.includes(target) ? target : "";
+  const evalEntry = s.report?.per_model[modelId];
+  const evaluationInvalid = evalEntry?.readiness?.verdict === "invalid_test_set"
+    || (evalEntry?.test?.split != null && evalEntry.test.split !== "test");
+  const measured = s.report?.mock || evaluationInvalid ? undefined : evalEntry?.overall;
+  const plan = s.dashboardPlans[modelId];
+  const [createError, setCreateError] = useState<unknown>(null);   // dashboard generation failed
+  const [planError, setPlanError] = useState<unknown>(null);       // refine / export failed
+  const planning = !plan && !createError;                          // derived, so the effect never sets state synchronously
+  const [refining, setRefining] = useState(false);
+  const [instruction, setInstruction] = useState("");
+  const [attempt, setAttempt] = useState(0);
+  const session = useInferenceSession((frame) => api.inference(modelId, frame, {
+    conf: evalEntry?.settings?.conf_threshold ?? 0.25, targetEvent: activeTarget || null,
+  }), sampleMode, classes, activeTarget);
+  const savePlan = (next: DashboardPlan) => set((current) => ({
+    dashboardPlans: { ...current.dashboardPlans, [modelId]: next },
+  }));
+
+  useEffect(() => {
+    if (plan) return;
+    let active = true;
+    if (sampleMode) {
+      savePlan(samplePlan(prompt, classes, activeTarget));
+      return;
+    }
+    api.createDashboard(prompt, taskId, modelId).then((next) => {
+      if (active) savePlan(next);
+    }).catch((error) => {
+      if (active) setCreateError(error);
+    });
+    return () => { active = false; };
+    // classes / activeTarget / savePlan are re-created every render; the plan only depends on the ids below
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [api, attempt, modelId, plan, prompt, sampleMode, taskId]);
+
+  async function refine(event: FormEvent) {
+    event.preventDefault();
+    if (!plan || !instruction.trim() || refining) return;
+    setRefining(true);
+    setPlanError(null);
+    try {
+      if (sampleMode) {
+        const changes = instruction.trim();
+        const rename = /^(?:rename(?: dashboard)?(?: to)?|title)\s*[: ]\s*(.+)$/i.exec(changes);
+        const preview = /^(hide|show) (?:the )?(?:camera|preview)$/i.exec(changes);
+        if (!rename && !preview) throw new Error('In Sample mode, try “rename to Loading dock” or “hide camera”.');
+        const spec = structuredClone(plan.spec);
+        if (rename) spec.title = rename[1].slice(0, 100);
+        if (preview?.[1].toLowerCase() === "hide") {
+          if (spec.widgets.length === 1) throw new Error("Keep at least one dashboard widget.");
+          spec.widgets = spec.widgets.filter((widget) => widget.type !== "live_preview");
+        } else if (preview && !spec.widgets.some((widget) => widget.type === "live_preview")) {
+          spec.widgets.unshift({ id: "camera", title: "Camera preview", type: "live_preview",
+            source_id: spec.data_sources[0].id, span: spec.layout.columns, config: { show_boxes: true } });
+        }
+        savePlan({ ...plan, spec });
+      } else savePlan(await api.refineDashboard(plan.id, instruction.trim()));
+      setInstruction("");
+    } catch (error) {
+      setPlanError(error);
+    } finally {
+      setRefining(false);
+    }
+  }
+
+  return <>
+    <AnimatePresence initial={false}>
+      {planning && (
+        <motion.div key="planning" className="hero compact" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("base")}>
+          <ScreenActivity message="Preparing dashboard" />
+        </motion.div>
+      )}
+    </AnimatePresence>
+    <ErrorBox error={createError} />
+    <ErrorBox error={planError} />
+    {!plan && !planning && <button className="btn" onClick={() => { setCreateError(null); setAttempt((value) => value + 1); }}>Retry dashboard</button>}
+    {plan && <>
+      <DashboardRenderer spec={plan.spec} classes={classes} samples={session.samples} preview={session.preview}
+        loading={session.loading} error={session.error} sampleMode={sampleMode} />
+      <div className="row deploy-tools">
+        <button className="btn primary" onClick={session.running ? session.stop : session.start} aria-pressed={session.running}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span key={session.running ? "stop" : "play"} aria-hidden style={{ display: "inline-grid" }}
+              initial={{ opacity: 0, scale: 0.6, rotate: -45 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} exit={{ opacity: 0, scale: 0.6 }} transition={t("fast")}>
+              {session.running ? "■" : "▶"}
+            </motion.span>
+          </AnimatePresence>
+          {session.running ? "Stop inference" : sampleMode ? "Run sample inference" : "Start camera"}
+        </button>
+        {!sampleMode && <label className="btn">Choose image
+          <input type="file" className="sr-only" accept="image/*" onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (file) void session.useImage(file);
+            event.target.value = "";
+          }} />
+        </label>}
+        <button className="btn" onClick={async () => {
+          try {
+            const { downloadDashboard } = await import("@/dashboard/exportDashboard");
+            downloadDashboard(plan.spec, classes, activeTarget, evalEntry?.settings?.conf_threshold ?? 0.25);
+          } catch (error) {
+            setPlanError(error);
+          }
+        }}>Export dashboard</button>
+        {!sampleMode && !plan.ai_generated && <span className="small muted">Default layout</span>}
+        {measured && <span className="small muted">
+          {sampleMode ? "Sample evaluation" : "Test evaluation"} · precision {pct(measured.precision)} · recall {pct(measured.recall)}
+        </span>}
+      </div>
+      {[...plan.limitations, ...plan.clarification_questions].length > 0 && (
+        <ul className="small muted">{[...plan.limitations, ...plan.clarification_questions].map((message, i) => <li key={i}>{message}</li>)}</ul>
+      )}
+      <form className="dash-refine" aria-busy={refining} onSubmit={refine}>
+        <label htmlFor="dashboard-refinement">Refine dashboard</label>
+        <div className="row">
+          <input id="dashboard-refinement" className="input" value={instruction} maxLength={500}
+            placeholder={sampleMode ? "e.g. Rename to Loading dock" : "e.g. Put the detection table first"}
+            onChange={(event) => setInstruction(event.target.value)} />
+          <button className="btn" disabled={refining || !instruction.trim()}>Apply</button>
+        </div>
+        <ScreenActivity slot message={refining ? "Updating dashboard" : undefined} />
+      </form>
+    </>}
+  </>;
 }

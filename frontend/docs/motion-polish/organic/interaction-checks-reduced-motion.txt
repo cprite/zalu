@@ -1,0 +1,16 @@
+PASS Prepare: ArrowRight/ArrowLeft move between frames — Frame 2 of 36 → Frame 3 of 36 → Frame 2 of 36
+PASS Prepare: selected thumbnail ring rendered once
+PASS Keyboard focus is visible — outline-style=solid
+PASS Train: Options disclosure opens
+PASS Train: preset selection moves
+PASS Train: Options disclosure reports state
+PASS Train: completion state shown
+PASS Verify: KPI ends on the measured value — objects found = 90%
+PASS Verify: Compare models opens
+PASS Verify: See mistakes opens (and compare closes)
+PASS Deploy: refine 'hide camera' removes the preview widget — 4 → 3
+PASS Deploy: refine 'rename' updates the title
+PASS Deploy: live KPI shows a reading — kpi=0
+0
+PASS Mobile: Deploy has no horizontal overflow
+PASS No uncaught page errors

@@ -1,30 +1,39 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Annotator, classColor } from "@/components/Annotator";
-import { Banner, ErrorBox, SampleBadge, SectionHead, Spinner } from "@/components/ui";
+import { ScreenActivity } from "@/components/ScreenActivity";
+import { Banner, ErrorBox, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
-import { coach } from "@/lib/coach";
 import { useFlow } from "@/lib/flow";
+import { t } from "@/lib/motion";
 import type { Annotation } from "@/lib/types";
 
+/** Stage 1 · Describe → prepare / verify the auto-labels. One primary action: continue to training. */
 export function Prepare() {
   const { api } = useApi();
   const { s, set } = useFlow();
-  const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<unknown>(null);
-  const [saveErr, setSaveErr] = useState<unknown>(null);
   const [saving, setSaving] = useState(false);
   const [cur, setCur] = useState(0);
   const ds = s.trainDataset!;
+  const loading = !!ds && !s.annotationsLoaded && !err;  // derived: no setState inside the loading effect
+  const reduce = useReducedMotion();
+  const strip = useRef<HTMLDivElement>(null);
   const classes = s.task?.classes.length ? s.task.classes : ds.classes;
 
   useEffect(() => {
-    if (!ds || (s.labels.length && s.frames.length)) return;
-    setLoading(true);
+    if (!ds || s.annotationsLoaded) return;
+    let active = true;
     Promise.all([api.getLabels(ds.id), api.listFrames(ds.id)])
-      .then(([labels, frames]) => set({ labels, frames }))
-      .catch(setErr)
-      .finally(() => setLoading(false));
+      .then(([labels, frames]) => {
+        if (!active) return;
+        set({ labels, frames, annotationsLoaded: true });
+        const firstLabelled = frames.findIndex((f) => labels.some((l) => l.image === f.name));
+        if (firstLabelled > 0) setCur(firstLabelled);  // open on a frame that has something to check
+      })
+      .catch((e) => { if (active) setErr(e); });
+    return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ds?.id]);
 
@@ -34,91 +43,100 @@ export function Prepare() {
     return m;
   }, [s.labels]);
   const frame = s.frames[cur];
-  const tips = s.task ? coach({ ...s.task, classes }, s.frames, s.labels, ds.source_ids) : [];
-  const human = s.labels.filter((l) => l.source === "human").length;
+  const total = s.frames.length;
+
+  // ← / → move between frames (ignored while typing or choosing a class)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.altKey || e.metaKey || e.ctrlKey) return;
+      if (e.key === "ArrowRight") { e.preventDefault(); setCur((c) => Math.min(total - 1, c + 1)); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); setCur((c) => Math.max(0, c - 1)); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [total]);
+  useEffect(() => {
+    strip.current?.querySelector<HTMLElement>(`[data-i="${cur}"]`)?.scrollIntoView({ block: "nearest", inline: "center", behavior: reduce ? "auto" : "smooth" });
+  }, [cur, reduce]);
+  const edited = s.annotationsDirty;
 
   const setImageLabels = (img: string, next: Annotation[]) =>
-    set((p) => ({ labels: [...p.labels.filter((l) => l.image !== img), ...next], labelsSaved: false }));
+    set((p) => ({ labels: [...p.labels.filter((l) => l.image !== img), ...next], labelsSaved: false, annotationsDirty: true }));
 
-  async function save() {
-    setSaving(true);
-    setSaveErr(null);
-    try {
-      await api.saveLabels(ds.id, s.labels);
-      set({ labelsSaved: true });
-    } catch (e) {
-      setSaveErr(e);
-    } finally {
+  /** Corrections are saved automatically when the user moves on. */
+  async function next() {
+    setErr(null);
+    if (edited && !s.labelsSaved) {
+      setSaving(true);
+      try {
+        await api.saveLabels(ds.id, s.labels);
+        set({ labelsSaved: true, annotationsDirty: false });
+      } catch (e) {
+        setErr(e);
+        setSaving(false);
+        return;
+      }
       setSaving(false);
     }
+    set({ step: 3 });
   }
 
   return (
-    <div className="fade-in">
-      <SectionHead title="Check the automatic labels"
-        sub="An open-vocabulary detector labelled every frame from your description. Fix anything wrong: these labels are what the model learns from."
-        right={<SampleBadge show={api.mode === "mock"} label="Sample auto-labels" />} />
-      <div className="split">
-        <div className="col">
-          {loading && <div className="card row"><Spinner /> Loading frames and auto-labels…</div>}
-          <ErrorBox error={err} />
-          {!s.frames.length && !loading && (
-            <Banner kind="info">No frames to preview for this dataset (for example a dataset registered directly on the server). You can go straight to training.</Banner>
-          )}
-          {frame && (
-            <div className="card col">
-              <div className="row small">
-                <b>{frame.name}</b><span className="muted">frame {cur + 1} of {s.frames.length}</span>
-                <div className="spacer" />
-                <button className="btn sm" aria-label="Previous frame" disabled={cur === 0} onClick={() => setCur(cur - 1)}>←</button>
-                <button className="btn sm" aria-label="Next frame" disabled={cur >= s.frames.length - 1} onClick={() => setCur(cur + 1)}>→</button>
-              </div>
-              <Annotator frame={frame} labels={byImage.get(frame.name) ?? []} classes={classes} onChange={(n) => setImageLabels(frame.name, n)} />
-            </div>
-          )}
-          {s.frames.length > 0 && (
-            <div className="thumbs">
-              {s.frames.map((f, i) => {
-                const ls = byImage.get(f.name) ?? [];
-                return (
-                  <button key={f.name} className={`thumb ${i === cur ? "sel" : ""}`} onClick={() => setCur(i)} title={f.name}
-                    aria-label={`Frame ${i + 1}: ${ls.length ? `${ls.length} box(es)` : "nothing labelled"}`} aria-current={i === cur ? "true" : undefined}>
-                    <svg viewBox={`0 0 ${f.width} ${f.height}`} preserveAspectRatio="xMidYMid slice">
-                      <image href={f.url} width={f.width} height={f.height} />
-                      {ls.map((l, k) => <rect key={k} x={l.box[0]} y={l.box[1]} width={l.box[2] - l.box[0]} height={l.box[3] - l.box[1]} fill="none" stroke={classColor(classes, l.cls)} strokeWidth={f.width / 120} />)}
-                    </svg>
-                    <span className="count">{ls.length || "empty"}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
+    <div className="wide-col" style={{ maxWidth: 880 }}>
+      <div className="hero compact">
+        <h1>Check the labels</h1>
+        <p>Review the boxes and correct any mistakes before training.</p>
+        {api.mode === "mock" && <span className="small muted">Demo labels</span>}
+      </div>
 
-        <div className="col">
-          <div className="card col">
-            <h4>Dataset</h4>
-            <div className="small ink2">
-              <div>{s.frames.length || Object.values(ds.counts).reduce((a, b) => a + b, 0)} frames · {s.labels.length} boxes · {human} checked by you</div>
-              {classes.map((c) => <div key={c}><span className="dot" style={{ background: classColor(classes, c) }} /> {c}: {s.labels.filter((l) => l.cls === c).length}</div>)}
-              <div className="tiny muted" style={{ marginTop: 4 }}>Recording: {ds.source_ids.join(", ") || "—"} · {ds.id}</div>
-            </div>
-            <ErrorBox error={saveErr} />
-            <button className="btn primary" onClick={() => set({ step: 3 })}>Continue to training →</button>
-            <button className="btn" disabled={saving || !s.labels.length} onClick={save}>{saving && <Spinner />}{s.labelsSaved ? "✓ Corrections saved" : "Save corrections"}</button>
+      <ScreenActivity message={loading ? "Loading frames and labels" : saving ? "Saving labels" : undefined} />
+      <ErrorBox error={err} />
+      {!loading && !s.frames.length && !err && (
+        <Banner kind="info">No frames to preview for this dataset. You can continue to training.</Banner>
+      )}
+
+      {frame && (
+        <div className="card col">
+          <div className="row small">
+            <span className="muted" aria-live="polite">Frame {cur + 1} of {s.frames.length}</span>
+            <div className="spacer" />
+            <span className="tiny muted" aria-hidden>← → to browse</span>
+            <motion.button className="btn sm" aria-label="Previous frame" aria-keyshortcuts="ArrowLeft" disabled={cur === 0} onClick={() => setCur(cur - 1)}
+              whileTap={{ x: -2 }} transition={t("fast")}>←</motion.button>
+            <motion.button className="btn sm" aria-label="Next frame" aria-keyshortcuts="ArrowRight" disabled={cur >= s.frames.length - 1} onClick={() => setCur(cur + 1)}
+              whileTap={{ x: 2 }} transition={t("fast")}>→</motion.button>
           </div>
-          <div className="card col">
-            <div className="row"><h4>Data coach</h4><span className="badge exp">Rule-based</span></div>
-            {tips.length === 0 && <div className="small muted">Tips appear once frames are loaded.</div>}
-            {tips.map((t) => (
-              <div key={t.title} className="small">
-                <div><span aria-hidden className={t.level === "warn" ? "text-warning-ink font-bold" : t.level === "ok" ? "text-success-ink font-bold" : "text-brand-ink font-bold"}>{t.level === "warn" ? "!" : t.level === "ok" ? "✓" : "i"}</span> <span className="sr-only">{t.level === "warn" ? "Needs attention:" : t.level === "ok" ? "Good:" : "Tip:"}</span> <b>{t.title}</b></div>
-                <div className="ink2" style={{ paddingLeft: 14 }}>{t.detail}</div>
-              </div>
-            ))}
-            <div className="tiny muted">Based on your frames (lighting measured from pixels) and labels. Suggestions from the Data Engine will appear here too.</div>
-          </div>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={frame.name} initial={{ opacity: 0.35 }} animate={{ opacity: 1 }} exit={{ opacity: 0.35 }} transition={t("fast")}>
+              <Annotator frame={frame} labels={byImage.get(frame.name) ?? []} classes={classes} onChange={(n) => setImageLabels(frame.name, n)} />
+            </motion.div>
+          </AnimatePresence>
         </div>
+      )}
+
+      {s.frames.length > 1 && (
+        <div className="thumbs" ref={strip}>
+          {s.frames.map((f, i) => {
+            const ls = byImage.get(f.name) ?? [];
+            return (
+              <button key={f.name} data-i={i} className={`thumb ${i === cur ? "sel" : ""}`} onClick={() => setCur(i)} title={f.name}
+                aria-label={`Frame ${i + 1}: ${ls.length ? `${ls.length} box(es)` : "nothing labelled"}`} aria-current={i === cur ? "true" : undefined}>
+                <svg viewBox={`0 0 ${f.width} ${f.height}`} preserveAspectRatio="xMidYMid slice">
+                  <image href={f.url} width={f.width} height={f.height} />
+                  {ls.map((l, k) => <rect key={k} x={l.box[0]} y={l.box[1]} width={l.box[2] - l.box[0]} height={l.box[3] - l.box[1]} fill="none" stroke={classColor(classes, l.cls)} strokeWidth={f.width / 120} />)}
+                </svg>
+                <span className="count">{ls.length || "empty"}</span>
+                {i === cur && <motion.span layoutId="thumb-ring" className="thumb-ring" transition={t("base")} aria-hidden />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="actions-center" style={{ marginTop: 8 }}>
+        <button className="btn ghost" onClick={() => set({ step: 1 })}>← Change footage</button>
+        <button className="btn primary" disabled={saving || loading} onClick={next}>{saving && <Spinner />}{edited && !s.labelsSaved ? "Save and train →" : "Looks good, train →"}</button>
       </div>
     </div>
   );

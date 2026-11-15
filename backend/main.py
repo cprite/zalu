@@ -362,3 +362,78 @@ def model_status(model_id: str):
             "runs": len(runs), "last_run_at": max((r.created_at for r in runs), default=None),
             "latest_report_id": reports[0].id if reports else None,
             "note": "'deployable' means weights exist; there is no persistent live-camera deployment registry yet."}
+
+
+
+# ---------- dashboards (route: Kolyan; planner: Kirill, backend/task_engine/dashboard; spec: Codex v1) ----------
+def _planner_llm():
+    """Kirill's planner on the owner's Claude subscription (CLI); CLI failure -> planner's own rule-based fallback."""
+    from backend.task_engine.dashboard import DashboardDraft, PlannerUnavailable
+
+    if not claude_cli.available():
+        return None  # planner falls back by itself only if its default (API) backend fails; see below
+    return claude_cli.claude_cli_backend(output_model=DashboardDraft, error_cls=PlannerUnavailable)
+
+
+def _llm_or_fallback():
+    llm = _planner_llm()
+    if llm is None:  # no CLI login: make the planner use its deterministic fallback instead of the metered API
+        from backend.task_engine.dashboard import PlannerUnavailable
+
+        def unavailable(system, messages):
+            raise PlannerUnavailable("claude CLI not logged in on nikopi5")
+        unavailable.name = "unavailable"
+        return unavailable
+    return llm
+
+
+def _model_classes(model_id: Optional[str]):
+    if not model_id:
+        return None
+    return _get("models", model_id, schemas.ModelArtifact).classes
+
+
+@app.post("/api/dashboards", dependencies=[Depends(auth)])
+def create_dashboard(body: dict):
+    """{prompt, task_id, model_id?} -> {id, ...PlannerResult}. Always returns a valid DashboardSpec v1 in `spec`."""
+    from backend.task_engine.dashboard import plan_dashboard
+
+    prompt = (body.get("prompt") or "").strip()
+    if not prompt or not body.get("task_id"):
+        raise HTTPException(422, "prompt and task_id are required")
+    task = _get("tasks", body["task_id"], schemas.TaskSpec)
+    model_id = body.get("model_id")
+    res = plan_dashboard(prompt, task, model_classes=_model_classes(model_id), sources_catalog=dashboard_sources(),
+                         llm=_llm_or_fallback())
+    rec = schemas.DashboardRecord(task_id=task.task_id, model_id=model_id, prompt=prompt, result=res.model_dump())
+    storage.save("dashboards", rec)
+    return {"id": rec.id, **rec.result}
+
+
+@app.post("/api/dashboards/{dashboard_id}/refine", dependencies=[Depends(auth)])
+def refine_dashboard_route(dashboard_id: str, body: dict):
+    """{instruction} -> {id, ...PlannerResult} for the updated dashboard (never retrains the model)."""
+    from backend.task_engine.dashboard import refine_dashboard
+
+    instruction = (body.get("instruction") or "").strip()
+    if not instruction:
+        raise HTTPException(422, "instruction is required")
+    rec = _get("dashboards", dashboard_id, schemas.DashboardRecord)
+    task = _get("tasks", rec.task_id, schemas.TaskSpec)
+    try:
+        res = refine_dashboard(rec.result["spec"], instruction, task, model_classes=_model_classes(rec.model_id),
+                               sources_catalog=dashboard_sources(), llm=_llm_or_fallback())
+    except ValueError as e:
+        raise HTTPException(409, str(e))
+    rec.history.append({"instruction": instruction, "status": res.status, "generator": res.generator,
+                        "at": schemas.now()})
+    rec.result, rec.updated_at = res.model_dump(), schemas.now()
+    storage.save("dashboards", rec)
+    return {"id": rec.id, **rec.result}
+
+
+@app.get("/api/dashboards/{dashboard_id}", dependencies=[Depends(auth)])
+def get_dashboard(dashboard_id: str):
+    rec = _get("dashboards", dashboard_id, schemas.DashboardRecord)
+    return {"id": rec.id, "task_id": rec.task_id, "model_id": rec.model_id, "prompt": rec.prompt,
+            "history": rec.history, **rec.result}

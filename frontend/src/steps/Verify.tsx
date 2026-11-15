@@ -1,14 +1,17 @@
 "use client";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { ScreenActivity } from "@/components/ScreenActivity";
 import { Comparison } from "@/components/Comparison";
 import { FailureGallery } from "@/components/FailureGallery";
-import { MediaInput } from "@/components/MediaInput";
+import { Composer } from "@/components/Composer";
 import { ReportCard } from "@/components/ReportCard";
-import { Banner, ErrorBox, SectionHead, Spinner } from "@/components/ui";
+import { Banner, ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { makeSampleFrames } from "@/lib/sampleFrames";
 import { pct } from "@/lib/explain";
+import { Disclosure, EXIT, reveal } from "@/lib/motion";
 import type { DatasetManifest, EvaluationReport } from "@/lib/types";
 
 export function Verify() {
@@ -17,6 +20,7 @@ export function Verify() {
   const [err, setErr] = useState<unknown>(null);
   const [busy, setBusy] = useState<"" | "upload" | "eval">("");
   const [selected, setSelected] = useState<string>(() => bestTrained(s.report));
+  const [more, setMore] = useState<"" | "compare" | "mistakes">("");
   const [serverSets, setServerSets] = useState<DatasetManifest[]>([]);
   const trainIds = new Set(s.models.map((m) => m.dataset_id).filter(Boolean));
   const trainSessions = new Set([...(s.trainDataset?.source_ids ?? [])]);
@@ -26,35 +30,6 @@ export function Verify() {
     if (api.mode === "live") api.listDatasets().then((all) => setServerSets(all.filter((d) => !trainIds.has(d.id) && d.id !== s.trainDataset?.id))).catch(() => setServerSets([]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api]);
-
-  async function uploadTest() {
-    if (!s.task) return;
-    setBusy("upload");
-    setErr(null);
-    try {
-      const testDataset = await api.createDataset(s.task.id, s.testFiles, { session_id: s.testSession, role: "test" });
-      set({ testDataset, report: null });
-    } catch (e) {
-      setErr(e);
-    } finally {
-      setBusy("");
-    }
-  }
-
-  async function evaluate() {
-    if (!s.testDataset) return;
-    setBusy("eval");
-    setErr(null);
-    try {
-      const report = await api.createEvaluation({ model_ids: s.models.map((m) => m.id), test_dataset_id: s.testDataset.id });
-      set({ report });
-      setSelected(bestTrained(report));
-    } catch (e) {
-      setErr(e);
-    } finally {
-      setBusy("");
-    }
-  }
 
   const download = () => {
     const b = new Blob([JSON.stringify(s.report, null, 1)], { type: "application/json" });
@@ -68,74 +43,91 @@ export function Verify() {
   const sample = !!s.report && Object.values(s.report.per_model).some((e) => e.sample_data);
   const leaks = s.report?.notes.filter((n) => n.startsWith("LEAKAGE")) ?? [];
 
+  /** One action: register the new footage as an independent test set (if needed), then evaluate all models. */
+  async function runTest() {
+    if (!s.task) return;
+    setErr(null);
+    try {
+      let test = s.testDataset;
+      if (!test) {
+        setBusy("upload");
+        test = await api.createDataset(s.task.id, s.testFiles, { session_id: s.testSession, role: "test" });
+        set({ testDataset: test, report: null });
+      }
+      setBusy("eval");
+      const report = await api.createEvaluation({ model_ids: s.models.map((m) => m.id), test_dataset_id: test.id });
+      set({ report });
+      setSelected(bestTrained(report));
+    } catch (e) {
+      setErr(e);
+    } finally {
+      setBusy("");
+    }
+  }
+
   return (
-    <div className="fade-in">
-      <SectionHead title="Verify on footage the model has never seen"
-        sub="Record a few minutes at another time of day or from another angle. This independent test is the score that counts." />
-      <div className="split">
-        <div className="card col">
-          <label className="field">Test recording name
-            <input className="input" value={s.testSession} aria-invalid={sameSession} aria-describedby={sameSession ? "leak-msg" : undefined}
-              onChange={(e) => set({ testSession: e.target.value.replace(/\s+/g, "_"), testDataset: null })} />
-          </label>
-          {sameSession && <Banner kind="bad" id="leak-msg">This name matches a training recording. Test footage must come from a <b>different</b> session, otherwise the score is inflated.</Banner>}
-          <MediaInput files={s.testFiles} onFiles={(testFiles) => set({ testFiles, testDataset: null })} sessionId={s.testSession} />
-          {api.mode === "mock" && !s.testFiles.length && (
-            <button className="btn sm self-start" onClick={async () => set({ testFiles: await makeSampleFrames(24, s.testSession) })}>Use generated sample test frames</button>
-          )}
-          {api.mode === "live" && serverSets.length > 0 && (
-            <label className="field">Or choose a test dataset on the server
-              <select className="select" defaultValue="" onChange={(e) => set({ testDataset: serverSets.find((d) => d.id === e.target.value) ?? null })}>
-                <option value="" disabled>Choose…</option>
-                {serverSets.map((d) => <option key={d.id} value={d.id}>{d.id} · {d.variant} · sessions {d.source_ids.join(", ") || "unknown"}</option>)}
-              </select>
-            </label>
+    <div className="center-col" style={s.report ? { maxWidth: 1040 } : undefined}>
+      {!s.report ? (
+        <>
+          <div className="hero compact">
+            <h1>Test on fresh footage</h1>
+            <p>Use a separate recording the model has never seen.</p>
+          </div>
+          <Composer textless files={s.testFiles} onFiles={(testFiles) => set({ testFiles, testDataset: null })} onSubmit={runTest}
+            canSubmit={(s.testFiles.length > 0 || !!s.testDataset) && !sameSession} busy={!!busy} submitLabel="Run the test" />
+          <ScreenActivity slot message={busy === "upload" ? "Preparing test footage" : busy ? "Checking results" : undefined} />
+          {sameSession && <Banner kind="bad">This recording name matches your training footage. Choose a separate recording.</Banner>}
+          {!busy && (
+            <div className="actions-center">
+              {api.mode === "mock" && !s.testFiles.length && (
+                <button className="toggle" onClick={async () => set({ testFiles: await makeSampleFrames(24, s.testSession) })}>Use sample test frames</button>
+              )}
+              {api.mode === "live" && serverSets.length > 0 && (
+                <label className="small ink2">Or use a test set on the server:{" "}
+                  <select className="select" style={{ width: "auto", display: "inline-block", minHeight: 32 }} defaultValue=""
+                    onChange={(e) => set({ testDataset: serverSets.find((d) => d.id === e.target.value) ?? null })}>
+                    <option value="" disabled>Choose…</option>
+                    {serverSets.map((d) => <option key={d.id} value={d.id}>{d.id} · {d.variant}</option>)}
+                  </select>
+                </label>
+              )}
+            </div>
           )}
           <ErrorBox error={err} />
-          <div className="row">
-            <button className="btn" onClick={() => set({ step: 3 })}>← Back</button>
-            <div className="spacer" />
-            {!s.testDataset ? (
-              <button className="btn primary" disabled={!s.testFiles.length || sameSession || busy === "upload"} onClick={uploadTest}>
-                {busy === "upload" && <Spinner />}Use as test footage
-              </button>
-            ) : (
-              <button className="btn primary" disabled={busy === "eval"} onClick={evaluate}>
-                {busy === "eval" && <Spinner />}{busy === "eval" ? "Testing all models…" : s.report ? "Run the test again" : "Run independent test"}
-              </button>
-            )}
+          <div className="actions-center"><button className="btn ghost sm" onClick={() => set({ step: 3 })}>← Training</button></div>
+        </>
+      ) : (
+        <>
+          <div className="hero compact">
+            <h1>Test results</h1>
+            {sample && isMockReport(s.report) && <span className="small muted">Demo results</span>}
           </div>
-          {s.testDataset && <p className="tiny muted">✓ Test footage ready: {s.testDataset.id} (recording {s.testDataset.source_ids.join(", ")})</p>}
-        </div>
-        <aside className="col small ink2" style={{ padding: "8px 4px" }}>
-          <h4 className="text-ink">Why a separate recording?</h4>
-          <p>Frames from the same video look almost identical. Testing on them is like grading an exam with the answers the student memorised.</p>
-          <ul className="col" style={{ gap: 4, paddingLeft: 18, margin: 0 }}>
-            <li>Synthetic images are never used for testing.</li>
-            <li>The confidence threshold is fixed before the test.</li>
-            <li>Run the test once per model version; don&apos;t tune on it.</li>
-          </ul>
-        </aside>
-      </div>
-
-      {s.report && (
-        <div className="col" style={{ gap: 16, marginTop: 24 }}>
           {leaks.length > 0 && <Banner kind="bad"><div>{leaks.map((n) => <div key={n}>{n}</div>)}</div></Banner>}
-          {sample && <Banner kind="sample"><span><b>Sample results.</b> Produced by the real evaluation engine on simulated predictions. They are not measurements of your model.</span></Banner>}
           {isMockReport(s.report) ? (
             <MockReport rep={s.report} />
           ) : (
             <>
-              <Comparison rep={s.report} selected={selected} onSelect={setSelected} />
               {sel && <ReportCard e={sel} onDownload={download} />}
-              {sel && <FailureGallery e={sel} imageSize={s.report.image_size} />}
+              <div className="actions-center">
+                <Disclosure open={more === "compare"} onToggle={() => setMore(more === "compare" ? "" : "compare")} controls="verify-more">Compare models</Disclosure>
+                <Disclosure open={more === "mistakes"} onToggle={() => setMore(more === "mistakes" ? "" : "mistakes")} controls="verify-more">See mistakes</Disclosure>
+              </div>
+              <AnimatePresence mode="wait" initial={false}>
+                {more === "compare" && (
+                  <motion.div key="compare" id="verify-more" {...reveal} exit={{ ...reveal.exit, transition: EXIT }} style={{ overflow: "hidden" }}><Comparison rep={s.report} selected={selected} onSelect={setSelected} /></motion.div>
+                )}
+                {more === "mistakes" && sel && (
+                  <motion.div key="mistakes" id="verify-more" {...reveal} exit={{ ...reveal.exit, transition: EXIT }} style={{ overflow: "hidden" }}><FailureGallery e={sel} imageSize={s.report.image_size} /></motion.div>
+                )}
+              </AnimatePresence>
             </>
           )}
-          <div className="row">
-            <div className="spacer" />
+          <div className="actions-center">
+            <button className="btn ghost" onClick={() => set({ step: 3 })}>← Training</button>
+            <button className="btn ghost" onClick={() => set({ report: null, testDataset: null })}>Test other footage</button>
             <button className="btn primary" onClick={() => set({ step: 5, deployModelId: selected })}>Deploy this model →</button>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
@@ -149,7 +141,7 @@ function isMockReport(r: EvaluationReport) {
 function MockReport({ rep }: { rep: EvaluationReport }) {
   return (
     <section className="card col">
-      <Banner kind="warn"><b>Not an independent test.</b> The backend has no Evaluation Engine yet, so it returned the training run&apos;s validation metrics. Do not use these numbers to decide on deployment.</Banner>
+      <Banner kind="warn"><b>Not an independent test.</b> These training validation scores have no independent test behind them. Run a test before using them to decide on deployment.</Banner>
       <div className="tbl-wrap"><table className="tbl">
         <thead><tr><th>Model</th><th>Validation recall</th><th>Validation precision</th><th>mAP50</th></tr></thead>
         <tbody>

@@ -1,16 +1,15 @@
 # ZALU frontend: integration guide (for Kolyan and Kirill)
 
-Branch `damir/eval-frontend` = `kolyan/backend-p0` (as of 4886fe7) + the frontend, Damir's Evaluation Engine and design files.
-No backend file was changed. The frontend talks to `backend/main.py` exactly as it is.
+Branch `damir/dashboard` uses the current FastAPI backend on `kolyan/backend-p0`. The frontend uses the shared DashboardSpec v1 from `shared/dashboard_spec`.
 
 ## 1. Run the frontend
 Requirements: Node.js 20+ (tested with Node 24, npm 11).
 
 ```bash
 git fetch origin
-git checkout damir/eval-frontend
+git switch damir/dashboard
 cd frontend
-npm install
+npm ci
 npm run dev            # http://localhost:3000
 ```
 
@@ -22,10 +21,9 @@ In the app: top right **◆ Sample mode → Data source**:
 - **Access token**: the `ZALU_TOKEN` value from nikopi5
 - **Connect live**. The badge turns to **● Live backend**. The popover shows the GPU worker state and each engine (✓ real, ! MOCK).
 
-Or set it once in `frontend/.env.local` (git-ignored; copy from `.env.example`):
+To prefill the backend URL, set this in `frontend/.env.local`. Enter the access token at runtime in the data source dialog. The token is kept in memory for the current page:
 ```
 NEXT_PUBLIC_ZALU_API=https://nikopi5.tail4aaac7.ts.net:10000
-NEXT_PUBLIC_ZALU_TOKEN=...
 ```
 CORS: `main.py` already allows all origins, so `localhost:3000` works against the public URL.
 
@@ -37,7 +35,7 @@ CORS: `main.py` already allows all origins, so `localhost:3000` works against th
 | Prepare | `GET /api/datasets/{id}/annotations`, `GET /api/files?path=<image_path>`, `POST /api/datasets/{id}/labels` | shows up to 60 frames; sends `LabelCorrection` only for frames whose boxes changed (`source: manual` for drawn/confirmed boxes). |
 | Train | `GET /api/datasets`, `POST /api/training`, `GET /api/jobs/{id}` (poll 1.5 s), `GET /api/models/{id}`, `POST /api/models/zero-shot` | `variant=test` datasets are never offered for training. |
 | Verify | `POST /api/datasets` with `kind=test`, `POST /api/evaluations {model_ids, test_dataset_id}` | if the backend returns `mock: true`, the UI shows val metrics with a "Not an independent test" warning. |
-| Deploy | `POST /api/inference` multipart (`model_id`, `image`, `conf`, `target_event`) in a loop | needs camera permission in the browser. |
+| Deploy | `POST /api/dashboards`, `POST /api/dashboards/{id}/refine`, and multipart `POST /api/inference` | Dashboard planning uses the selected task and trained model. Camera needs permission on HTTPS or localhost. Image upload also works for one-frame inference. |
 
 Conversion between Kirill's contracts (`task_id`, `dataset_id`, `ClassDef`, `BoxLabel`) and the UI model is only in
 `frontend/src/lib/api/live.ts`. If a contract changes, that is the one file to update.

@@ -1,0 +1,13 @@
+.tile { position: absolute; inset: 0; width: 100%; display: grid; place-items: center; cursor: pointer; }
+.tile:focus-visible { outline-offset: -3px; }
+.tile:disabled { cursor: default; }
+.tile .thumbnail { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fallback { min-width: 0; max-width: 100%; padding: .2rem; display: grid; gap: .1rem; color: var(--color-muted); }
+.fallback span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.play, .remove { display: grid; place-items: center; border-radius: 50%; background: var(--color-surface); color: var(--color-ink); border: 1px solid var(--color-line); }
+.play { z-index: 1; align-self: end; justify-self: start; margin: .25rem; width: 1.35rem; height: 1.35rem; font-size: .65rem; }
+.remove { position: absolute; top: .15rem; right: .15rem; width: 1.65rem; height: 1.65rem; font-size: 1rem; cursor: pointer; }
+.dialog { margin: auto; width: min(46rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 1rem; border: 1px solid var(--color-line); border-radius: var(--radius-lg); background: var(--color-surface); color: var(--color-ink); text-align: start; overflow: auto; }
+.dialog::backdrop { background: color-mix(in srgb, var(--color-ink) 48%, transparent); }
+.heading { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; overflow-wrap: anywhere; margin-bottom: .75rem; }
+.media { display: block; width: 100%; max-height: 68dvh; object-fit: contain; background: var(--color-surface-2); }

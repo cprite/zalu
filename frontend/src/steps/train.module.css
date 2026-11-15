@@ -1,0 +1,5 @@
+.jobs { display: grid; gap: 1rem; }
+.job { display: grid; gap: .45rem; padding-block: .25rem; min-width: 0; }
+.job + .job { border-block-start: 1px solid var(--color-line); padding-block-start: 1rem; }
+.jobHeader { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .35rem 1rem; }
+.jobHeader b { overflow-wrap: anywhere; }
