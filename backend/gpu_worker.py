@@ -239,7 +239,9 @@ def _clip():
     with _clip_lock:
         if "m" not in _clip_cache:
             dev = "cuda" if torch.cuda.is_available() else "cpu"
-            m, pre = clip.load(CLIP_MODEL, device=dev)  # weights from ~/.cache/clip (already there for YOLO-World)
+            # zalu-gpu has the weights in /data/weights/clip (no internet on the GX10); fall back to ~/.cache/clip
+            root = os.environ.get("ZALU_CLIP_DIR", "/data/weights/clip")
+            m, pre = clip.load(CLIP_MODEL, device=dev, download_root=root if os.path.isdir(root) else None)
             m.eval()
             _clip_cache.update(m=m, pre=pre, dev=dev)
     return _clip_cache["m"], _clip_cache["pre"], _clip_cache["dev"]
