@@ -35,7 +35,7 @@ export function ErrorBox({ error }: { error: unknown }) {
     return (
       <Banner kind="warn">
         <b>This step is not connected on the backend yet.</b> {error.message}
-        <div>Switch to <b>Sample mode</b> (top right) to continue the walkthrough, or pick an existing dataset.</div>
+        <div>Switch the data source to <b>Sample</b> in Settings (top right) to continue the walkthrough, or pick an existing dataset.</div>
       </Banner>
     );
   }

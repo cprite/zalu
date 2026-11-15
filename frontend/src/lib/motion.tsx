@@ -1,30 +1,74 @@
 "use client";
-// Motion tokens for ZALU. One easing curve and three durations (150 / 220 / 320 ms) everywhere.
-// <MotionConfig reducedMotion="user"> in page.tsx turns transforms into instant changes for people who ask for less motion.
+// Motion tokens for ZALU. One easing curve and three durations (150 / 220 / 320 ms at the default level) everywhere.
+// Every token is read lazily (getters), so the global Motion Intensity preference (lib/prefs) changes durations, travel,
+// springs and loading loops the next time anything animates, without touching the screens that use the tokens.
+// <MotionConfig> in app/providers.tsx turns transforms into instant changes for Reduced and for people whose OS asks
+// for less motion; the OS setting always wins over the in-app slider.
 import { AnimatePresence, animate, motion, useInView, useMotionValue, useReducedMotion, useTransform, type Transition } from "motion/react";
 import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
+import { effectiveMotion, getPrefs, usePrefs, type MotionLevel } from "./prefs";
 
 export const EASE = [0.2, 0, 0, 1] as const;           // standard "emphasized decelerate"
-export const DUR = { fast: 0.15, base: 0.22, slow: 0.32 } as const;
-export const t = (d: keyof typeof DUR = "base", extra: Transition = {}): Transition => ({ duration: DUR[d], ease: EASE, ...extra });
 
-/** Screen / section entrance: fade with a short rise. */
+/**
+ * Per-level dials. Reduced keeps short opacity fades only (no travel, no springs, no loops); Expressive adds a little
+ * travel and a spring with a hint of follow-through, never bounce.
+ */
+export const LEVELS: Record<MotionLevel, { time: number; travel: number; stiffness: number; damping: number; press: number; loop: number }> = {
+  0: { time: 0.6, travel: 0, stiffness: 900, damping: 80, press: 1, loop: 0 },
+  1: { time: 0.8, travel: 0.5, stiffness: 600, damping: 52, press: 0.99, loop: 0.6 },
+  2: { time: 1, travel: 1, stiffness: 520, damping: 44, press: 0.98, loop: 1 },
+  3: { time: 1.2, travel: 1.5, stiffness: 400, damping: 30, press: 0.97, loop: 1.3 },
+};
+// Until hydration finishes the tokens stay at Balanced, so server HTML and the first client render agree
+// (initial styles such as translateY are serialised). Providers flips this right after mount.
+let hydrated = false;
+export function markMotionHydrated() { hydrated = true; }
+/** The dials in force right now. */
+export const level = () => LEVELS[!hydrated ? 2 : effectiveMotion(getPrefs())];
+
+const BASE = { fast: 0.15, base: 0.22, slow: 0.32 } as const;
+type DurKey = keyof typeof BASE;
+/** Durations in seconds, scaled by the motion level when read. */
+export const DUR = {
+  get fast() { return BASE.fast * level().time; },
+  get base() { return BASE.base * level().time; },
+  get slow() { return BASE.slow * level().time; },
+};
+/** Vertical travel in px for entrances, scaled by the motion level. */
+const travel = (px: number) => px * level().travel;
+
+/** Tween on the shared curve. The duration is a getter, so it resolves when the animation starts, not at import. */
+export const t = (d: DurKey = "base", extra: Transition = {}): Transition => {
+  const o = { ease: EASE, ...extra } as Transition;
+  if (!("duration" in extra)) Object.defineProperty(o, "duration", { get: () => DUR[d], enumerable: true });
+  return o;
+};
+
+/** Screen / section entrance: fade with a short rise. Spread it ({...enter}) at render time. */
 export const enter = {
-  initial: { opacity: 0, y: 8 },
+  initial: { opacity: 0, get y() { return travel(8); } },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -4 },
+  exit: { opacity: 0, get y() { return travel(-4); } },
   transition: t("base"),
 };
 
 /** Container + child variants for the one orchestrated load moment (Describe hero). */
 export const stagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.05, delayChildren: 0.04 } },
+  show: { transition: { get staggerChildren() { return 0.05 * level().time; }, get delayChildren() { return 0.04 * level().time; } } },
 };
 export const rise = {
-  hidden: { opacity: 0, y: 8 },
+  hidden: { opacity: 0, get y() { return travel(8); } },
   show: { opacity: 1, y: 0, transition: t("slow") },
 };
+
+/** true when the effective level is Reduced (in-app choice or the OS setting). Prefer it to useReducedMotion(). */
+export function useLessMotion(): boolean {
+  const { motion: m } = usePrefs();
+  const os = useReducedMotion();
+  return m === 0 || !!os;
+}
 
 /** Height reveal for disclosures (Options, Compare models, See mistakes). */
 export const reveal = {
@@ -40,8 +84,8 @@ export const reveal = {
  * value immediately, and with reduced motion the number simply jumps. It never displays a value that was not passed in
  * except during that short tween.
  */
-export function AnimatedNumber({ value, format, className, duration = DUR.slow * 2 }: { value: number; format: (v: number) => string; className?: string; duration?: number }) {
-  const reduce = useReducedMotion();
+export function AnimatedNumber({ value, format, className, duration }: { value: number; format: (v: number) => string; className?: string; duration?: number }) {
+  const reduce = useLessMotion();
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
   const mv = useMotionValue(value);
@@ -55,7 +99,7 @@ export function AnimatedNumber({ value, format, className, duration = DUR.slow *
       first.current = false;
       mv.set(0);
     }
-    const c = animate(mv, value, { duration, ease: EASE });
+    const c = animate(mv, value, { duration: duration ?? DUR.slow * 2, ease: EASE });
     return () => c.stop();
   }, [value, reduce, inView, mv, duration]);
   return (
@@ -71,12 +115,12 @@ export function AnimatedNumber({ value, format, className, duration = DUR.slow *
  * Uses ZALU ink tokens; static text when reduced motion is on.
  */
 export function TextShimmer({ children, className }: { children: string; className?: string }) {
-  const reduce = useReducedMotion();
+  const reduce = useLessMotion();
   if (reduce) return <span className={className}>{children}</span>;
   return (
     <motion.span className={`shimmer ${className ?? ""}`}
       initial={{ backgroundPosition: "100% center" }} animate={{ backgroundPosition: "0% center" }}
-      transition={{ repeat: Infinity, duration: 1.8, ease: "linear" }}>
+      transition={{ repeat: Infinity, duration: 1.8 / Math.max(level().loop, 0.6), ease: "linear" }}>
       {children}
     </motion.span>
   );
@@ -84,20 +128,36 @@ export function TextShimmer({ children, className }: { children: string; classNa
 
 // ---------------------------------------------------------------- Organic pass (see docs/motion-polish/ORGANIC-MOTION.md)
 
-/** Critically damped spring: shared selection indicators and progress smoothing settle without overshoot. */
-export const SPRING = { type: "spring", stiffness: 520, damping: 44, mass: 0.9 } as const;
+/**
+ * Shared-element spring: selection indicators, progress smoothing, the settings slider. Near-critically damped at
+ * Subtle and Balanced (no overshoot); Expressive allows a few percent of follow-through. Resolves at animation start.
+ */
+export const SPRING = {
+  type: "spring" as const,
+  mass: 0.9,
+  get stiffness() { return level().stiffness; },
+  get damping() { return level().damping; },
+};
+/**
+ * whileTap targets that follow the motion level, for motion.* buttons that animate their own press
+ * (CSS handles plain buttons). Reduced resolves to scale 1; the CSS tint then carries the feedback.
+ * Usage: <motion.button whileTap={press}> or whileTap={pressIcon} for small round icon buttons.
+ */
+export const press = { get scale() { return level().press; } };
+export const pressIcon = { get scale() { return 1 - (1 - level().press) * 3; } };
 /** Exits are always faster than entrances. */
 export const EXIT = t("fast");
 
 /** Three-dot activity indicator. Loops only while mounted (i.e. while work is running); static under reduced motion. */
 export function Dots({ label, className }: { label?: string; className?: string }) {
-  const reduce = useReducedMotion();
+  const reduce = useLessMotion();
+  const k = Math.max(level().loop, 0.6);
   return (
     <span className={`dots ${className ?? ""}`} role={label ? "status" : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
       {[0, 1, 2].map((i) => (
         <motion.span key={i} className="dot-i"
-          animate={reduce ? { opacity: 0.6 } : { opacity: [0.25, 1, 0.25], y: [0, -2, 0] }}
-          transition={reduce ? undefined : { duration: 1.05, repeat: Infinity, ease: "easeInOut", delay: i * 0.14 }} />
+          animate={reduce ? { opacity: 0.6 } : { opacity: [0.25, 1, 0.25], y: [0, -2 * k, 0] }}
+          transition={reduce ? undefined : { duration: 1.05 / k, repeat: Infinity, ease: "easeInOut", delay: i * 0.14 }} />
       ))}
     </span>
   );
