@@ -1,13 +1,14 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import { ScreenActivity } from "@/components/ScreenActivity";
 import { Composer } from "@/components/Composer";
 import { CameraCapture } from "@/components/MediaInput";
 import { ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { makeSampleFrames } from "@/lib/sampleFrames";
-import { StatusLine, reveal, t } from "@/lib/motion";
+import { reveal } from "@/lib/motion";
 
 /** Stage 1 · Describe → footage. Same message-box feel, files only. */
 export function Upload() {
@@ -38,20 +39,13 @@ export function Upload() {
   return (
     <div className="center-col">
       <div className="hero compact">
-        <h1>Add footage from your camera</h1>
-        <p>A few minutes from the place where the camera will run, including moments where there is nothing to detect.</p>
+        <h1>Add your footage</h1>
+        <p>Use footage from the camera location, including a few empty scenes.</p>
       </div>
       <Composer textless files={s.trainFiles} onFiles={(trainFiles) => set({ trainFiles, trainDataset: null, frames: [], labels: [], labelsSaved: false, annotationsLoaded: false, annotationsDirty: false,
           jobs: [], models: [], report: null, deployModelId: null, dashboardPlans: {} })} onSubmit={submit}
         canSubmit={s.trainFiles.length > 0} busy={busy} submitLabel="Upload and label" />
-      <AnimatePresence initial={false}>
-        {busy && (
-          <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
-            <StatusLine state="working">Uploading and labelling your footage…</StatusLine>
-            <span className="tiny muted" style={{ display: "block", marginTop: 4 }}>Longer videos take a few minutes.</span>
-          </motion.p>
-        )}
-      </AnimatePresence>
+      <ScreenActivity slot message={busy ? "Preparing footage" : undefined} />
       {!busy && (
         <div className="actions-center">
           <button className="toggle" onClick={() => setCamera(!camera)} aria-expanded={camera}>{camera ? "Hide camera" : "Record with my camera"}</button>

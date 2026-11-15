@@ -2,10 +2,11 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Annotator, classColor } from "@/components/Annotator";
-import { Banner, ErrorBox, SampleBadge, Spinner } from "@/components/ui";
+import { ScreenActivity } from "@/components/ScreenActivity";
+import { Banner, ErrorBox, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
-import { StatusLine, t } from "@/lib/motion";
+import { t } from "@/lib/motion";
 import type { Annotation } from "@/lib/types";
 
 /** Stage 1 · Describe → prepare / verify the auto-labels. One primary action: continue to training. */
@@ -85,11 +86,11 @@ export function Prepare() {
     <div className="wide-col" style={{ maxWidth: 880 }}>
       <div className="hero compact">
         <h1>Check the labels</h1>
-        <p>ZALU marked every frame. Fix anything that looks wrong: the model learns from these boxes.</p>
-        <SampleBadge show={api.mode === "mock"} label="Sample labels" />
+        <p>Review the boxes and correct any mistakes before training.</p>
+        {api.mode === "mock" && <span className="small muted">Demo labels</span>}
       </div>
 
-      {loading && <p className="hint"><StatusLine state="working">Loading frames and labels…</StatusLine></p>}
+      <ScreenActivity message={loading ? "Loading frames and labels" : saving ? "Saving labels" : undefined} />
       <ErrorBox error={err} />
       {!loading && !s.frames.length && !err && (
         <Banner kind="info">No frames to preview for this dataset. You can continue to training.</Banner>

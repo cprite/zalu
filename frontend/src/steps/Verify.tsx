@@ -1,16 +1,17 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { ScreenActivity } from "@/components/ScreenActivity";
 import { Comparison } from "@/components/Comparison";
 import { FailureGallery } from "@/components/FailureGallery";
 import { Composer } from "@/components/Composer";
 import { ReportCard } from "@/components/ReportCard";
-import { Banner, ErrorBox, SampleBadge } from "@/components/ui";
+import { Banner, ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { makeSampleFrames } from "@/lib/sampleFrames";
 import { pct } from "@/lib/explain";
-import { Disclosure, EXIT, StatusLine, reveal, t } from "@/lib/motion";
+import { Disclosure, EXIT, reveal } from "@/lib/motion";
 import type { DatasetManifest, EvaluationReport } from "@/lib/types";
 
 export function Verify() {
@@ -69,19 +70,13 @@ export function Verify() {
       {!s.report ? (
         <>
           <div className="hero compact">
-            <h1>Test it on new footage</h1>
-            <p>Record a few minutes the model has never seen, at another time or from another angle. This is the score that counts.</p>
+            <h1>Test on fresh footage</h1>
+            <p>Use a separate recording the model has never seen.</p>
           </div>
           <Composer textless files={s.testFiles} onFiles={(testFiles) => set({ testFiles, testDataset: null })} onSubmit={runTest}
             canSubmit={(s.testFiles.length > 0 || !!s.testDataset) && !sameSession} busy={!!busy} submitLabel="Run the test" />
-          <AnimatePresence initial={false}>
-            {busy && (
-              <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
-                <StatusLine state="working">{busy === "upload" ? "Uploading test footage…" : "Testing every model on your new footage…"}</StatusLine>
-              </motion.p>
-            )}
-          </AnimatePresence>
-          {sameSession && <Banner kind="bad">This footage has the same recording name as the training footage. Use a different recording, otherwise the score is inflated.</Banner>}
+          <ScreenActivity slot message={busy === "upload" ? "Preparing test footage" : busy ? "Checking results" : undefined} />
+          {sameSession && <Banner kind="bad">This recording name matches your training footage. Choose a separate recording.</Banner>}
           {!busy && (
             <div className="actions-center">
               {api.mode === "mock" && !s.testFiles.length && (
@@ -104,8 +99,8 @@ export function Verify() {
       ) : (
         <>
           <div className="hero compact">
-            <h1>Results on new footage</h1>
-            {sample && isMockReport(s.report) && <SampleBadge label="Sample results" />}
+            <h1>Test results</h1>
+            {sample && isMockReport(s.report) && <span className="small muted">Demo results</span>}
           </div>
           {leaks.length > 0 && <Banner kind="bad"><div>{leaks.map((n) => <div key={n}>{n}</div>)}</div></Banner>}
           {isMockReport(s.report) ? (
@@ -146,7 +141,7 @@ function isMockReport(r: EvaluationReport) {
 function MockReport({ rep }: { rep: EvaluationReport }) {
   return (
     <section className="card col">
-      <Banner kind="warn"><b>Not an independent test.</b> The backend has no Evaluation Engine yet, so it returned the training run&apos;s validation metrics. Do not use these numbers to decide on deployment.</Banner>
+      <Banner kind="warn"><b>Not an independent test.</b> These training validation scores have no independent test behind them. Run a test before using them to decide on deployment.</Banner>
       <div className="tbl-wrap"><table className="tbl">
         <thead><tr><th>Model</th><th>Validation recall</th><th>Validation precision</th><th>mAP50</th></tr></thead>
         <tbody>
