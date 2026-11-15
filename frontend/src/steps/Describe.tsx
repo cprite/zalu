@@ -76,9 +76,9 @@ export function Describe() {
           {busy ? (
             <ScreenActivity key="busy" message={busy === "task" ? "Reading your request" : "Preparing footage"} />
           ) : !prompt ? (
-            <motion.div key="examples" className="suggestions" aria-label="Examples" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
+            <motion.div key="examples" className="suggestions" role="group" aria-label="Examples" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
               {EXAMPLES.map((x) => (
-                <motion.button key={x} className="chip" whileTap={{ scale: 0.97 }} transition={t("fast")}
+                <motion.button key={x} className="chip" transition={t("fast")}
                   onClick={() => { setPrompt(x); document.getElementById("composer-text")?.focus(); }}>{x}</motion.button>
               ))}
             </motion.div>

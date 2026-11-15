@@ -14,7 +14,7 @@ export function FailureGallery({ e, imageSize }: { e: ModelEvaluation; imageSize
   return (
     <section className="card col fade-in" aria-labelledby="gallery-title">
       <div className="row">
-        <h3 id="gallery-title">Failure gallery</h3>
+        <h2 id="gallery-title">Failure gallery</h2>
         {e.sample_data && <span className="small muted">Demo frames</span>}
         <div className="spacer" />
         <div className="tabs has-pill" role="group" aria-label="Filter failures">

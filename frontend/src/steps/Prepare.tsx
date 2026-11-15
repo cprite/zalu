@@ -1,12 +1,12 @@
 "use client";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Annotator, classColor } from "@/components/Annotator";
 import { ScreenActivity } from "@/components/ScreenActivity";
 import { Banner, ErrorBox, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
-import { t } from "@/lib/motion";
+import { t, useLessMotion } from "@/lib/motion";
 import type { Annotation } from "@/lib/types";
 
 /** Stage 1 · Describe → prepare / verify the auto-labels. One primary action: continue to training. */
@@ -18,7 +18,7 @@ export function Prepare() {
   const [cur, setCur] = useState(0);
   const ds = s.trainDataset!;
   const loading = !!ds && !s.annotationsLoaded && !err;  // derived: no setState inside the loading effect
-  const reduce = useReducedMotion();
+  const reduce = useLessMotion();
   const strip = useRef<HTMLDivElement>(null);
   const classes = s.task?.classes.length ? s.task.classes : ds.classes;
 
@@ -103,9 +103,9 @@ export function Prepare() {
             <div className="spacer" />
             <span className="tiny muted" aria-hidden>← → to browse</span>
             <motion.button className="btn sm" aria-label="Previous frame" aria-keyshortcuts="ArrowLeft" disabled={cur === 0} onClick={() => setCur(cur - 1)}
-              whileTap={{ x: -2 }} transition={t("fast")}>←</motion.button>
+              whileTap={reduce ? undefined : { x: -2 }} transition={t("fast")}>←</motion.button>
             <motion.button className="btn sm" aria-label="Next frame" aria-keyshortcuts="ArrowRight" disabled={cur >= s.frames.length - 1} onClick={() => setCur(cur + 1)}
-              whileTap={{ x: 2 }} transition={t("fast")}>→</motion.button>
+              whileTap={reduce ? undefined : { x: 2 }} transition={t("fast")}>→</motion.button>
           </div>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={frame.name} initial={{ opacity: 0.35 }} animate={{ opacity: 1 }} exit={{ opacity: 0.35 }} transition={t("fast")}>
@@ -121,7 +121,7 @@ export function Prepare() {
             const ls = byImage.get(f.name) ?? [];
             return (
               <button key={f.name} data-i={i} className={`thumb ${i === cur ? "sel" : ""}`} onClick={() => setCur(i)} title={f.name}
-                aria-label={`Frame ${i + 1}: ${ls.length ? `${ls.length} box(es)` : "nothing labelled"}`} aria-current={i === cur ? "true" : undefined}>
+                aria-label={`Frame ${i + 1}: ${ls.length ? `${ls.length} box(es)` : "empty"}`} aria-current={i === cur ? "true" : undefined}>
                 <svg viewBox={`0 0 ${f.width} ${f.height}`} preserveAspectRatio="xMidYMid slice">
                   <image href={f.url} width={f.width} height={f.height} />
                   {ls.map((l, k) => <rect key={k} x={l.box[0]} y={l.box[1]} width={l.box[2] - l.box[0]} height={l.box[3] - l.box[1]} fill="none" stroke={classColor(classes, l.cls)} strokeWidth={f.width / 120} />)}

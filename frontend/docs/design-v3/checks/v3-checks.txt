@@ -27,7 +27,7 @@ PASS  Press at level 2: scale 0.98  — matrix(0.98, 0, 0, 0.98, 0, 0)
 PASS  Press at level 2: no layout shift (box width unchanged in layout)  — 140.03125 vs visual 137.2
 PASS  Press at level 3: scale 0.97  — matrix(0.97, 0, 0, 0.97, 0, 0)
 PASS  Press at level 3: no layout shift (box width unchanged in layout)  — 140.03125 vs visual 135.8
-PASS  Press at level 0: scale none  — matrix(1, 0, 0, 1, 0, 0) shadow=oklab(0.244858 -0.00380383 -0.0385778 / 
+PASS  Press at level 0: scale none  — matrix(1, 0, 0, 1, 0, 0) shadow=oklab(0.244858 -0.00380383 -0.0385778 /
 PASS  Reduced press gives a tint instead of movement  — oklab(0.244858 -0.00380383 -0.0385778 / 0.12) 0px 0px 0px 12
 PASS  Press at level 0: no layout shift (box width unchanged in layout)  — 140.03125 vs visual 140.0
 PASS  OS reduced motion overrides Expressive (data-motion 0)  — 0

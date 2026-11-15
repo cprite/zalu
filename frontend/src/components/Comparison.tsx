@@ -18,7 +18,7 @@ export function Comparison({ rep, selected, onSelect }: { rep: EvaluationReport;
 
   return (
     <div className="card col fade-in">
-      <div className="row"><h3>Model comparison</h3>{sample && <span className="small muted">Demo results</span>}</div>
+      <div className="row"><h2>Model comparison</h2>{sample && <span className="small muted">Demo results</span>}</div>
       <div className="tbl-wrap"><table className="tbl">
         <caption className="sr-only">Models compared on the same independent test footage. Select a model to open its report card.</caption>
         <thead><tr><th>Model</th><th>Recall</th><th>Precision</th><th>F1</th><th>False alarms</th><th>Missed</th><th>Speed</th><th>Verdict</th></tr></thead>

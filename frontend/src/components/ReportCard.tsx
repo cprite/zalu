@@ -20,7 +20,7 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
   return (
     <div className="card col fade-in" style={{ gap: 18 }}>
       <div className="row">
-        <h3>{variantLabel(e.model?.kind, e.model?.variant)}</h3>
+        <h2>{variantLabel(e.model?.kind, e.model?.variant)}</h2>
         {e.sample_data && <span className="small muted">Demo results</span>}
         <div className="spacer" />
         <span className="small muted">{e.test.n_images} new frames</span>
@@ -51,7 +51,7 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
 
       <div className="grid2">
         <div className="col">
-          <h4>Test targets</h4>
+          <h3>Test targets</h3>
           {[["Recall", o.recall, o.recall_ci95], ["Precision", o.precision, o.precision_ci95]].map(([n, val, c]) => (
             <div key={n as string} className="col" style={{ gap: 2 }}>
               <div className="row small"><span>{n as string}</span><div className="spacer" /><span className="num">{pct(val as number)} <span className="muted">target {pct(target(n as string))}</span></span></div>
@@ -62,7 +62,7 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
           <Checklist items={[...r.criteria, ...r.data_criteria]} />
         </div>
         <div className="col">
-          <h4>Detection errors</h4>
+          <h3>Detection errors</h3>
           <div className="grid2">
             <Kpi k="False alarms" v={o.fp} help={METRIC_HELP.fp} />
             <Kpi k="Missed objects" v={o.fn} help={METRIC_HELP.fn} />
@@ -74,7 +74,7 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
 
       <div className="grid2">
         <div className="col">
-          <h4>Per class</h4>
+          <h3>Per class</h3>
           <div className={styles.detailsTable} tabIndex={0} role="region" aria-label="Per-class results"><table className="tbl">
             <thead><tr><th>Class</th><th>Test objects</th><th>Recall</th><th>Precision</th><th>Frame recall</th></tr></thead>
             <tbody>
@@ -86,7 +86,7 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
           </table></div>
         </div>
         <div className="col">
-          <h4>Test data and limitations</h4>
+          <h3>Test data and limitations</h3>
           <div className="small ink2">
             {e.test.n_images} independent frames ({e.test.n_images_without_objects} with nothing to detect) from {e.test.n_sessions ?? "an unknown number of"} recording session(s) never used for training.
             Box counted correct at overlap ≥ {e.settings.iou_threshold}, confidence ≥ {e.settings.conf_threshold}.

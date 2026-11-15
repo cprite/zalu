@@ -113,6 +113,7 @@ export function Train() {
             const repeated = s.jobs.filter((job) => job.request.dataset_id === j.request.dataset_id);
             const attempt = repeated.length > 1 ? ` · Run ${repeated.indexOf(j) + 1}` : "";
             const active = j.status === "running";
+            const epochText = epoch ? `Epoch ${epoch[1]} of ${epoch[2]}` : undefined;
             const message = j.message?.split("\n")[0].replace(/\s*\(sample\)$/i, "").trim();
             return (
               <article key={j.id} className={styles.job} data-job-status={j.status}>
@@ -120,12 +121,12 @@ export function Train() {
                   <b>{name}{attempt}</b>
                   {active && <span className="small muted num">{Math.round(j.progress * 100)}%</span>}
                 </div>
-                {active ? <ScreenActivity message={epoch ? `Epoch ${epoch[1]} of ${epoch[2]}` : message || "Training model"} />
+                {active ? <ScreenActivity announce={!epochText} message={epochText ?? (message || "Training model")} />
                   : <span className={`small ${j.status === "failed" ? "negv" : "muted"}`}>
                     {j.status === "queued" ? "Queued" : j.status === "succeeded" ? "Complete" : "Failed"}
                   </span>}
                 {j.status !== "failed"
-                  ? <TrainingProgress value={j.progress} active={active} label={`${name}${attempt} progress`} />
+                  ? <TrainingProgress value={j.progress} active={active} label={`${name}${attempt} progress`} valueText={active ? epochText : undefined} />
                   : <p className="small negv">{j.error} <button className="btn sm" onClick={train}>Retry</button></p>}
               </article>
             );
