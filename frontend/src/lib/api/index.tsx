@@ -1,6 +1,5 @@
 "use client";
-// API adapter: components call useApi() and never know whether data is SAMPLE (mock) or live.
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+
 import { createLiveApi } from "./live";
 import { createMockApi } from "./mock";
 import type { ZaluApi } from "./types";
@@ -8,41 +7,10 @@ import type { ZaluApi } from "./types";
 export { ApiError } from "./types";
 export type { ZaluApi } from "./types";
 
-export interface ApiConfig {
-  baseUrl: string; // "" = mock
-  token: string;
-}
-
-const KEY = "zalu.api";
-const envDefault: ApiConfig = {
-  baseUrl: "",
-  token: "",
-};
-
-const Ctx = createContext<{ api: ZaluApi; config: ApiConfig; setConfig: (c: ApiConfig) => void } | null>(null);
-const mockSingleton = createMockApi();
-
-export function ApiProvider({ children }: { children: ReactNode }) {
-  const [config, setConfigState] = useState<ApiConfig>(envDefault);
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(KEY);
-      if (saved) {
-        const { baseUrl } = JSON.parse(saved);
-        if (typeof baseUrl === "string") localStorage.setItem(KEY, JSON.stringify({ baseUrl }));
-      }
-    } catch { /* ignore */ }
-  }, []);
-  const setConfig = (c: ApiConfig) => {
-    setConfigState(c);
-    localStorage.setItem(KEY, JSON.stringify({ baseUrl: c.baseUrl }));
-  };
-  const api = useMemo(() => (config.baseUrl ? createLiveApi(config.baseUrl, config.token) : mockSingleton), [config]);
-  return <Ctx.Provider value={{ api, config, setConfig }}>{children}</Ctx.Provider>;
-}
+// Demo mode is an explicit build choice. The default always uses the deployed API.
+const api: ZaluApi = process.env.NEXT_PUBLIC_ZALU_MODE === "demo"
+  ? createMockApi() : createLiveApi();
 
 export function useApi() {
-  const c = useContext(Ctx);
-  if (!c) throw new Error("useApi outside ApiProvider");
-  return c;
+  return { api };
 }

@@ -5,7 +5,7 @@ import { STAGES, stageFill, stageOf, unlocked, useFlow } from "@/lib/flow";
 import { SPRING } from "@/lib/motion";
 import { SettingsMenu } from "./Settings";
 
-/** Header: brand and the Settings menu (theme, motion, text size, data source). No technical labels here. */
+/** Header with the brand and Settings. */
 export function Topbar() {
   return (
     <header className="topbar">

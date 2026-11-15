@@ -1,31 +1,28 @@
 # ZALU frontend: integration guide (for Kolyan and Kirill)
 
-Branch `damir/dashboard` uses the current FastAPI backend on `kolyan/backend-p0`. The frontend uses the shared DashboardSpec v1 from `shared/dashboard_spec`.
+The frontend uses the shared DashboardSpec v1 from `shared/dashboard_spec`.
 
 ## 1. Run the frontend
 Requirements: Node.js 20+ (tested with Node 24, npm 11).
 
 ```bash
 git fetch origin
-git switch damir/dashboard
+git switch main
 cd frontend
 npm ci
 npm run dev            # http://localhost:3000
 ```
 
-It opens in **Sample mode** (purple ◆ badges): no backend needed, all data is generated in the browser and labelled as sample.
+The app uses the live API by default. To run a local offline demo, set `NEXT_PUBLIC_ZALU_MODE=demo`
+in `frontend/.env.local` before starting. Remove the setting before building for production.
 
-## 2. Connect the real backend
-In the app: top right **◆ Sample mode → Data source**:
-- **Backend URL**: `https://nikopi5.tail4aaac7.ts.net:10000` (public app), or `http://localhost:9100` (local uvicorn / ssh tunnel to nikopi5)
-- **Access token**: the `ZALU_TOKEN` value from nikopi5
-- **Connect live**. The badge turns to **● Live backend**. The popover shows the GPU worker state and each engine (✓ real, ! MOCK).
+## 2. Configure the API
 
-To prefill the backend URL, set this in `frontend/.env.local`. Enter the access token at runtime in the data source dialog. The token is kept in memory for the current page:
-```
-NEXT_PUBLIC_ZALU_API=https://nikopi5.tail4aaac7.ts.net:10000
-```
-CORS: `main.py` already allows all origins, so `localhost:3000` works against the public URL.
+The browser calls same-origin `/api`. Set the server-only `ZALU_API_URL` to the upstream origin
+before the build, or have an authenticated deployment gateway serve `/api` directly and leave the
+variable unset. For a bearer-protected FastAPI deployment, authenticate users at the gateway and
+attach the backend's bearer token there. Keep the credential out of `NEXT_PUBLIC_*`, browser storage
+and client code. Only expose authenticated routes to authorised users.
 
 ## 3. What each screen calls (live mode)
 | Step | Calls | Notes |

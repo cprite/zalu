@@ -11,10 +11,21 @@ export type ThemePref = "light" | "dark" | "system";
 export type ScalePref = "compact" | "default" | "large";
 /** 0 Reduced · 1 Subtle · 2 Balanced · 3 Expressive */
 export type MotionLevel = 0 | 1 | 2 | 3;
-export interface Prefs { theme: ThemePref; motion: MotionLevel; scale: ScalePref }
+export interface Prefs {
+  theme: ThemePref;
+  motion: MotionLevel;
+  scale: ScalePref;
+  highContrast: boolean;
+  reducedMotion: boolean;
+  strongFocus: boolean;
+  keyboardShortcuts: boolean;
+}
 
 export const MOTION_LABELS = ["Reduced", "Subtle", "Balanced", "Expressive"] as const;
-export const DEFAULT_PREFS: Prefs = { theme: "system", motion: 2, scale: "default" };
+export const DEFAULT_PREFS: Prefs = {
+  theme: "system", motion: 2, scale: "default",
+  highContrast: false, reducedMotion: false, strongFocus: false, keyboardShortcuts: true,
+};
 
 // ---------------------------------------------------------------- store
 
@@ -26,7 +37,13 @@ function sanitize(p: Partial<Prefs> | null | undefined): Prefs {
   const theme = p?.theme === "light" || p?.theme === "dark" ? p.theme : "system";
   const scale = p?.scale === "compact" || p?.scale === "large" ? p.scale : "default";
   const motion = ([0, 1, 2, 3] as const).includes(p?.motion as MotionLevel) ? (p!.motion as MotionLevel) : 2;
-  return { theme, scale, motion };
+  return {
+    theme, scale, motion,
+    highContrast: p?.highContrast === true,
+    reducedMotion: p?.reducedMotion === true,
+    strongFocus: p?.strongFocus === true,
+    keyboardShortcuts: p?.keyboardShortcuts !== false,
+  };
 }
 
 function read(): Prefs {
@@ -39,7 +56,7 @@ export const systemReduced = () => !!mq("(prefers-reduced-motion: reduce)")?.mat
 
 /** The level actually in force: the OS reduced-motion setting always wins. */
 export function effectiveMotion(p: Prefs = prefs): MotionLevel {
-  return systemReduced() ? 0 : p.motion;
+  return systemReduced() || p.reducedMotion ? 0 : p.motion;
 }
 
 /** Swap the palette with transitions paused for one frame so 150 ms colour tweens don't smear across the page. */
@@ -59,6 +76,8 @@ function apply(p: Prefs, prev?: Prefs) {
   d.dataset.themePref = p.theme;
   d.dataset.scale = p.scale;
   d.dataset.motion = String(effectiveMotion(p));
+  d.toggleAttribute("data-high-contrast", p.highContrast);
+  d.toggleAttribute("data-strong-focus", p.strongFocus);
   d.style.colorScheme = theme;
   resume?.();
 }

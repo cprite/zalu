@@ -2,6 +2,7 @@
 // Box editor: drag to draw, click to select, change class, delete, confirm. Boxes are in image pixels.
 import { motion } from "motion/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { getPrefs } from "@/lib/prefs";
 import { t } from "@/lib/motion";
 import type { Frame } from "@/lib/frames";
 import type { Annotation } from "@/lib/types";
@@ -22,7 +23,8 @@ export function Annotator({ frame, labels, classes, onChange }: {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (sel == null || (e.target as HTMLElement).tagName === "SELECT") return;
+      if (!getPrefs().keyboardShortcuts || (e.target as HTMLElement).closest?.("header, [role=dialog], [contenteditable]")) return;
+      if (sel == null || (e.target as HTMLElement).closest?.("input, textarea, select")) return;
       if (e.key === "Delete" || e.key === "Backspace") { onChange(labels.filter((_, i) => i !== sel)); setSelState(null); }
     };
     window.addEventListener("keydown", onKey);

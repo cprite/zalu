@@ -4,7 +4,7 @@
 // springs and loading loops the next time anything animates, without touching the screens that use the tokens.
 // <MotionConfig> in app/providers.tsx turns transforms into instant changes for Reduced and for people whose OS asks
 // for less motion; the OS setting always wins over the in-app slider.
-import { AnimatePresence, animate, motion, useInView, useMotionValue, useReducedMotion, useTransform, type Transition } from "motion/react";
+import { AnimatePresence, animate, motion, useInView, useMotionValue, useTransform, type Transition } from "motion/react";
 import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 import { effectiveMotion, getPrefs, usePrefs, type MotionLevel } from "./prefs";
 
@@ -65,9 +65,8 @@ export const rise = {
 
 /** true when the effective level is Reduced (in-app choice or the OS setting). Prefer it to useReducedMotion(). */
 export function useLessMotion(): boolean {
-  const { motion: m } = usePrefs();
-  const os = useReducedMotion();
-  return m === 0 || !!os;
+  const { motion } = usePrefs();
+  return motion === 0;
 }
 
 /** Height reveal for disclosures (Options, Compare models, See mistakes). */
