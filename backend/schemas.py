@@ -146,3 +146,15 @@ class VideoRun(BaseModel):
     gpu_ms_median: Optional[float] = None
     wall_s: Optional[float] = None
     created_at: float = Field(default_factory=now)
+
+
+# ---------- Dashboards (route: Kolyan, planner: Kirill, spec: Codex DashboardSpec v1) ----------
+class DashboardRecord(BaseModel):
+    id: str = Field(default_factory=lambda: new_id("dash"))
+    task_id: str
+    model_id: Optional[str] = None
+    prompt: str
+    result: dict[str, Any]                    # latest PlannerResult (spec, status, ai_generated, limitations, ...)
+    history: list[dict[str, Any]] = []        # [{instruction, status, generator, at}]
+    created_at: float = Field(default_factory=now)
+    updated_at: float = Field(default_factory=now)

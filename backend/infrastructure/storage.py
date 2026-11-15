@@ -10,7 +10,7 @@ from typing import Optional, Type, TypeVar
 from pydantic import BaseModel
 
 DATA_ROOT = Path(os.environ.get("ZALU_DATA", "/data")).resolve()
-KINDS = {"tasks", "datasets", "jobs", "models", "reports", "runs"}
+KINDS = {"tasks", "datasets", "jobs", "models", "reports", "runs", "dashboards"}
 _lock = threading.Lock()
 
 T = TypeVar("T", bound=BaseModel)

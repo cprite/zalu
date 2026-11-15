@@ -224,3 +224,65 @@ def video_infer(body: dict):
     return {"frames": frames, "duration_s": round((n or i) / vfps, 2), "width": w, "height": h,
             "video_fps": vfps, "gpu_ms_median": round(statistics.median(lat), 1) if lat else None,
             "wall_s": round(time.time() - t0, 2)}
+
+
+# ---------- CLIP (video search): image + text embeddings, same ultralytics CLIP fork YOLO-World uses ----------
+_clip_lock = __import__("threading").Lock()
+_clip_cache: dict = {}
+CLIP_MODEL = os.environ.get("ZALU_CLIP_MODEL", "ViT-B/32")
+
+
+def _clip():
+    import clip
+    import torch
+
+    with _clip_lock:
+        if "m" not in _clip_cache:
+            dev = "cuda" if torch.cuda.is_available() else "cpu"
+            # zalu-gpu has the weights in /data/weights/clip (no internet on the GX10); fall back to ~/.cache/clip
+            root = os.environ.get("ZALU_CLIP_DIR", "/data/weights/clip")
+            m, pre = clip.load(CLIP_MODEL, device=dev, download_root=root if os.path.isdir(root) else None)
+            m.eval()
+            _clip_cache.update(m=m, pre=pre, dev=dev)
+    return _clip_cache["m"], _clip_cache["pre"], _clip_cache["dev"]
+
+
+@app.post("/clip/image")
+async def clip_image(images: list[UploadFile] = File(...)):
+    """JPEG/PNG crops -> L2-normalised CLIP image embeddings, in input order."""
+    import io
+
+    import torch
+    from PIL import Image
+
+    raw = [await f.read() for f in images]
+
+    def run():
+        m, pre, dev = _clip()
+        out = []
+        for i in range(0, len(raw), 64):
+            try:
+                x = torch.stack([pre(Image.open(io.BytesIO(b)).convert("RGB")) for b in raw[i:i + 64]]).to(dev)
+            except Exception as e:
+                raise HTTPException(422, f"could not decode image in chunk {i}: {e}")
+            with torch.no_grad():
+                e = m.encode_image(x).float()
+            out += torch.nn.functional.normalize(e, dim=-1).cpu().tolist()
+        return out
+
+    return {"model": CLIP_MODEL, "embeddings": await run_in_threadpool(run)}
+
+
+@app.post("/clip/text")
+def clip_text(body: dict):
+    """{"texts": [...]} -> L2-normalised CLIP text embeddings."""
+    import clip
+    import torch
+
+    texts = body.get("texts") or []
+    if not texts or not all(isinstance(t, str) for t in texts):
+        raise HTTPException(422, "texts: non-empty list of strings required")
+    m, _, dev = _clip()
+    with torch.no_grad():
+        e = m.encode_text(clip.tokenize(texts, truncate=True).to(dev)).float()
+    return {"model": CLIP_MODEL, "embeddings": torch.nn.functional.normalize(e, dim=-1).cpu().tolist()}

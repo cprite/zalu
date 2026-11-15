@@ -36,3 +36,18 @@ Files in `backend/examples/dashboard/` are the unedited API responses:
 - `sources.json`, `summary_*.json`, `timeseries_*.json` (bucket 2 s), `events_*.json`, `model_status.json`.
 
 Tests: `PYTHONPATH=. python -m pytest tests/test_dashboard.py` (3 deterministic tests, no GPU).
+
+## Dashboard planning routes (planner: Kirill `backend/task_engine/dashboard`, spec: Codex DashboardSpec v1)
+| Method | Path | Body | Returns |
+|---|---|---|---|
+| POST | `/api/dashboards` | `{prompt, task_id, model_id?}` | `{id, status, spec, ai_generated, generator, limitations, ...}` (PlannerResult + id) |
+| POST | `/api/dashboards/{id}/refine` | `{instruction}` | same shape, updated spec; never retrains |
+| GET | `/api/dashboards/{id}` | — | latest result + `history` of refinements |
+
+- The planner gets `model.classes` (when `model_id` is given) and this backend's catalogue (`GET /api/dashboard/sources`).
+- LLM = the owner's Claude subscription via the `claude` CLI on nikopi5 (no API key). CLI failures or invalid output
+  raise the planner's `PlannerUnavailable`, so the planner returns its deterministic fallback (`ai_generated: false`).
+- Live results (2026-11-14 ~19:40 UTC, vest task + model_899ac71407), files in `backend/examples/dashboard/planner_*.json`:
+  create 15.6 s, status ok: 2 KPIs → no-vest alert table → live camera → 10-min trend → class split;
+  refine "Make the live camera larger and put it first" 14.3 s, ok; refine "Add a counter for forklifts" 14.0 s,
+  **partial** with the limitation "the model only detects person_with_vest and person_without_vest … retrain".
