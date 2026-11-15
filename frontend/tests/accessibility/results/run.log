@@ -1,0 +1,56 @@
+  [mobile] Describe: 0 violation rule(s): 
+  [desktop] Describe: 0 violation rule(s): 
+  [reduced] Describe: 0 violation rule(s): 
+  [mobile] Upload: 0 violation rule(s): 
+  [reduced] Upload: 0 violation rule(s): 
+  [desktop] Upload: 0 violation rule(s): 
+  [desktop] Upload-preview-dialog: 0 violation rule(s): 
+  [mobile] Prepare: 1 violation rule(s): label-content-name-mismatch(serious,9)
+  [reduced] Prepare: 1 violation rule(s): label-content-name-mismatch(serious,9)
+  [mobile] Train: 0 violation rule(s): 
+  [reduced] Train: 0 violation rule(s): 
+  [mobile] Train-running: 0 violation rule(s): 
+  [desktop] Prepare: 1 violation rule(s): label-content-name-mismatch(serious,9)
+  [reduced] Train-running: 0 violation rule(s): 
+  [desktop] Train: 0 violation rule(s): 
+  [desktop] Train-running: 0 violation rule(s): 
+  [reduced] Train-complete: 0 violation rule(s): 
+  [mobile] Train-complete: 0 violation rule(s): 
+  [mobile] Verify: 0 violation rule(s): 
+  [reduced] Verify: 0 violation rule(s): 
+  [desktop] Train-complete: 0 violation rule(s): 
+  [reduced] Verify-results: 1 violation rule(s): heading-order(moderate,1)
+  [mobile] Verify-results: 1 violation rule(s): heading-order(moderate,1)
+  [desktop] Verify: 0 violation rule(s): 
+  [reduced] Verify-details: 1 violation rule(s): heading-order(moderate,1)
+  [mobile] Verify-details: 1 violation rule(s): heading-order(moderate,1)
+  [reduced] Deploy-dashboard: 0 violation rule(s): 
+  [mobile] Deploy-dashboard: 0 violation rule(s): 
+  [desktop] Verify-results: 1 violation rule(s): heading-order(moderate,1)
+  [reduced] Deploy-inference: 0 violation rule(s): 
+  [mobile] Deploy-inference: 0 violation rule(s): 
+  [desktop] Verify-details: 1 violation rule(s): heading-order(moderate,1)
+  [desktop] Deploy-dashboard: 0 violation rule(s): 
+  [desktop] Deploy-inference: 0 violation rule(s): 
+{
+ "label-content-name-mismatch": {
+  "impact": "serious",
+  "where": [
+   "desktop:Prepare(9)",
+   "mobile:Prepare(9)",
+   "reduced:Prepare(9)"
+  ]
+ },
+ "heading-order": {
+  "impact": "moderate",
+  "where": [
+   "desktop:Verify-results(1)",
+   "desktop:Verify-details(1)",
+   "mobile:Verify-results(1)",
+   "mobile:Verify-details(1)",
+   "reduced:Verify-results(1)",
+   "reduced:Verify-details(1)"
+  ]
+ }
+}
+exit 1

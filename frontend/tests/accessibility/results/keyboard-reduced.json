@@ -1,0 +1,50 @@
+[
+ {
+  "screen": "Train-running",
+  "check": "live regions / progressbar semantics",
+  "regions": [
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Overall training progress"
+   },
+   {
+    "role": "status",
+    "live": null,
+    "text": "Epoch 8 of 30",
+    "valuetext": null,
+    "name": null
+   },
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Trained \u00b7 real footage only progress"
+   },
+   {
+    "role": "status",
+    "live": null,
+    "text": "Epoch 8 of 30",
+    "valuetext": null,
+    "name": null
+   },
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Trained \u00b7 real + synthetic progress"
+   }
+  ]
+ },
+ {
+  "screen": "Train-running",
+  "check": "running animations (prefers-reduced-motion=reduce)",
+  "count": 0,
+  "infinite": 0,
+  "animations": []
+ }
+]

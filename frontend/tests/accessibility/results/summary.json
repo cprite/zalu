@@ -1,0 +1,37 @@
+{
+ "url": "http://127.0.0.1:3000",
+ "modes": [
+  "desktop",
+  "mobile",
+  "reduced"
+ ],
+ "at": "2026-11-15T10:49:34Z",
+ "rules": {
+  "label-content-name-mismatch": {
+   "impact": "serious",
+   "help": "Elements must have their visible text as part of their accessible name",
+   "wcag": [
+    "wcag21a",
+    "wcag253"
+   ],
+   "where": [
+    "desktop:Prepare(9)",
+    "mobile:Prepare(9)",
+    "reduced:Prepare(9)"
+   ]
+  },
+  "heading-order": {
+   "impact": "moderate",
+   "help": "Heading levels should only increase by one",
+   "wcag": [],
+   "where": [
+    "desktop:Verify-results(1)",
+    "desktop:Verify-details(1)",
+    "mobile:Verify-results(1)",
+    "mobile:Verify-details(1)",
+    "reduced:Verify-results(1)",
+    "reduced:Verify-details(1)"
+   ]
+  }
+ }
+}

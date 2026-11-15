@@ -1,0 +1,126 @@
+[
+ {
+  "screen": "Train-running",
+  "check": "live regions / progressbar semantics",
+  "regions": [
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Overall training progress"
+   },
+   {
+    "role": "status",
+    "live": null,
+    "text": "Epoch 2 of 30",
+    "valuetext": null,
+    "name": null
+   },
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Trained \u00b7 real footage only progress"
+   },
+   {
+    "role": "status",
+    "live": null,
+    "text": "Epoch 2 of 30",
+    "valuetext": null,
+    "name": null
+   },
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Trained \u00b7 real + synthetic progress"
+   }
+  ]
+ },
+ {
+  "screen": "Train-running",
+  "check": "running animations (prefers-reduced-motion=no-preference)",
+  "count": 15,
+  "infinite": 15,
+  "animations": [
+   {
+    "name": "c1PWcW_flow",
+    "infinite": true,
+    "target": "c1PWcW_flow"
+   },
+   {
+    "name": "c1PWcW_flow",
+    "infinite": true,
+    "target": "c1PWcW_flow"
+   },
+   {
+    "name": "c1PWcW_flow",
+    "infinite": true,
+    "target": "c1PWcW_flow"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   }
+  ]
+ }
+]

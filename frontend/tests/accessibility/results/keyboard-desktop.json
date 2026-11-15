@@ -1,0 +1,1259 @@
+[
+ {
+  "screen": "Describe",
+  "trap": false,
+  "tab_stops": 9,
+  "no_visible_indicator": [
+   {
+    "tag": "textarea",
+    "role": null,
+    "name": "composer-text",
+    "focusVisible": true,
+    "indicator": false,
+    "outline": "none 3px rgb(23, 32, 51)",
+    "w": 690,
+    "h": 34,
+    "key": "07227029044114575",
+    "i": 2
+   }
+  ],
+  "below_24px_target": [],
+  "stops": [
+   {
+    "tag": "a",
+    "role": null,
+    "name": "Skip to content",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 131,
+    "h": 39,
+    "key": "5305092518563973",
+    "i": 0
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Data source: sample mode. Change",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 133,
+    "h": 32,
+    "key": "7571805569737178",
+    "i": 1
+   },
+   {
+    "tag": "textarea",
+    "role": null,
+    "name": "composer-text",
+    "focusVisible": true,
+    "indicator": false,
+    "outline": "none 3px rgb(23, 32, 51)",
+    "w": 690,
+    "h": 34,
+    "key": "07227029044114575",
+    "i": 2
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Attach images or video",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 36,
+    "h": 36,
+    "key": "19916390086839753",
+    "i": 3
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Find people without safety goggles",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 242,
+    "h": 32,
+    "key": "9826300336199348",
+    "i": 4
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Which restaurant tables are free",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 223,
+    "h": 32,
+    "key": "9264883808461043",
+    "i": 5
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Alert me when someone isn't wearing a hi-vis vest",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 336,
+    "h": 32,
+    "key": "04060543074002765",
+    "i": 6
+   },
+   {
+    "i": 7,
+    "tag": "body"
+   },
+   {
+    "tag": "a",
+    "role": null,
+    "name": "Skip to content",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 131,
+    "h": 39,
+    "key": "5305092518563973",
+    "i": 8
+   }
+  ]
+ },
+ {
+  "screen": "Describe",
+  "check": "composer reachable + typed by keyboard",
+  "value_ok": true
+ },
+ {
+  "screen": "Upload",
+  "trap": false,
+  "tab_stops": 8,
+  "no_visible_indicator": [],
+  "below_24px_target": [],
+  "stops": [
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Attach images or video",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 36,
+    "h": 36,
+    "key": "36909482693075535",
+    "i": 0
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Record with my camera",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 159,
+    "h": 29,
+    "key": "20795673057955522",
+    "i": 1
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Use sample frames",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 130,
+    "h": 29,
+    "key": "5305945125948841",
+    "i": 2
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "\u2190 Change the task",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 142,
+    "h": 32,
+    "key": "7675552870658702",
+    "i": 3
+   },
+   {
+    "i": 4,
+    "tag": "body"
+   },
+   {
+    "tag": "a",
+    "role": null,
+    "name": "Skip to content",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 131,
+    "h": 39,
+    "key": "5305092518563973",
+    "i": 5
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Data source: sample mode. Change",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 133,
+    "h": 32,
+    "key": "7571805569737178",
+    "i": 6
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Attach images or video",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 36,
+    "h": 36,
+    "key": "36909482693075535",
+    "i": 7
+   }
+  ]
+ },
+ {
+  "screen": "Upload",
+  "check": "file picker without drag-and-drop",
+  "file_input": {
+   "display": "none",
+   "visibility": "visible",
+   "tabindex": 0,
+   "hidden": true,
+   "hasLabel": false,
+   "labelText": null
+  },
+  "keyboard_file_chooser": {
+   "opened_from": "Attach images or video (Enter)",
+   "ok": true,
+   "multiple": true
+  },
+  "file_attached": true
+ },
+ {
+  "screen": "Upload-preview-dialog",
+  "check": "focus contained while open, Escape closes, focus restored",
+  "focus_never_reached_page_behind_dialog": true,
+  "focus_restored_to_tile": true
+ },
+ {
+  "screen": "Prepare",
+  "trap": false,
+  "tab_stops": 48,
+  "no_visible_indicator": [],
+  "below_24px_target": [],
+  "stops": [
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 3: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9972399904560927",
+    "i": 0
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 4: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "48744229216544765",
+    "i": 1
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 5: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "16737477611510976",
+    "i": 2
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 6: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9933641687906849",
+    "i": 3
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 7: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "34253652804960644",
+    "i": 4
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 8: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "985443073899182",
+    "i": 5
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 9: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "0053899975457005755",
+    "i": 6
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 10: 2 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "36656862181937633",
+    "i": 7
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 11: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "06659839618981922",
+    "i": 8
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 12: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "2184953718661211",
+    "i": 9
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 13: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9988701717293291",
+    "i": 10
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 14: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "7521320135137927",
+    "i": 11
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 15: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9281209167179628",
+    "i": 12
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 16: 2 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "8017451448921795",
+    "i": 13
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 17: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "4204002590711251",
+    "i": 14
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 18: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "37049796431574156",
+    "i": 15
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 19: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9734161246417992",
+    "i": 16
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 20: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "4154786674787406",
+    "i": 17
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 21: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "23066728033286266",
+    "i": 18
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 22: 2 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "1413767046411737",
+    "i": 19
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 23: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "26662297764539566",
+    "i": 20
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 24: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9009553671550493",
+    "i": 21
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 25: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "27076124877824115",
+    "i": 22
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 26: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "02397654561388618",
+    "i": 23
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 27: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "7912162783514469",
+    "i": 24
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 28: 2 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "3625155077162896",
+    "i": 25
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 29: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "6482896392039302",
+    "i": 26
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 30: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "48535162914543284",
+    "i": 27
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 31: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "17941287830795816",
+    "i": 28
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 32: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "241442582118925",
+    "i": 29
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 33: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "24037908181704648",
+    "i": 30
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 34: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "30765237620388153",
+    "i": 31
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 35: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "1747798030130635",
+    "i": 32
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 36: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "47391848832764594",
+    "i": 33
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "\u2190 Change footage",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 158,
+    "h": 40,
+    "key": "05316433413170396",
+    "i": 34
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Looks good, train \u2192",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 166,
+    "h": 40,
+    "key": "003759598997722713",
+    "i": 35
+   },
+   {
+    "i": 36,
+    "tag": "body"
+   },
+   {
+    "tag": "a",
+    "role": null,
+    "name": "Skip to content",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 131,
+    "h": 39,
+    "key": "5305092518563973",
+    "i": 37
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Data source: sample mode. Change",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 133,
+    "h": 32,
+    "key": "7571805569737178",
+    "i": 38
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Train\n, available",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 183,
+    "h": 39,
+    "key": "199429010347128",
+    "i": 39
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Previous frame",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 37,
+    "h": 32,
+    "key": "0018093597544656115",
+    "i": 40
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Next frame",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 37,
+    "h": 32,
+    "key": "006851708999933259",
+    "i": 41
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "no_goggles",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 109,
+    "h": 32,
+    "key": "9953425916756491",
+    "i": 42
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "goggles",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 87,
+    "h": 32,
+    "key": "7320460511102561",
+    "i": 43
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Box 1: no_goggles",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 148,
+    "h": 32,
+    "key": "9082123775150892",
+    "i": 44
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 1: nothing labelled",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "5068468690173471",
+    "i": 45
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 2: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9653377194310317",
+    "i": 46
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Frame 3: 1 box(es)",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 128,
+    "h": 80,
+    "key": "9972399904560927",
+    "i": 47
+   }
+  ]
+ },
+ {
+  "screen": "Prepare",
+  "check": "non-visual alternative to bounding boxes",
+  "box_elements": 32,
+  "tables": 0,
+  "lists_with_labels": 1
+ },
+ {
+  "screen": "Train-running",
+  "check": "live regions / progressbar semantics",
+  "regions": [
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Overall training progress"
+   },
+   {
+    "role": "status",
+    "live": null,
+    "text": "Epoch 8 of 30",
+    "valuetext": null,
+    "name": null
+   },
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Trained \u00b7 real footage only progress"
+   },
+   {
+    "role": "status",
+    "live": null,
+    "text": "Epoch 8 of 30",
+    "valuetext": null,
+    "name": null
+   },
+   {
+    "role": "progressbar",
+    "live": null,
+    "text": "",
+    "valuetext": null,
+    "name": "Trained \u00b7 real + synthetic progress"
+   }
+  ]
+ },
+ {
+  "screen": "Train-running",
+  "check": "running animations (prefers-reduced-motion=no-preference)",
+  "count": 17,
+  "infinite": 15,
+  "animations": [
+   {
+    "name": "c1PWcW_flow",
+    "infinite": true,
+    "target": "c1PWcW_flow"
+   },
+   {
+    "name": "c1PWcW_flow",
+    "infinite": true,
+    "target": "c1PWcW_flow"
+   },
+   {
+    "name": "c1PWcW_flow",
+    "infinite": true,
+    "target": "c1PWcW_flow"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": true,
+    "target": "dot-i"
+   },
+   {
+    "name": "Animation",
+    "infinite": false,
+    "target": "SPAN"
+   },
+   {
+    "name": "Animation",
+    "infinite": false,
+    "target": "SPAN"
+   }
+  ]
+ },
+ {
+  "screen": "Verify-results",
+  "trap": false,
+  "tab_stops": 12,
+  "no_visible_indicator": [],
+  "below_24px_target": [],
+  "stops": [
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Show details",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 106,
+    "h": 29,
+    "key": "937373342953857",
+    "i": 0
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Compare models",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 135,
+    "h": 29,
+    "key": "2071239698844648",
+    "i": 1
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "See mistakes",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 110,
+    "h": 29,
+    "key": "5902358825407759",
+    "i": 2
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "\u2190 Training",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 104,
+    "h": 40,
+    "key": "17145370758666478",
+    "i": 3
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Test other footage",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 158,
+    "h": 40,
+    "key": "011761414781299662",
+    "i": 4
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Deploy this model \u2192",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 170,
+    "h": 40,
+    "key": "7721647441869294",
+    "i": 5
+   },
+   {
+    "i": 6,
+    "tag": "body"
+   },
+   {
+    "tag": "a",
+    "role": null,
+    "name": "Skip to content",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 131,
+    "h": 39,
+    "key": "5305092518563973",
+    "i": 7
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Data source: sample mode. Change",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 133,
+    "h": 32,
+    "key": "7571805569737178",
+    "i": 8
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Describe\n, completed",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 183,
+    "h": 39,
+    "key": "6273081353310628",
+    "i": 9
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Deploy\n, available",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 183,
+    "h": 39,
+    "key": "5103583190118774",
+    "i": 10
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Show details",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 106,
+    "h": 29,
+    "key": "937373342953857",
+    "i": 11
+   }
+  ]
+ },
+ {
+  "screen": "Deploy-dashboard",
+  "trap": false,
+  "tab_stops": 11,
+  "no_visible_indicator": [
+   {
+    "tag": "input",
+    "role": null,
+    "name": "dashboard-refinement",
+    "focusVisible": true,
+    "indicator": false,
+    "outline": "none 3px rgb(23, 32, 51)",
+    "w": 614,
+    "h": 36,
+    "key": "42738863802769766",
+    "i": 4
+   }
+  ],
+  "below_24px_target": [],
+  "stops": [
+   {
+    "tag": "button",
+    "role": null,
+    "name": "\u2190 Evaluation",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 106,
+    "h": 32,
+    "key": "9015915789013884",
+    "i": 0
+   },
+   {
+    "tag": "select",
+    "role": null,
+    "name": "Zero-shot baseline (no training)\nTrained \u00b7 real footage only",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "none 3px rgb(23, 32, 51)",
+    "w": 319,
+    "h": 40,
+    "key": "6584154419090716",
+    "i": 1
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "\u25b6\nRun sample inference",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 199,
+    "h": 40,
+    "key": "36384389779572035",
+    "i": 2
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Export dashboard",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 154,
+    "h": 40,
+    "key": "6230200829199797",
+    "i": 3
+   },
+   {
+    "tag": "input",
+    "role": null,
+    "name": "dashboard-refinement",
+    "focusVisible": true,
+    "indicator": false,
+    "outline": "none 3px rgb(23, 32, 51)",
+    "w": 614,
+    "h": 36,
+    "key": "42738863802769766",
+    "i": 4
+   },
+   {
+    "i": 5,
+    "tag": "body"
+   },
+   {
+    "tag": "a",
+    "role": null,
+    "name": "Skip to content",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 131,
+    "h": 39,
+    "key": "5305092518563973",
+    "i": 6
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Data source: sample mode. Change",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 133,
+    "h": 32,
+    "key": "7571805569737178",
+    "i": 7
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Describe\n, completed",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 183,
+    "h": 39,
+    "key": "6273081353310628",
+    "i": 8
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "Train\n, completed",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 183,
+    "h": 39,
+    "key": "199429010347128",
+    "i": 9
+   },
+   {
+    "tag": "button",
+    "role": null,
+    "name": "\u2190 Evaluation",
+    "focusVisible": true,
+    "indicator": true,
+    "outline": "solid 3px rgb(49, 92, 253)",
+    "w": 106,
+    "h": 32,
+    "key": "9015915789013884",
+    "i": 10
+   }
+  ]
+ }
+]
