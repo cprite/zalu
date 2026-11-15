@@ -437,3 +437,9 @@ def get_dashboard(dashboard_id: str):
     rec = _get("dashboards", dashboard_id, schemas.DashboardRecord)
     return {"id": rec.id, "task_id": rec.task_id, "model_id": rec.model_id, "prompt": rec.prompt,
             "history": rec.history, **rec.result}
+
+
+# ---------- video search (Kolyan): batch upload -> GX10 person tracklets -> CLIP text search ----------
+from backend.video_search.api import router as video_search_router  # noqa: E402
+
+app.include_router(video_search_router, prefix="/api/video-search", dependencies=[Depends(auth)])

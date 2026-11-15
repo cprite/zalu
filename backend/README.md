@@ -57,6 +57,7 @@ train_seconds, ONNX check, paths. Benchmarks: `backend/BENCHMARK.md`.
 | POST | /api/datasets | multipart `task_id` + `files[]` → DatasetManifest (needs Data Engine) |
 | POST | /api/datasets/register | `{"data_yaml": "/data/...", "task_id"?, "variant"?}` or a full DatasetManifest |
 | POST | /api/datasets/{id}/labels | label corrections (Data Engine) |
+| * | /api/video-search/... | batch video search (<=10 recordings, person tracklets, CLIP text search); see `backend/video_search/STATUS.md` |
 | POST | /api/training | `{"dataset_id", "base_model": "yolo11n.pt", "epochs", "imgsz", "batch"}` → TrainingJob |
 | GET | /api/jobs/{id} | status queued/running/succeeded/failed, progress 0..1, message, error, result_id |
 | POST | /api/models/zero-shot | `{"classes": [...]}` → pretrained open-vocabulary baseline (YOLOE) |
