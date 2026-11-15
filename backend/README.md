@@ -1,8 +1,8 @@
 # Backend (owner: Kolyan)
 
 ## Where things run (2026-11-14, owner's decision)
-- **nikopi5**: the app (`backend/main.py`, systemd user unit `zalu-api`, 127.0.0.1:9100, public via Tailscale Funnel
-  `https://nikopi5.tail4aaac7.ts.net:10000`). API, auth, metadata (`~/zalu-app/data`), Task Engine on the owner's
+- **nikopi5**: the app (`backend/main.py`, systemd user unit `zalu-api`, 127.0.0.1:9100; was public via Tailscale Funnel
+  during the event, now offline). API, auth, metadata (`~/zalu-app/data`), Task Engine on the owner's
   Claude subscription through the local `claude` CLI (no API key). Keys (`ZALU_TOKEN`, `FAL_KEY`) only here.
   Install/restart: `backend/run_nikopi5.sh`.
 - **GX10 = external GPU only**: `backend/gpu_worker.py` in Docker `zalu-gpu` (127.0.0.1:9200), reached through the
