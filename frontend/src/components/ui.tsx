@@ -2,7 +2,7 @@
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { ApiError } from "@/lib/api";
-import { t } from "@/lib/motion";
+import { Dots, SPRING, t } from "@/lib/motion";
 
 export function SampleBadge({ show = true, label = "Sample data" }: { show?: boolean; label?: string }) {
   if (!show) return null;
@@ -26,7 +26,7 @@ export function Banner({ kind = "info", children, id }: { kind?: Kind; children:
 }
 
 export function Spinner() {
-  return <span className="spin" role="status" aria-label="Loading" />;
+  return <Dots label="Loading…" />;
 }
 
 export function ErrorBox({ error }: { error: unknown }) {
@@ -70,7 +70,8 @@ export function Progress({ value, label }: { value: number; label: string }) {
   const pctv = Math.round(value * 100);
   return (
     <div className="bar" role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pctv}>
-      <motion.span initial={false} animate={{ width: `${pctv}%` }} transition={t("slow")} />
+      {/* scaleX (compositor-only), spring-smoothed toward the real backend value */}
+      <motion.span className="bar-fill" initial={false} animate={{ scaleX: Math.max(0, Math.min(1, value)) }} transition={SPRING} />
     </div>
   );
 }

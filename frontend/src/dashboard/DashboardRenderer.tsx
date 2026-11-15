@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { AnimatedNumber, t } from "@/lib/motion";
+import { AnimatedNumber, Dots, t } from "@/lib/motion";
 import type { DashboardSpec, Widget } from "../../../shared/dashboard_spec/dashboard-spec";
 import { readMetric, type FrameSample } from "./session";
 import "./dashboard.css";
@@ -20,10 +20,24 @@ type Props = {
 const label = (value: string) => value.replaceAll("_", " ");
 const format = (value: number) => new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 }).format(value);
 
+/** Empty / waiting state: dots while inference is genuinely running, otherwise a quiet placeholder icon. */
+function Empty({ waiting = false, children }: { waiting?: boolean; children: string }) {
+  return (
+    <div className="dash-empty" role="status">
+      {waiting ? <Dots /> : (
+        <svg className="dash-empty-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3 3" aria-hidden>
+          <rect x="3.5" y="5.5" width="17" height="13" rx="3" />
+        </svg>
+      )}
+      <span>{waiting ? "Waiting for inference…" : children}</span>
+    </div>
+  );
+}
+
 function Trend({ points, windowSeconds, now }: { points: { at: number; value: number | null }[]; windowSeconds: number; now: number }) {
   const visible = points.filter((point) => point.at >= now - windowSeconds * 1000);
   const values = visible.flatMap((point) => point.value === null ? [] : [point.value]);
-  if (!values.length) return <p className="dash-empty">No readings in this window.</p>;
+  if (!values.length) return <Empty>No readings in this window.</Empty>;
   const max = Math.max(1, ...values);
   const marks = visible.map(({ at, value }) => value === null ? null : {
     x: 12 + 336 * (1 - Math.max(0, now - at) / (windowSeconds * 1000)),
@@ -36,7 +50,7 @@ function Trend({ points, windowSeconds, now }: { points: { at: number; value: nu
       <svg viewBox="0 0 360 100" role="img" aria-label={`Metric readings over the last ${windowSeconds} seconds`}>
         {[16, 51, 86].map((y) => <line key={y} x1="12" x2="348" y1={y} y2={y} stroke="var(--color-line)" />)}
         {lines.map(([a, b], i) => <line key={i} x1={a.x} x2={b.x} y1={a.y} y2={b.y} stroke="var(--viz-1, var(--color-brand))" strokeWidth="2" strokeLinecap="round" />)}
-        {lastMark && <circle cx={lastMark.x} cy={lastMark.y} r="4" fill="var(--viz-1, var(--color-brand))" stroke="var(--color-surface)" strokeWidth="2" />}
+        {lastMark && <motion.circle initial={false} animate={{ cx: lastMark.x, cy: lastMark.y }} transition={t("fast")} r="4" fill="var(--viz-1, var(--color-brand))" stroke="var(--color-surface)" strokeWidth="2" />}
       </svg>
       <figcaption>Last {windowSeconds}s <span>Range 0–{format(max)}</span></figcaption>
     </figure>
@@ -63,12 +77,12 @@ function Content({ widget, spec, classes, samples, preview, loading, sampleMode,
           </svg>
         )}
       </div>
-    ) : <p className="dash-empty">{loading ? "Waiting for inference…" : "Start the camera or choose an image."}</p>;
+    ) : <Empty waiting={loading}>Start the camera or choose an image.</Empty>;
   }
   if (widget.type === "kpi" || widget.type === "time_series") {
     const id = widget.config.metric_id;
     const metric = spec.metrics.find((item) => item.id === id && item.source_id === widget.source_id);
-    if (!metric) return <p className="dash-empty">Metric unavailable.</p>;
+    if (!metric) return <Empty>Metric unavailable.</Empty>;
     if (widget.type === "time_series") {
       return <Trend now={now} windowSeconds={widget.config.window_seconds} points={samples.map((sample) => ({
         at: sample.at, value: readMetric(metric, sample.result, classes).value,
@@ -77,26 +91,26 @@ function Content({ widget, spec, classes, samples, preview, loading, sampleMode,
     const reading = readMetric(metric, result, classes);
     return reading.status === "available"
       ? <div className="dash-kpi"><AnimatedNumber value={reading.value} format={format} duration={0.15} />{metric.operation === "inference_latency_ms" && <small> ms</small>}</div>
-      : <p className="dash-empty">{loading ? "Waiting for inference…" : "Metric unavailable."}</p>;
+      : <Empty waiting={loading}>Metric unavailable.</Empty>;
   }
-  if (!result) return <p className="dash-empty">{loading ? "Waiting for inference…" : "No inference results yet."}</p>;
+  if (!result) return <Empty waiting={loading}>No inference results yet.</Empty>;
   if (widget.type === "detection_table") {
     if (widget.config.rows === "events") {
-      if (!latest.eventsEnabled) return <p className="dash-empty">Event detection is off.</p>;
+      if (!latest.eventsEnabled) return <Empty>Event detection is off.</Empty>;
       const events = result.events.slice(0, widget.config.max_rows);
       return events.length ? <ul className="dash-events">{events.map((event, i) => <li key={i}>{label(event)}</li>)}</ul>
-        : <p className="dash-empty">No events in the latest frame.</p>;
+        : <Empty>No events in the latest frame.</Empty>;
     }
     const rows = result.detections.slice(0, widget.config.max_rows);
     return rows.length ? (
       <div className="dash-table"><table><thead><tr><th>Class</th><th>Confidence</th></tr></thead><tbody>
         {rows.map((detection, i) => <tr key={i}><td>{label(detection.cls)}</td><td>{format(100 * detection.score)}%</td></tr>)}
       </tbody></table></div>
-    ) : <p className="dash-empty">No detections in the latest frame.</p>;
+    ) : <Empty>No detections in the latest frame.</Empty>;
   }
   const counts = new Map<string, number>();
   for (const { cls } of result.detections) counts.set(cls, (counts.get(cls) ?? 0) + 1);
-  if (!counts.size) return <p className="dash-empty">No classes detected in the latest frame.</p>;
+  if (!counts.size) return <Empty>No classes detected in the latest frame.</Empty>;
   return (
     <ul className="dash-bars">{[...counts].sort(([a], [b]) => a.localeCompare(b)).map(([cls, count]) => (
       <li key={cls}><span>{label(cls)}</span><meter min={0} max={result.detections.length} value={count} aria-label={label(cls)} /><strong>{count}</strong></li>

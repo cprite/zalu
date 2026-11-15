@@ -7,7 +7,7 @@ import { ErrorBox } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { makeSampleFrames } from "@/lib/sampleFrames";
-import { TextShimmer, reveal, t } from "@/lib/motion";
+import { StatusLine, reveal, t } from "@/lib/motion";
 
 /** Stage 1 · Describe → footage. Same message-box feel, files only. */
 export function Upload() {
@@ -47,7 +47,8 @@ export function Upload() {
       <AnimatePresence initial={false}>
         {busy && (
           <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
-            <TextShimmer>Uploading and labelling your footage. Longer videos take a few minutes.</TextShimmer>
+            <StatusLine state="working">Uploading and labelling your footage…</StatusLine>
+            <span className="tiny muted" style={{ display: "block", marginTop: 4 }}>Longer videos take a few minutes.</span>
           </motion.p>
         )}
       </AnimatePresence>

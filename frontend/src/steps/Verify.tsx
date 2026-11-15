@@ -10,7 +10,7 @@ import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { makeSampleFrames } from "@/lib/sampleFrames";
 import { pct } from "@/lib/explain";
-import { TextShimmer, reveal, t } from "@/lib/motion";
+import { Disclosure, EXIT, StatusLine, reveal, t } from "@/lib/motion";
 import type { DatasetManifest, EvaluationReport } from "@/lib/types";
 
 export function Verify() {
@@ -77,7 +77,7 @@ export function Verify() {
           <AnimatePresence initial={false}>
             {busy && (
               <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
-                <TextShimmer>{busy === "upload" ? "Uploading test footage…" : "Testing every model on your new footage…"}</TextShimmer>
+                <StatusLine state="working">{busy === "upload" ? "Uploading test footage…" : "Testing every model on your new footage…"}</StatusLine>
               </motion.p>
             )}
           </AnimatePresence>
@@ -114,15 +114,15 @@ export function Verify() {
             <>
               {sel && <ReportCard e={sel} onDownload={download} />}
               <div className="actions-center">
-                <button className="toggle" aria-expanded={more === "compare"} onClick={() => setMore(more === "compare" ? "" : "compare")}>Compare models</button>
-                <button className="toggle" aria-expanded={more === "mistakes"} onClick={() => setMore(more === "mistakes" ? "" : "mistakes")}>See mistakes</button>
+                <Disclosure open={more === "compare"} onToggle={() => setMore(more === "compare" ? "" : "compare")} controls="verify-more">Compare models</Disclosure>
+                <Disclosure open={more === "mistakes"} onToggle={() => setMore(more === "mistakes" ? "" : "mistakes")} controls="verify-more">See mistakes</Disclosure>
               </div>
               <AnimatePresence mode="wait" initial={false}>
                 {more === "compare" && (
-                  <motion.div key="compare" {...reveal} style={{ overflow: "hidden" }}><Comparison rep={s.report} selected={selected} onSelect={setSelected} /></motion.div>
+                  <motion.div key="compare" id="verify-more" {...reveal} exit={{ ...reveal.exit, transition: EXIT }} style={{ overflow: "hidden" }}><Comparison rep={s.report} selected={selected} onSelect={setSelected} /></motion.div>
                 )}
                 {more === "mistakes" && sel && (
-                  <motion.div key="mistakes" {...reveal} style={{ overflow: "hidden" }}><FailureGallery e={sel} imageSize={s.report.image_size} /></motion.div>
+                  <motion.div key="mistakes" id="verify-more" {...reveal} exit={{ ...reveal.exit, transition: EXIT }} style={{ overflow: "hidden" }}><FailureGallery e={sel} imageSize={s.report.image_size} /></motion.div>
                 )}
               </AnimatePresence>
             </>

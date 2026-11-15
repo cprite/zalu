@@ -88,8 +88,11 @@ export function Annotator({ frame, labels, classes, onChange }: {
             const unsure = l.source === "auto" && (l.score ?? 1) < 0.5;
             return (
               <g key={i} onPointerDown={(e) => { e.stopPropagation(); setSel(i); }} style={{ cursor: "pointer" }}>
-                <rect x={x1} y={y1} width={x2 - x1} height={y2 - y1} fill={i === sel ? `${col}33` : "transparent"} stroke={col}
-                  strokeWidth={i === sel ? sw * 1.8 : sw} strokeDasharray={unsure ? `${sw * 4} ${sw * 3}` : undefined} />
+                {/* boxes settle in from their own centre; the selected one thickens smoothly */}
+                <motion.rect x={x1} y={y1} width={x2 - x1} height={y2 - y1} fill={i === sel ? `${col}33` : "transparent"} stroke={col}
+                  strokeDasharray={unsure ? `${sw * 4} ${sw * 3}` : undefined}
+                  style={{ transformBox: "fill-box", transformOrigin: "center" }}
+                  initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1, strokeWidth: i === sel ? sw * 1.8 : sw }} transition={t("base")} />
                 <text x={x1 + 4} y={Math.max(14, y1 - 6)} className="box-label" style={{ fontSize: frame.width / 55 }}>
                   {l.cls}{l.source === "auto" && l.score != null ? ` ${Math.round(l.score * 100)}%` : l.source === "human" ? " ✓" : ""}
                 </text>
