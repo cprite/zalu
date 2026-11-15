@@ -1,8 +1,13 @@
 "use client";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { METRIC_HELP, REASONS, VERDICT, pct, variantLabel } from "@/lib/explain";
 import type { Check, ModelEvaluation } from "@/lib/types";
+import { AnimatedNumber, reveal, t } from "@/lib/motion";
 import { CiBar, Kpi, SampleBadge } from "./ui";
+
+const percent = (x: number) => `${Math.round(x)}%`;
+const whole = (x: number) => String(Math.round(x));
 
 /** Model Report Card: everything needed to decide "deploy or not", with limitations stated next to the numbers. */
 export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?: () => void }) {
@@ -22,25 +27,27 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
         <span className="small muted">{e.test.n_images} new frames</span>
       </div>
 
-      <div className={`verdict ${r.verdict}`}>
-        <div className="icon">{v.icon}</div>
+      <motion.div className={`verdict ${r.verdict}`} initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={t("slow")}>
+        <motion.div className="icon" initial={{ scale: 0.6 }} animate={{ scale: 1 }} transition={t("slow", { delay: 0.06 })}>{v.icon}</motion.div>
         <div className="col" style={{ gap: 2 }}>
           <b>{v.label}</b>
           <span className="small">{r.summary}</span>
         </div>
-      </div>
+      </motion.div>
 
       <div className="kpis">
-        <Kpi k="Objects found" v={pct(o.recall)} ci={ci(o.recall_ci95)} />
-        <Kpi k="Alerts that are real" v={pct(o.precision)} ci={ci(o.precision_ci95)} />
-        <Kpi k="Missed" v={o.fn} ci={`${o.fp} false alarms`} />
-        <Kpi k="Speed" v={e.performance?.fps ? `${Math.round(e.performance.fps)} FPS` : "—"} ci={e.performance ? `${e.performance.latency_ms_median} ms per frame` : "not measured"} />
+        {/* numbers count up to the measured values; null stays "—" (never invented) */}
+        <Kpi k="Objects found" v={o.recall == null ? "—" : <AnimatedNumber value={o.recall * 100} format={percent} />} ci={ci(o.recall_ci95)} />
+        <Kpi k="Alerts that are real" v={o.precision == null ? "—" : <AnimatedNumber value={o.precision * 100} format={percent} />} ci={ci(o.precision_ci95)} />
+        <Kpi k="Missed" v={<AnimatedNumber value={o.fn} format={whole} />} ci={`${o.fp} false alarms`} />
+        <Kpi k="Speed" v={e.performance?.fps ? <AnimatedNumber value={e.performance.fps} format={(x) => `${Math.round(x)} FPS`} /> : "—"} ci={e.performance ? `${e.performance.latency_ms_median} ms per frame` : "not measured"} />
       </div>
 
       <div className="actions-center">
         <button className="toggle" aria-expanded={details} onClick={() => setDetails(!details)}>{details ? "Hide details" : "Show details"}</button>
       </div>
-      {details && (<>
+      <AnimatePresence initial={false}>
+      {details && (<motion.div key="details" className="col" style={{ gap: 18, overflow: "hidden" }} {...reveal}>
       <div className="tiny muted mono" style={{ textAlign: "center" }}>version {e.model?.id} · base {e.model?.base_model} · tested on {e.test.dataset_id} ({e.test.split ?? "test"} split)
         {onDownload && <> · <button className="toggle tiny" onClick={onDownload}>Download JSON</button></>}</div>
 
@@ -94,7 +101,8 @@ export function ReportCard({ e, onDownload }: { e: ModelEvaluation; onDownload?:
           )}
         </div>
       </div>
-      </>)}
+      </motion.div>)}
+      </AnimatePresence>
     </div>
   );
 }

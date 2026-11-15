@@ -1,26 +1,29 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Annotator, classColor } from "@/components/Annotator";
 import { Banner, ErrorBox, SampleBadge, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
+import { TextShimmer, t } from "@/lib/motion";
 import type { Annotation } from "@/lib/types";
 
 /** Stage 1 · Describe → prepare / verify the auto-labels. One primary action: continue to training. */
 export function Prepare() {
   const { api } = useApi();
   const { s, set } = useFlow();
-  const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<unknown>(null);
   const [saving, setSaving] = useState(false);
   const [cur, setCur] = useState(0);
   const ds = s.trainDataset!;
+  const loading = !!ds && !s.annotationsLoaded && !err;  // derived: no setState inside the loading effect
+  const reduce = useReducedMotion();
+  const strip = useRef<HTMLDivElement>(null);
   const classes = s.task?.classes.length ? s.task.classes : ds.classes;
 
   useEffect(() => {
     if (!ds || s.annotationsLoaded) return;
     let active = true;
-    setLoading(true);
     Promise.all([api.getLabels(ds.id), api.listFrames(ds.id)])
       .then(([labels, frames]) => {
         if (!active) return;
@@ -28,8 +31,7 @@ export function Prepare() {
         const firstLabelled = frames.findIndex((f) => labels.some((l) => l.image === f.name));
         if (firstLabelled > 0) setCur(firstLabelled);  // open on a frame that has something to check
       })
-      .catch(setErr)
-      .finally(() => { if (active) setLoading(false); });
+      .catch((e) => { if (active) setErr(e); });
     return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ds?.id]);
@@ -40,6 +42,22 @@ export function Prepare() {
     return m;
   }, [s.labels]);
   const frame = s.frames[cur];
+  const total = s.frames.length;
+
+  // ← / → move between frames (ignored while typing or choosing a class)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.altKey || e.metaKey || e.ctrlKey) return;
+      if (e.key === "ArrowRight") { e.preventDefault(); setCur((c) => Math.min(total - 1, c + 1)); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); setCur((c) => Math.max(0, c - 1)); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [total]);
+  useEffect(() => {
+    strip.current?.querySelector<HTMLElement>(`[data-i="${cur}"]`)?.scrollIntoView({ block: "nearest", inline: "center", behavior: reduce ? "auto" : "smooth" });
+  }, [cur, reduce]);
   const edited = s.annotationsDirty;
 
   const setImageLabels = (img: string, next: Annotation[]) =>
@@ -64,14 +82,14 @@ export function Prepare() {
   }
 
   return (
-    <div className="wide-col fade-in" style={{ maxWidth: 880 }}>
+    <div className="wide-col" style={{ maxWidth: 880 }}>
       <div className="hero compact">
         <h1>Check the labels</h1>
         <p>ZALU marked every frame. Fix anything that looks wrong: the model learns from these boxes.</p>
         <SampleBadge show={api.mode === "mock"} label="Sample labels" />
       </div>
 
-      {loading && <p className="hint" role="status"><Spinner /> Loading frames…</p>}
+      {loading && <p className="hint" role="status"><TextShimmer>Loading frames and labels…</TextShimmer></p>}
       <ErrorBox error={err} />
       {!loading && !s.frames.length && !err && (
         <Banner kind="info">No frames to preview for this dataset. You can continue to training.</Banner>
@@ -80,27 +98,33 @@ export function Prepare() {
       {frame && (
         <div className="card col">
           <div className="row small">
-            <span className="muted">Frame {cur + 1} of {s.frames.length}</span>
+            <span className="muted" aria-live="polite">Frame {cur + 1} of {s.frames.length}</span>
             <div className="spacer" />
-            <button className="btn sm" aria-label="Previous frame" disabled={cur === 0} onClick={() => setCur(cur - 1)}>←</button>
-            <button className="btn sm" aria-label="Next frame" disabled={cur >= s.frames.length - 1} onClick={() => setCur(cur + 1)}>→</button>
+            <span className="tiny muted" aria-hidden>← → to browse</span>
+            <button className="btn sm" aria-label="Previous frame" aria-keyshortcuts="ArrowLeft" disabled={cur === 0} onClick={() => setCur(cur - 1)}>←</button>
+            <button className="btn sm" aria-label="Next frame" aria-keyshortcuts="ArrowRight" disabled={cur >= s.frames.length - 1} onClick={() => setCur(cur + 1)}>→</button>
           </div>
-          <Annotator frame={frame} labels={byImage.get(frame.name) ?? []} classes={classes} onChange={(n) => setImageLabels(frame.name, n)} />
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={frame.name} initial={{ opacity: 0.35 }} animate={{ opacity: 1 }} exit={{ opacity: 0.35 }} transition={t("fast")}>
+              <Annotator frame={frame} labels={byImage.get(frame.name) ?? []} classes={classes} onChange={(n) => setImageLabels(frame.name, n)} />
+            </motion.div>
+          </AnimatePresence>
         </div>
       )}
 
       {s.frames.length > 1 && (
-        <div className="thumbs">
+        <div className="thumbs" ref={strip}>
           {s.frames.map((f, i) => {
             const ls = byImage.get(f.name) ?? [];
             return (
-              <button key={f.name} className={`thumb ${i === cur ? "sel" : ""}`} onClick={() => setCur(i)} title={f.name}
+              <button key={f.name} data-i={i} className={`thumb ${i === cur ? "sel" : ""}`} onClick={() => setCur(i)} title={f.name}
                 aria-label={`Frame ${i + 1}: ${ls.length ? `${ls.length} box(es)` : "nothing labelled"}`} aria-current={i === cur ? "true" : undefined}>
                 <svg viewBox={`0 0 ${f.width} ${f.height}`} preserveAspectRatio="xMidYMid slice">
                   <image href={f.url} width={f.width} height={f.height} />
                   {ls.map((l, k) => <rect key={k} x={l.box[0]} y={l.box[1]} width={l.box[2] - l.box[0]} height={l.box[3] - l.box[1]} fill="none" stroke={classColor(classes, l.cls)} strokeWidth={f.width / 120} />)}
                 </svg>
                 <span className="count">{ls.length || "empty"}</span>
+                {i === cur && <motion.span layoutId="thumb-ring" className="thumb-ring" transition={t("base")} aria-hidden />}
               </button>
             );
           })}

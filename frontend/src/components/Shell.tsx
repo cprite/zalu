@@ -1,8 +1,10 @@
 "use client";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { useApi } from "@/lib/api";
+import { useApi, type ZaluApi } from "@/lib/api";
 import { BRAND } from "@/lib/explain";
 import { STAGES, stageFill, stageOf, unlocked, useFlow } from "@/lib/flow";
+import { t } from "@/lib/motion";
 import type { Health } from "@/lib/types";
 
 export function Topbar() {
@@ -11,20 +13,23 @@ export function Topbar() {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(config);
   const { s } = useFlow();
-  const [health, setHealth] = useState<Health | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  // health probe result is tagged with the api it belongs to, so a new data source shows "checking" without a reset in the effect
+  const [probe, setProbe] = useState<{ api: ZaluApi; health?: Health; err?: string } | null>(null);
+  const current = probe?.api === api ? probe : null;
+  const health = current?.health ?? null;
+  const err = current?.err ?? null;
 
-  useEffect(() => {
+  /** Prefill the source form when it opens (remembered URL, then the build-time default). */
+  function openSource() {
     try {
       const remembered = JSON.parse(localStorage.getItem("zalu.api") ?? "{}").baseUrl;
       setDraft(config.baseUrl ? config : { ...config, baseUrl: remembered || process.env.NEXT_PUBLIC_ZALU_API || "" });
     } catch { setDraft(config); }
-  }, [config]);
+    setOpen(true);
+  }
   useEffect(() => {
     let live = true;
-    setHealth(null);
-    setErr(null);
-    api.health().then((h) => live && setHealth(h)).catch((e) => live && setErr(e.message));
+    api.health().then((h) => live && setProbe({ api, health: h })).catch((e) => live && setProbe({ api, err: e.message }));
     return () => { live = false; };
   }, [api]);
 
@@ -45,7 +50,7 @@ export function Topbar() {
       </div>
       <div className="spacer" />
       <div style={{ position: "relative" }}>
-        <button className="btn sm" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="source-pop"
+        <button className="btn sm" onClick={() => (open ? setOpen(false) : openSource())} aria-expanded={open} aria-controls="source-pop"
           aria-label={`Data source: ${api.mode === "mock" ? "sample mode" : "live backend"}. Change`}>
           {api.mode === "mock" ? <span className="badge sample">◆ Sample mode</span> : <span className="badge live">● Live backend</span>}
           {api.mode === "live" && (err ? <span className="badge bad">✕ offline</span> : health ? <span className="badge good">✓ connected</span> : <span className="spin" />)}
@@ -99,7 +104,9 @@ export function StoryProgress() {
             <li key={st.label}>
               <button className={`story-seg ${i === cur ? "active" : ""}`} disabled={!reachable} onClick={() => set({ step: first })}
                 aria-current={i === cur ? "step" : undefined}>
-                <span className="track" aria-hidden><span style={{ width: `${Math.round(fill[i] * 100)}%` }} /></span>
+                <span className="track" aria-hidden>
+                  <motion.span initial={false} animate={{ width: `${Math.round(fill[i] * 100)}%` }} transition={t("slow")} />
+                </span>
                 <span className="story-label">{st.label}</span>
                 <span className="sr-only">, {state}</span>
               </button>

@@ -1,8 +1,10 @@
 "use client";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { StoryProgress, Topbar } from "@/components/Shell";
 import { ApiProvider } from "@/lib/api";
 import { FlowProvider, STAGES, STEPS, stageOf, useFlow } from "@/lib/flow";
+import { enter } from "@/lib/motion";
 import { Deploy } from "@/steps/Deploy";
 import { Describe } from "@/steps/Describe";
 import { Prepare } from "@/steps/Prepare";
@@ -24,13 +26,18 @@ function Journey() {
   }, [s.step]);
   return (
     <main id="main" ref={main} tabIndex={-1} aria-label={`${STAGES[stageOf(s.step)].label}: ${STEPS[s.step].label}`} style={{ outline: "none" }}>
-      <Step key={s.step} />
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div key={s.step} {...enter}>
+          <Step />
+        </motion.div>
+      </AnimatePresence>
     </main>
   );
 }
 
 export default function Page() {
   return (
+    <MotionConfig reducedMotion="user" transition={enter.transition}>
     <ApiProvider>
       <FlowProvider>
         <a href="#main" className="skip">Skip to content</a>
@@ -41,5 +48,6 @@ export default function Page() {
         </div>
       </FlowProvider>
     </ApiProvider>
+    </MotionConfig>
   );
 }

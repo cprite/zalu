@@ -1,6 +1,8 @@
 "use client";
 // Box editor: drag to draw, click to select, change class, delete, confirm. Boxes are in image pixels.
-import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { t } from "@/lib/motion";
 import type { Frame } from "@/lib/frames";
 import type { Annotation } from "@/lib/types";
 
@@ -11,15 +13,17 @@ export function Annotator({ frame, labels, classes, onChange }: {
   frame: Frame; labels: Annotation[]; classes: string[]; onChange: (next: Annotation[]) => void;
 }) {
   const svg = useRef<SVGSVGElement>(null);
-  const [sel, setSel] = useState<number | null>(null);
+  // selection belongs to a frame: switching frames clears it without an effect
+  const [selState, setSelState] = useState<{ frame: string; i: number } | null>(null);
+  const sel = selState && selState.frame === frame.name ? selState.i : null;
+  const setSel = (i: number | null) => setSelState(i == null ? null : { frame: frame.name, i });
   const [draw, setDraw] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(null);
   const [active, setActive] = useState(classes[0]);
 
-  useEffect(() => { setSel(null); }, [frame.name]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (sel == null || (e.target as HTMLElement).tagName === "SELECT") return;
-      if (e.key === "Delete" || e.key === "Backspace") { onChange(labels.filter((_, i) => i !== sel)); setSel(null); }
+      if (e.key === "Delete" || e.key === "Backspace") { onChange(labels.filter((_, i) => i !== sel)); setSelState(null); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -33,7 +37,7 @@ export function Annotator({ frame, labels, classes, onChange }: {
   // Window listeners are attached synchronously on pointerdown, so even a very fast drag keeps its pointerup.
   const drawRef = useRef<typeof draw>(null);
   const latest = useRef({ labels, onChange, active, frame });
-  latest.current = { labels, onChange, active, frame };
+  useLayoutEffect(() => { latest.current = { labels, onChange, active, frame }; });
   function beginDraw(cx: number, cy: number) {
     const p = pt(cx, cy);
     drawRef.current = { x0: p.x, y0: p.y, x1: p.x, y1: p.y };
@@ -110,7 +114,9 @@ export function Annotator({ frame, labels, classes, onChange }: {
         {labels.map((l, i) => {
           const unsure = l.source === "auto" && (l.score ?? 1) < 0.5;
           return (
-            <li key={i} className="row small" style={{ gap: 8, padding: "4px 8px", borderRadius: 8, background: i === sel ? "var(--color-brand-soft)" : undefined }}>
+            <motion.li key={i} layout="position" className="row small" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={t("fast")}
+              style={{ gap: 8, padding: "4px 8px", borderRadius: 8, background: i === sel ? "var(--color-brand-soft)" : "transparent",
+                transition: "background-color .15s cubic-bezier(.2,0,0,1)" }}>
               <button className="chip" aria-pressed={i === sel} onClick={() => setSel(i === sel ? null : i)}>
                 <span className="dot" style={{ background: classColor(classes, l.cls) }} aria-hidden />
                 Box {i + 1}: {l.cls}
@@ -130,7 +136,7 @@ export function Annotator({ frame, labels, classes, onChange }: {
                   <button className="btn sm danger" onClick={() => { onChange(labels.filter((_, k) => k !== i)); setSel(null); }}>Delete</button>
                 </>
               )}
-            </li>
+            </motion.li>
           );
         })}
       </ul>

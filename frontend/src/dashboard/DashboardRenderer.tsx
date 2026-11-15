@@ -1,6 +1,8 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { AnimatedNumber, t } from "@/lib/motion";
 import type { DashboardSpec, Widget } from "../../../shared/dashboard_spec/dashboard-spec";
 import { readMetric, type FrameSample } from "./session";
 import "./dashboard.css";
@@ -27,13 +29,14 @@ function Trend({ points, windowSeconds, now }: { points: { at: number; value: nu
     x: 12 + 336 * (1 - Math.max(0, now - at) / (windowSeconds * 1000)),
     y: 86 - (70 * value) / max,
   });
+  const lastMark = [...marks].reverse().find((mark) => mark !== null) ?? null;
   const lines = marks.flatMap((mark, i) => mark && marks[i - 1] ? [[marks[i - 1]!, mark]] : []);
   return (
     <figure className="dash-trend">
       <svg viewBox="0 0 360 100" role="img" aria-label={`Metric readings over the last ${windowSeconds} seconds`}>
-        {[16, 51, 86].map((y) => <line key={y} x1="12" x2="348" y1={y} y2={y} stroke="#e2e9f4" />)}
-        {lines.map(([a, b], i) => <line key={i} x1={a.x} x2={b.x} y1={a.y} y2={b.y} stroke="#2463eb" strokeWidth="2" />)}
-        {marks.map((mark, i) => mark && <circle key={i} cx={mark.x} cy={mark.y} r="2.6" fill="#2463eb" />)}
+        {[16, 51, 86].map((y) => <line key={y} x1="12" x2="348" y1={y} y2={y} stroke="var(--color-line)" />)}
+        {lines.map(([a, b], i) => <line key={i} x1={a.x} x2={b.x} y1={a.y} y2={b.y} stroke="var(--viz-1, var(--color-brand))" strokeWidth="2" strokeLinecap="round" />)}
+        {lastMark && <circle cx={lastMark.x} cy={lastMark.y} r="4" fill="var(--viz-1, var(--color-brand))" stroke="var(--color-surface)" strokeWidth="2" />}
       </svg>
       <figcaption>Last {windowSeconds}s <span>Range 0–{format(max)}</span></figcaption>
     </figure>
@@ -46,13 +49,14 @@ function Content({ widget, spec, classes, samples, preview, loading, sampleMode,
   if (widget.type === "live_preview") {
     return preview || (sampleMode && result) ? (
       <div className="dash-preview" style={{ aspectRatio: result ? result.width / result.height : 16 / 9 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- blob: frame preview, next/image cannot optimise it */}
         {preview && <img src={preview} alt="Frame submitted for inference" />}
         {sampleMode && !preview && <span className="dash-sample-frame">Simulated frame</span>}
         {widget.config.show_boxes && result && (
           <svg viewBox={`0 0 ${result.width} ${result.height}`} aria-label="Detection boxes" role="img">
             {result.detections.map(({ box: [x, y, x2, y2], cls }, i) => (
               <g key={i}>
-                <rect x={x} y={y} width={x2 - x} height={y2 - y} fill="none" stroke="#76abff" strokeWidth="3" />
+                <rect x={x} y={y} width={x2 - x} height={y2 - y} fill="none" stroke="#8fb0ff" strokeWidth="3" />
                 <text x={x + 4} y={Math.max(18, y - 6)} fill="white" stroke="#0e1727" paintOrder="stroke" strokeWidth="4" fontSize={result.width / 40}>{label(cls)}</text>
               </g>
             ))}
@@ -72,7 +76,7 @@ function Content({ widget, spec, classes, samples, preview, loading, sampleMode,
     }
     const reading = readMetric(metric, result, classes);
     return reading.status === "available"
-      ? <div className="dash-kpi">{format(reading.value)}{metric.operation === "inference_latency_ms" && <small> ms</small>}</div>
+      ? <div className="dash-kpi"><AnimatedNumber value={reading.value} format={format} duration={0.15} />{metric.operation === "inference_latency_ms" && <small> ms</small>}</div>
       : <p className="dash-empty">{loading ? "Waiting for inference…" : "Metric unavailable."}</p>;
   }
   if (!result) return <p className="dash-empty">{loading ? "Waiting for inference…" : "No inference results yet."}</p>;
@@ -113,16 +117,27 @@ export function DashboardRenderer(props: Props) {
     <section className="dash" aria-label={spec.title}>
       <header className="dash-heading">
         <div><h1>{spec.title}</h1><p>{spec.description}</p></div>
-        <span className={`dash-status ${sampleMode ? "sample" : ""}`}>{sampleMode ? "Sample data · simulated" : "Live inference"}</span>
+        <span className={`dash-status ${sampleMode ? "sample" : ""} ${samples.length && !error ? "on" : ""}`}>
+          <span className="dash-dot" aria-hidden />{sampleMode ? "Sample data · simulated" : "Live inference"}
+        </span>
       </header>
       {error && <p className="dash-error" role="alert">{error}</p>}
-      {loading && <p className="dash-pending" role="status">Running inference…</p>}
+      <AnimatePresence initial={false}>
+        {loading && !samples.length && (
+          <motion.p key="pending" className="dash-pending" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
+            Running inference…
+          </motion.p>
+        )}
+      </AnimatePresence>
       <div className="dash-grid" style={{ gridTemplateColumns: `repeat(${spec.layout.columns}, minmax(0, 1fr))` }}>
-        {spec.widgets.map((widget) => (
-          <section key={widget.id} className="dash-card" style={{ gridColumn: `span ${widget.span}` }} data-widget={widget.type}>
-            <h2>{widget.title}</h2><Content {...props} widget={widget} now={Math.max(now, samples.at(-1)?.at ?? 0)} />
-          </section>
-        ))}
+        <AnimatePresence initial={false}>
+          {spec.widgets.map((widget) => (
+            <motion.section key={widget.id} layout="position" className="dash-card" style={{ gridColumn: `span ${widget.span}` }} data-widget={widget.type}
+              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98 }} transition={t("base")}>
+              <h2>{widget.title}</h2><Content {...props} widget={widget} now={Math.max(now, samples.at(-1)?.at ?? 0)} />
+            </motion.section>
+          ))}
+        </AnimatePresence>
       </div>
     </section>
   );

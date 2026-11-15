@@ -1,4 +1,5 @@
 "use client";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Comparison } from "@/components/Comparison";
 import { FailureGallery } from "@/components/FailureGallery";
@@ -9,6 +10,7 @@ import { useApi } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { makeSampleFrames } from "@/lib/sampleFrames";
 import { pct } from "@/lib/explain";
+import { TextShimmer, reveal, t } from "@/lib/motion";
 import type { DatasetManifest, EvaluationReport } from "@/lib/types";
 
 export function Verify() {
@@ -63,7 +65,7 @@ export function Verify() {
   }
 
   return (
-    <div className="center-col fade-in" style={s.report ? { maxWidth: 1040 } : undefined}>
+    <div className="center-col" style={s.report ? { maxWidth: 1040 } : undefined}>
       {!s.report ? (
         <>
           <div className="hero compact">
@@ -72,7 +74,13 @@ export function Verify() {
           </div>
           <Composer textless files={s.testFiles} onFiles={(testFiles) => set({ testFiles, testDataset: null })} onSubmit={runTest}
             canSubmit={(s.testFiles.length > 0 || !!s.testDataset) && !sameSession} busy={!!busy} submitLabel="Run the test" />
-          {busy && <p className="hint" role="status">{busy === "upload" ? "Uploading test footage…" : "Testing every model on your new footage…"}</p>}
+          <AnimatePresence initial={false}>
+            {busy && (
+              <motion.p key="busy" className="hint" role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={t("fast")}>
+                <TextShimmer>{busy === "upload" ? "Uploading test footage…" : "Testing every model on your new footage…"}</TextShimmer>
+              </motion.p>
+            )}
+          </AnimatePresence>
           {sameSession && <Banner kind="bad">This footage has the same recording name as the training footage. Use a different recording, otherwise the score is inflated.</Banner>}
           {!busy && (
             <div className="actions-center">
@@ -109,8 +117,14 @@ export function Verify() {
                 <button className="toggle" aria-expanded={more === "compare"} onClick={() => setMore(more === "compare" ? "" : "compare")}>Compare models</button>
                 <button className="toggle" aria-expanded={more === "mistakes"} onClick={() => setMore(more === "mistakes" ? "" : "mistakes")}>See mistakes</button>
               </div>
-              {more === "compare" && <Comparison rep={s.report} selected={selected} onSelect={setSelected} />}
-              {more === "mistakes" && sel && <FailureGallery e={sel} imageSize={s.report.image_size} />}
+              <AnimatePresence mode="wait" initial={false}>
+                {more === "compare" && (
+                  <motion.div key="compare" {...reveal} style={{ overflow: "hidden" }}><Comparison rep={s.report} selected={selected} onSelect={setSelected} /></motion.div>
+                )}
+                {more === "mistakes" && sel && (
+                  <motion.div key="mistakes" {...reveal} style={{ overflow: "hidden" }}><FailureGallery e={sel} imageSize={s.report.image_size} /></motion.div>
+                )}
+              </AnimatePresence>
             </>
           )}
           <div className="actions-center">

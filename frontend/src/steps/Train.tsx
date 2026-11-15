@@ -1,9 +1,11 @@
 "use client";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { ErrorBox, Progress, Spinner } from "@/components/ui";
 import { useApi } from "@/lib/api";
 import { variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
+import { reveal, t } from "@/lib/motion";
 import type { DatasetManifest } from "@/lib/types";
 
 const PRESETS = [
@@ -81,14 +83,26 @@ export function Train() {
   const overall = s.jobs.length ? s.jobs.reduce((t, j) => t + (j.status === "failed" ? 0 : j.progress), 0) / s.jobs.length : 0;
 
   return (
-    <div className="center-col fade-in">
+    <div className="center-col">
       <div className="hero compact">
-        <h1>{done ? "Your model is ready" : running ? "Training your model…" : "Train your model"}</h1>
-        <p>{done ? "Next, ZALU checks it on footage it has never seen." : "A small, fast detector trained on your labelled frames. It takes a few minutes."}</p>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={done ? "done" : running ? "running" : "idle"} className="col" style={{ alignItems: "center", gap: 8 }}
+            initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={t("base")}>
+            {done && (
+              <span className="done-mark" aria-hidden>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                  <motion.path d="M5 12.5l4.5 4.5L19 7.5" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={t("slow", { delay: 0.08 })} />
+                </svg>
+              </span>
+            )}
+            <h1>{done ? "Your model is ready" : running ? "Training your model…" : "Train your model"}</h1>
+            <p>{done ? "Next, ZALU checks it on footage it has never seen." : "A small, fast detector trained on your labelled frames. It takes a few minutes."}</p>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {(s.jobs.length > 0) && (
-        <section className="card col" aria-live="polite">
+        <motion.section className="card col" aria-live="polite" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t("base")}>
           {s.jobs.length > 1 && <Progress value={overall} label="Overall training progress" />}
           {s.jobs.map((j) => {
             const d = datasets.find((x) => x.id === j.request.dataset_id);
@@ -98,7 +112,12 @@ export function Train() {
                 <div className="row small">
                   <b>{variantLabel("trained", d?.variant)}</b>
                   <div className="spacer" />
-                  <span className={j.status === "failed" ? "negv" : "muted"}>{icon} {j.status === "running" || j.status === "queued" ? j.message.split("\n")[0] : j.status}</span>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span key={j.status} className={j.status === "failed" ? "negv" : j.status === "succeeded" ? "pos" : "muted"}
+                      initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={t("fast")}>
+                      {icon} {j.status === "running" || j.status === "queued" ? j.message.split("\n")[0] : j.status}
+                    </motion.span>
+                  </AnimatePresence>
                 </div>
                 {j.status !== "failed"
                   ? <Progress value={j.progress} label={`${variantLabel("trained", d?.variant)} progress`} />
@@ -106,7 +125,7 @@ export function Train() {
               </div>
             );
           })}
-        </section>
+        </motion.section>
       )}
 
       <ErrorBox error={err} />
@@ -133,8 +152,9 @@ export function Train() {
           <button className="toggle" aria-expanded={showOptions} onClick={() => setShowOptions(!showOptions)}>{showOptions ? "Hide options" : "Options"}</button>
         </div>
       )}
+      <AnimatePresence initial={false}>
       {showOptions && !running && (
-        <section className="card col">
+        <motion.section key="options" className="card col" {...reveal} style={{ overflow: "hidden" }}>
           <fieldset className="col" style={{ border: 0, padding: 0, margin: 0, gap: 8 }}>
             <legend className="text-[15px] font-semibold" style={{ marginBottom: 8 }}>Models to compare</legend>
             {datasets.map((d) => (
@@ -148,15 +168,17 @@ export function Train() {
               <span>Zero-shot baseline (no training, for comparison)</span>
             </label>
           </fieldset>
-          <div className="tabs" role="radiogroup" aria-label="Training time">
+          <div className="tabs has-pill" role="radiogroup" aria-label="Training time">
             {PRESETS.map((p) => (
               <button key={p.epochs} role="radio" aria-checked={epochs === p.epochs} className={epochs === p.epochs ? "on" : ""} onClick={() => setEpochs(p.epochs)}>
-                {p.label} <span className="muted">{p.note}</span>
+                {epochs === p.epochs && <motion.span layoutId="train-preset" className="tab-pill" transition={t("base")} aria-hidden />}
+                <span className="tab-label">{p.label} <span className="muted">{p.note}</span></span>
               </button>
             ))}
           </div>
-        </section>
+        </motion.section>
       )}
+      </AnimatePresence>
     </div>
   );
 }
