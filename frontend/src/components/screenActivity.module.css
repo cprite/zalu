@@ -1,0 +1,9 @@
+.slot { min-block-size: 1.65rem; text-align: center; }
+.activity { display: inline-flex; align-items: center; gap: .6rem; color: var(--color-brand-ink); font-size: .875rem; }
+.activityText { display: inline-grid; }
+.track { height: .45rem; border-radius: 999px; background: var(--color-surface-2); overflow: hidden; }
+.fill { height: 100%; position: relative; overflow: hidden; border-radius: inherit; background: var(--color-brand); }
+.flow { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 28%, color-mix(in srgb, var(--color-brand-soft) 33%, transparent) 50%, transparent 72%); background-size: 220% 100%; animation: flow 2.4s linear infinite; }
+@keyframes flow { from { background-position: 100% 0; } to { background-position: -120% 0; } }
+.complete { margin-inline: auto; width: 2.75rem; height: 2.75rem; display: grid; place-items: center; border-radius: 50%; color: var(--color-success-ink); background: var(--color-success-soft); }
+@media (prefers-reduced-motion: reduce) { .flow { animation: none; } }

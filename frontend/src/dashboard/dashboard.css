@@ -1,0 +1,56 @@
+/* Dashboard renderer, on ZALU tokens (globals.css @theme). Text always wears ink tokens; colour marks carry identity. */
+.dash { width: 100%; color: var(--color-ink); --viz-1: var(--color-brand); }
+.dash-heading { display: flex; gap: 16px; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.dash-heading h1 { margin: 0 0 6px; font-size: clamp(1.6rem, 3.6vw, 2.2rem); line-height: 1.15; letter-spacing: -.02em; }
+.dash-heading p { margin: 0; color: var(--color-ink-2); max-width: 68ch; }
+.dash-status { flex: none; display: inline-flex; align-items: center; gap: 8px; background: var(--color-success-soft); color: var(--color-success-ink);
+  padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.dash-status.sample { background: var(--color-sample-soft); color: var(--color-sample); }
+.dash-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: .45; }
+.dash-status.on .dash-dot { opacity: 1; animation: dash-pulse 1.6s cubic-bezier(.2,0,0,1) infinite; }
+@keyframes dash-pulse { 0% { box-shadow: 0 0 0 0 currentColor; } 70% { box-shadow: 0 0 0 6px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* cards hug their content: a KPI no longer stretches to the height of the camera next to it */
+.dash-grid { display: grid; gap: 16px; align-items: start; }
+.dash-card { min-width: 0; padding: 16px; border: 1px solid var(--color-line); border-radius: var(--radius-lg); background: var(--color-surface);
+  overflow-wrap: anywhere; transition: border-color .15s cubic-bezier(.2,0,0,1); }
+.dash-card:focus-within { border-color: var(--color-control); }
+.dash-card h2 { margin: 0 0 12px; color: var(--color-ink-2); font-size: 14px; font-weight: 600; }
+.dash-empty, .dash-pending { color: var(--color-muted); margin: 0; font-size: 13px; }
+.dash-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-height: 56px; justify-content: center; }
+.dash-pending, .dash-error { margin-bottom: 12px; }
+.dash-error { color: var(--color-error-ink); padding: 10px 12px; background: var(--color-error-soft); border-radius: var(--radius-md); }
+.dash-kpi { color: var(--color-ink); font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.dash-kpi small { font-size: .42em; letter-spacing: 0; color: var(--color-ink-2); font-weight: 600; }
+.dash-preview { position: relative; overflow: hidden; border-radius: var(--radius-md); background: #0E1422; }
+.dash-preview img, .dash-preview svg { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.dash-sample-frame { position: absolute; inset: auto auto 12px 12px; color: #c9d6f2; font-size: 12px; }
+.dash-trend { margin: 0; }
+.dash-trend svg { display: block; width: 100%; }
+.dash-trend figcaption { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-muted); }
+.dash-table { max-height: 300px; overflow: auto; }
+.dash-table table { width: 100%; text-align: left; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.dash-table th { color: var(--color-muted); font-weight: 600; font-size: 12px; }
+.dash-table th, .dash-table td { border-bottom: 1px solid var(--color-line); padding: 6px 4px; }
+.dash-events { margin: 0; padding-left: 20px; }
+.dash-bars { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.dash-bars li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(24px, 2fr) auto; align-items: center; gap: 10px; font-size: 13px; color: var(--color-ink-2); }
+.dash-bars meter { width: 100%; accent-color: var(--color-brand); }
+.dash-bars strong { color: var(--color-ink); font-variant-numeric: tabular-nums; }
+
+/* refine form reads like the rest of the product's message box */
+.dash-refine { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; max-width: 720px; }
+.dash-refine label { font-size: 13px; font-weight: 600; color: var(--color-ink-2); }
+.dash-refine .row { flex-wrap: nowrap; gap: 8px; padding: 6px 6px 6px 16px; border: 1px solid var(--color-control); border-radius: 24px; background: var(--color-surface);
+  transition: border-color .22s cubic-bezier(.2,0,0,1), box-shadow .22s cubic-bezier(.2,0,0,1); }
+.dash-refine .row:focus-within { border-color: var(--color-brand); box-shadow: 0 0 0 3px var(--color-brand-soft); }
+.dash-refine .input { flex: 1; min-width: 0; border: 0; padding: 4px 0; min-height: 36px; box-shadow: none !important; }
+.dash-refine .btn { border-radius: 999px; flex: none; }
+.deploy-tools { justify-content: flex-start; gap: 12px; flex-wrap: wrap; margin-block: 16px; }
+.deploy-tools label:focus-within { outline: 3px solid var(--color-brand); outline-offset: 3px; border-radius: var(--radius-md); }
+
+@media (max-width: 640px) {
+  .dash-heading { flex-direction: column; gap: 10px; }
+  .dash-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .dash-card { grid-column: 1 !important; }
+}

@@ -1,9 +1,13 @@
 "use client";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { ErrorBox, Progress, SectionHead, Spinner } from "@/components/ui";
+import { ErrorBox } from "@/components/ui";
+import { ScreenActivity, TrainingComplete, TrainingProgress } from "@/components/ScreenActivity";
+import styles from "./train.module.css";
 import { useApi } from "@/lib/api";
-import { pct, variantLabel } from "@/lib/explain";
+import { variantLabel } from "@/lib/explain";
 import { useFlow } from "@/lib/flow";
+import { Disclosure, EXIT, SPRING, reveal, t } from "@/lib/motion";
 import type { DatasetManifest } from "@/lib/types";
 
 const PRESETS = [
@@ -21,6 +25,7 @@ export function Train() {
   const [epochs, setEpochs] = useState(30);
   const [err, setErr] = useState<unknown>(null);
   const [busy, setBusy] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const ds = s.trainDataset!;
   const classes = s.task?.classes ?? ds.classes;
 
@@ -38,13 +43,26 @@ export function Train() {
   const running = s.jobs.some((j) => j.status === "queued" || j.status === "running");
   useEffect(() => {
     if (!running) return;
-    const t = setInterval(async () => {
-      const jobs = await Promise.all(s.jobs.map((j) => (j.status === "succeeded" || j.status === "failed" ? j : api.getJob(j.id).catch(() => j))));
-      const newModels = await Promise.all(jobs.filter((j) => j.status === "succeeded" && j.result_id && !s.models.some((m) => m.id === j.result_id))
-        .map((j) => api.getModel(j.result_id!)));
-      set((p) => ({ jobs, models: [...p.models, ...newModels.filter((m) => !p.models.some((x) => x.id === m.id))] }));
+    let active = true;
+    const t = setTimeout(async () => {
+      try {
+        const jobs = await Promise.all(s.jobs.map((job) =>
+          job.status === "succeeded" || job.status === "failed" ? job : api.getJob(job.id)));
+        const newModels = await Promise.all(jobs.filter((job) => job.status === "succeeded" && job.result_id
+          && !s.models.some((model) => model.id === job.result_id)).map((job) => api.getModel(job.result_id!)));
+        if (active) {
+          setErr(null);
+          set((current) => ({ jobs, models: [...current.models,
+            ...newModels.filter((model) => !current.models.some((item) => item.id === model.id))] }));
+        }
+      } catch (error) {
+        if (active) {
+          setErr(error);
+          set((current) => ({ jobs: [...current.jobs] }));
+        }
+      }
     }, 1500);
-    return () => clearInterval(t);
+    return () => { active = false; clearTimeout(t); };
   }, [running, s.jobs, s.models, api, set]);
 
   async function train() {
@@ -62,90 +80,111 @@ export function Train() {
   }
 
   const done = s.models.some((m) => m.kind === "trained") && !running;
+  // real training time reported by the backend (slowest trained model), shown only when present
+  const seconds = s.models.filter((m) => m.kind === "trained" && m.train_seconds != null).map((m) => m.train_seconds as number);
+  const trainedIn = seconds.length ? (Math.max(...seconds) >= 90 ? `${Math.round(Math.max(...seconds) / 60)} min` : `${Math.round(Math.max(...seconds))} s`) : null;
   const nothingPicked = !zeroShot && !datasets.some((d) => pick[d.id]);
 
+  const overall = s.jobs.length ? s.jobs.reduce((t, j) => t + (j.status === "failed" ? 0 : j.progress), 0) / s.jobs.length : 0;
+
   return (
-    <div className="fade-in">
-      <SectionHead title="Train a small, fast model" sub="We fine-tune a compact detector on your labelled frames. It runs on a GPU and takes a few minutes." />
-      <div className="card col" style={{ gap: 24 }}>
-        <div className="grid2">
-          <fieldset className="col" style={{ border: 0, padding: 0, margin: 0 }}>
-            <legend className="text-[15px] font-semibold" style={{ marginBottom: 8 }}>What to train</legend>
+    <div className="center-col">
+      <div className="hero compact">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={done ? "done" : running ? "running" : "idle"} className="col" style={{ alignItems: "center", gap: 8 }}
+            initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={t("base")}>
+            {done && <TrainingComplete />}
+            <h1>{done ? "Training complete" : s.jobs.some((job) => job.status === "running") ? "Training your model" : running ? "Training queued" : "Train your model"}</h1>
+            <p>{done ? `${trainedIn ? `Trained in ${trainedIn}. ` : ""}Test it on fresh footage.` : !running ? "Use your labelled footage to train a detector." : null}</p>
+            {api.mode === "mock" && <span className="small muted">Demo training</span>}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <ScreenActivity message={busy ? "Submitting training" : undefined} />
+
+      {(s.jobs.length > 0) && (
+        <motion.section className={`card ${styles.jobs}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t("base")}>
+          {s.jobs.length > 1 && <TrainingProgress value={overall} active={s.jobs.some((job) => job.status === "running")} label="Overall training progress" />}
+          {s.jobs.map((j) => {
+            const d = datasets.find((x) => x.id === j.request.dataset_id);
+            const epoch = /epoch\s+(\d+)\s*\/\s*(\d+)/i.exec(j.message ?? "");   // only when the backend reports it
+            const name = variantLabel("trained", d?.variant);
+            const repeated = s.jobs.filter((job) => job.request.dataset_id === j.request.dataset_id);
+            const attempt = repeated.length > 1 ? ` · Run ${repeated.indexOf(j) + 1}` : "";
+            const active = j.status === "running";
+            const epochText = epoch ? `Epoch ${epoch[1]} of ${epoch[2]}` : undefined;
+            const message = j.message?.split("\n")[0].replace(/\s*\(sample\)$/i, "").trim();
+            return (
+              <article key={j.id} className={styles.job} data-job-status={j.status}>
+                <div className={styles.jobHeader}>
+                  <b>{name}{attempt}</b>
+                  {active && <span className="small muted num">{Math.round(j.progress * 100)}%</span>}
+                </div>
+                {active ? <ScreenActivity announce={!epochText} message={epochText ?? (message || "Training model")} />
+                  : <span className={`small ${j.status === "failed" ? "negv" : "muted"}`}>
+                    {j.status === "queued" ? "Queued" : j.status === "succeeded" ? "Complete" : "Failed"}
+                  </span>}
+                {j.status !== "failed"
+                  ? <TrainingProgress value={j.progress} active={active} label={`${name}${attempt} progress`} valueText={active ? epochText : undefined} />
+                  : <p className="small negv">{j.error} <button className="btn sm" onClick={train}>Retry</button></p>}
+              </article>
+            );
+          })}
+        </motion.section>
+      )}
+
+      <ErrorBox error={err} />
+
+      {!running && (
+        <div className="actions-center">
+          {done ? (
+            <>
+              <button className="btn ghost" onClick={() => set({ step: 2 })}>← Labels</button>
+              <button className="btn ghost" disabled={busy || nothingPicked} onClick={train}>Train again</button>
+              <button className="btn primary" onClick={() => set({ step: 4 })}>Test on new footage →</button>
+            </>
+          ) : (
+            <>
+              <button className="btn ghost" onClick={() => set({ step: 2 })}>← Labels</button>
+              <button className="btn primary" disabled={busy || nothingPicked} onClick={train}>Start training</button>
+            </>
+          )}
+        </div>
+      )}
+
+      {!running && (
+        <div className="actions-center">
+          <Disclosure open={showOptions} onToggle={() => setShowOptions(!showOptions)} controls="train-options">Options</Disclosure>
+        </div>
+      )}
+      <AnimatePresence initial={false}>
+      {showOptions && !running && (
+        <motion.section key="options" id="train-options" className="card col" {...reveal} exit={{ ...reveal.exit, transition: EXIT }} style={{ overflow: "hidden" }}>
+          <fieldset className="col" style={{ border: 0, padding: 0, margin: 0, gap: 8 }}>
+            <legend className="text-[15px] font-semibold" style={{ marginBottom: 8 }}>Models to compare</legend>
             {datasets.map((d) => (
               <label key={d.id} className="flex gap-2 items-start small">
                 <input type="checkbox" checked={!!pick[d.id]} onChange={(e) => setPick({ ...pick, [d.id]: e.target.checked })} />
-                <span><b>{variantLabel("trained", d.variant)}</b> <span className="muted">· {Object.entries(d.counts).map(([k, v]) => `${v} ${k}`).join(", ")}</span></span>
+                <span>{variantLabel("trained", d.variant)}</span>
               </label>
             ))}
             <label className="flex gap-2 items-start small">
               <input type="checkbox" checked={zeroShot} onChange={(e) => setZeroShot(e.target.checked)} />
-              <span><b>Zero-shot baseline</b> <span className="muted">· the large open-vocabulary model without training, to compare against</span></span>
+              <span>Pretrained baseline for comparison</span>
             </label>
-            {datasets.length > 1 && <p className="tiny muted">Training both variants lets ZALU check honestly whether synthetic examples help.</p>}
           </fieldset>
-          <div className="col">
-            <h4 id="time-label">Training time</h4>
-            <div className="tabs" role="radiogroup" aria-labelledby="time-label">
-              {PRESETS.map((p) => (
-                <button key={p.epochs} role="radio" aria-checked={epochs === p.epochs} className={epochs === p.epochs ? "on" : ""} onClick={() => setEpochs(p.epochs)}>
-                  {p.label} <span className="muted">{p.note}</span>
-                </button>
-              ))}
-            </div>
-            <details className="small ink2">
-              <summary className="cursor-pointer">Advanced settings</summary>
-              <div className="col" style={{ gap: 4, marginTop: 8 }}>
-                <span>Base model: <code>yolo11n.pt</code> (compact, exported to ONNX)</span>
-                <span>Epochs: {epochs} · image size 640 · batch 16</span>
-              </div>
-            </details>
+          <div className="tabs has-pill" role="radiogroup" aria-label="Training time">
+            {PRESETS.map((p) => (
+              <button key={p.epochs} role="radio" aria-checked={epochs === p.epochs} className={epochs === p.epochs ? "on" : ""} onClick={() => setEpochs(p.epochs)}>
+                {epochs === p.epochs && <motion.span layoutId="train-preset" className="tab-pill" transition={SPRING} aria-hidden />}
+                <span className="tab-label">{p.label} <span className="muted">{p.note}</span></span>
+              </button>
+            ))}
           </div>
-        </div>
-        <ErrorBox error={err} />
-        <div className="row">
-          <button className="btn" onClick={() => set({ step: 2 })}>← Back</button>
-          <div className="spacer" />
-          {done ? (
-            <>
-              <button className="btn" disabled={busy || nothingPicked} onClick={train}>Train again</button>
-              <button className="btn primary" onClick={() => set({ step: 4 })}>Verify on new footage →</button>
-            </>
-          ) : (
-            <button className="btn primary" disabled={busy || running || nothingPicked} onClick={train}>
-              {(busy || running) && <Spinner />}{running ? "Training…" : "Start training"}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {(s.jobs.length > 0 || s.models.length > 0) && (
-        <section className="card col" style={{ marginTop: 16 }} aria-live="polite">
-          <h3>Progress</h3>
-          {s.jobs.map((j) => {
-            const d = datasets.find((x) => x.id === j.request.dataset_id);
-            const m = s.models.find((x) => x.id === j.result_id);
-            const icon = j.status === "succeeded" ? "✓" : j.status === "failed" ? "✕" : "…";
-            return (
-              <div key={j.id} className="col" style={{ gap: 4 }}>
-                <div className="row small">
-                  <b>{variantLabel("trained", d?.variant)}</b>
-                  <span className={`badge ${j.status === "succeeded" ? "good" : j.status === "failed" ? "bad" : "exp"}`}>{icon} {j.status}</span>
-                  <span className="muted">{j.message.split("\n")[0]}</span>
-                  <div className="spacer" />
-                  {m && <span className="tiny muted">trained in {m.train_seconds}s · validation recall {pct(m.metrics.recall)}, precision {pct(m.metrics.precision)}</span>}
-                </div>
-                {j.status !== "failed"
-                  ? <Progress value={j.progress} label={`${variantLabel("trained", d?.variant)} progress`} />
-                  : <p className="small negv">{j.error} <button className="btn sm" onClick={train}>Retry</button></p>}
-              </div>
-            );
-          })}
-          {s.models.filter((m) => m.kind === "zero_shot").map((m) => (
-            <div key={m.id} className="row small"><b>Zero-shot baseline</b> <span className="badge good">✓ ready</span> <span className="muted">{m.base_model}, no training needed</span></div>
-          ))}
-          <p className="tiny muted">Validation numbers come from frames of the same recording. They help pick a model but are optimistic. The real score comes from the next step.</p>
-        </section>
+        </motion.section>
       )}
+      </AnimatePresence>
     </div>
   );
 }

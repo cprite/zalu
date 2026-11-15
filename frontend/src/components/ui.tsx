@@ -1,6 +1,8 @@
 "use client";
+import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { ApiError } from "@/lib/api";
+import { Dots, SPRING, t } from "@/lib/motion";
 
 export function SampleBadge({ show = true, label = "Sample data" }: { show?: boolean; label?: string }) {
   if (!show) return null;
@@ -14,16 +16,17 @@ const LABEL: Record<Kind, string> = { info: "Note", warn: "Warning", bad: "Error
 /** Status is always conveyed by icon + hidden label + text, never by colour alone. */
 export function Banner({ kind = "info", children, id }: { kind?: Kind; children: ReactNode; id?: string }) {
   return (
-    <div className={`banner ${kind}`} id={id} role={kind === "bad" ? "alert" : "status"}>
+    <motion.div className={`banner ${kind}`} id={id} role={kind === "bad" ? "alert" : "status"}
+      initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} transition={t("base")}>
       <span className="ic" aria-hidden>{ICON[kind]}</span>
       <span className="sr-only">{LABEL[kind]}:</span>
       <div className="small" style={{ flex: 1 }}>{children}</div>
-    </div>
+    </motion.div>
   );
 }
 
 export function Spinner() {
-  return <span className="spin" role="status" aria-label="Loading" />;
+  return <Dots label="Loading…" />;
 }
 
 export function ErrorBox({ error }: { error: unknown }) {
@@ -32,7 +35,7 @@ export function ErrorBox({ error }: { error: unknown }) {
     return (
       <Banner kind="warn">
         <b>This step is not connected on the backend yet.</b> {error.message}
-        <div>Switch to <b>Sample mode</b> (top right) to continue the walkthrough, or pick an existing dataset.</div>
+        <div>Switch the data source to <b>Sample</b> in Settings (top right) to continue the walkthrough, or pick an existing dataset.</div>
       </Banner>
     );
   }
@@ -67,20 +70,8 @@ export function Progress({ value, label }: { value: number; label: string }) {
   const pctv = Math.round(value * 100);
   return (
     <div className="bar" role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pctv}>
-      <span style={{ width: `${pctv}%` }} />
-    </div>
-  );
-}
-
-export function SectionHead({ title, sub, right }: { title: string; sub?: ReactNode; right?: ReactNode }) {
-  return (
-    <div className="section-head">
-      <div className="col" style={{ gap: 4 }}>
-        <h1>{title}</h1>
-        {sub && <p>{sub}</p>}
-      </div>
-      <div className="spacer" />
-      {right}
+      {/* scaleX (compositor-only), spring-smoothed toward the real backend value */}
+      <motion.span className="bar-fill" initial={false} animate={{ scaleX: Math.max(0, Math.min(1, value)) }} transition={SPRING} />
     </div>
   );
 }

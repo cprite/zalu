@@ -1,0 +1,48 @@
+PASS  No flash: dark pref applied before body paints  — dark|rgb(14, 19, 28)
+PASS  Scale applied before paint (large = 18px root)  — 18px
+PASS  No console errors (dark/large)
+PASS  Default: System theme resolves to light on a light OS  — {"theme":"light","scale":"default","motion":"2","themePref":"system","fs":"16px"}
+PASS  System theme follows OS change live (to dark)  — dark
+PASS  Settings trigger reachable with Tab
+PASS  Focus moves into the Settings dialog  — System
+PASS  Arrow keys move the theme radio and apply Dark  — {"theme":"dark","scale":"default","motion":2}
+PASS  Slider End -> Expressive (data-motion 3)  — 3
+PASS  Slider Home -> Reduced (data-motion 0)  — 0
+PASS  Slider ArrowRight -> Subtle  — 1
+PASS  Clicking a slider label selects it (Balanced)  — 2
+PASS  Text size Large -> root 18px  — 18px
+PASS  Text size Compact -> root 15px  — 15px
+PASS  Live reveals backend URL field
+PASS  Sample hides the backend fields
+PASS  Header shows an understated source indicator
+PASS  Purple Sample mode badge is gone from the header
+PASS  Escape closes and returns focus to the trigger
+PASS  Outside click closes Settings
+PASS  Preferences persist across reload (dark)  — dark
+PASS  Next.js dev indicator hidden (devIndicators: false)
+PASS  No console errors (settings flow)
+PASS  Press at level 1: scale 0.99  — matrix(0.99, 0, 0, 0.99, 0, 0)
+PASS  Press at level 1: no layout shift (box width unchanged in layout)  — 140.03125 vs visual 138.6
+PASS  Press at level 2: scale 0.98  — matrix(0.98, 0, 0, 0.98, 0, 0)
+PASS  Press at level 2: no layout shift (box width unchanged in layout)  — 140.03125 vs visual 137.2
+PASS  Press at level 3: scale 0.97  — matrix(0.97, 0, 0, 0.97, 0, 0)
+PASS  Press at level 3: no layout shift (box width unchanged in layout)  — 140.03125 vs visual 135.8
+PASS  Press at level 0: scale none  — matrix(1, 0, 0, 1, 0, 0) shadow=oklab(0.244858 -0.00380383 -0.0385778 /
+PASS  Reduced press gives a tint instead of movement  — oklab(0.244858 -0.00380383 -0.0385778 / 0.12) 0px 0px 0px 12
+PASS  Press at level 0: no layout shift (box width unchanged in layout)  — 140.03125 vs visual 140.0
+PASS  OS reduced motion overrides Expressive (data-motion 0)  — 0
+PASS  Settings explains that the device setting wins
+PASS  Desktop 1280 · compact · light: no horizontal overflow on all six screens
+PASS  Desktop · compact: no console errors through the journey
+PASS  Desktop 1280 · default · light: no horizontal overflow on all six screens
+PASS  Desktop · default: no console errors through the journey
+PASS  Desktop 1280 · large · dark: no horizontal overflow on all six screens
+PASS  Desktop · large: no console errors through the journey
+PASS  Mobile 390 · compact · light: no horizontal overflow on all six screens
+PASS  Mobile · compact: no console errors through the journey
+PASS  Mobile 390 · default · light: no horizontal overflow on all six screens
+PASS  Mobile · default: no console errors through the journey
+PASS  Mobile 390 · large · dark: no horizontal overflow on all six screens
+PASS  Mobile · large: no console errors through the journey
+PASS  dark theme: text contrast ≥ 4.5:1 (3:1 large) on all six screens
+PASS  light theme: text contrast ≥ 4.5:1 (3:1 large) on all six screens

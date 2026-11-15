@@ -1,6 +1,6 @@
 // ZALU Design System Builder (Figma plugin, owner: Damir)
 // Builds in the open file: token variables + text styles, core components with variants, Foundations,
-// and the six-screen journey (Describe -> Upload -> Prepare -> Train -> Verify -> Deploy) with prototype links.
+// and three top-level stages with linked detail screens for footage, labels and evaluation.
 // Mirrors frontend/src (same token names, same copy). Re-running replaces what the plugin created earlier.
 // Works on the Starter plan (3 pages). Run: Figma desktop -> Plugins -> Development -> Import plugin from manifest.
 
@@ -395,10 +395,13 @@ async function foundationsPage(page) {
 }
 
 // ---------------------------------------------------------------- screens
-const STEPS = [["Describe", "What to detect"], ["Upload", "Your camera footage"], ["Prepare", "Check auto-labels"], ["Train", "Small, fast model"], ["Verify", "Test on new footage"], ["Deploy", "Live camera"]];
+const STAGES = ["Describe", "Train", "Deploy"];
+const SCREENS = ["Describe", "Describe · Footage", "Describe · Labels", "Train", "Train · Evaluation", "Deploy"];
+const STAGE_OF = [0, 0, 0, 1, 1, 2];
+const PROGRESS = [1 / 3, 2 / 3, 1, 1 / 2, 1, 1];
 
 async function shell(index, title, sub) {
-  const f = box(`${PREFIX}${index + 1} ${STEPS[index][0]}`, "VERTICAL", { w: 1280, gap: 24, pad: [16, 40, 48, 40], fill: "bg" });
+  const f = box(`${PREFIX}${index + 1} ${SCREENS[index]}`, "VERTICAL", { w: 1280, gap: 24, pad: [16, 40, 48, 40], fill: "bg" });
   const top = box("Top bar", "HORIZONTAL", { gap: 16, cross: "CENTER" });
   add(f, top, { fillW: true });
   const mark = box("Brand mark", "HORIZONTAL", { main: "CENTER", cross: "CENTER" });
@@ -406,22 +409,28 @@ async function shell(index, title, sub) {
   const dot = figma.createEllipse(); dot.resize(10, 10); fill(dot, "on-brand"); mark.appendChild(dot);
   top.appendChild(mark);
   top.appendChild(await text("ZALU", "Body/Strong", "ink"));
-  top.appendChild(await text("Describe it. Train it. Prove it works.", "Body/Small", "muted"));
   spacer(top);
   top.appendChild(inst("Badge", "Tone=Sample", { Label: "Sample mode" }));
 
-  const stepper = box("Stepper", "HORIZONTAL", { gap: 8 });
+  const stepper = box("Progress", "HORIZONTAL", { gap: 8 });
   add(f, stepper, { fillW: true });
-  STEPS.forEach(([s, h], i) => {
-    const state = i === index ? "Active" : i < index ? "Done" : i === index + 1 ? "Available" : "Locked";
-    const st = inst("Step", `State=${state}`, { Number: String(i + 1), Step: s, Hint: h });
-    add(stepper, st, { grow: true });
-  });
+  for (const [i, label] of STAGES.entries()) {
+    const segment = box(label, "VERTICAL", { gap: 5 });
+    add(stepper, segment, { grow: true });
+    const track = rect("Track", 394, 4, "line");
+    const bar = box("Progress stroke", "HORIZONTAL", { w: 394, h: 4 });
+    bar.layoutMode = "NONE";
+    bar.appendChild(track);
+    const progress = i < STAGE_OF[index] ? 1 : i === STAGE_OF[index] ? PROGRESS[index] : 0;
+    if (progress) bar.appendChild(rect("Completed", 394 * progress, 4, "brand"));
+    segment.appendChild(bar);
+    await addText(segment, label, "Body/Small Strong", i === STAGE_OF[index] ? "brand-ink" : "muted");
+  }
 
-  const head = box("Section head", "VERTICAL", { gap: 4 });
+  const head = box("Section head", "VERTICAL", { gap: 8, cross: "CENTER" });
   add(f, head, { fillW: true });
   await addText(head, title, "Heading/H1", "ink");
-  await addText(head, sub, "Body/Default", "ink-2", { wrap: true });
+  await addText(head, sub, "Body/Default", "ink-2");
   return f;
 }
 function card(name, o = {}) { return box(name, "VERTICAL", { gap: o.gap ?? 16, pad: [24, 24, 24, 24], fill: "surface", stroke: "line", radius: "lg", ...o }); }
@@ -465,43 +474,29 @@ async function screens(page) {
   // 1 Describe
   {
     const f = await shell(0, "What should your camera detect?", "Describe it in your own words. We turn it into a detection task you can check before anything is trained.");
-    const c = card("Prompt"); add(f, c, { fillW: true });
-    await field(c, "Describe what the camera should detect", "Find people without safety goggles at the lab bench", { h: 96 });
-    const ex = box("Examples", "HORIZONTAL", { gap: 8 }); add(c, ex, { fillW: true });
-    for (const e of ["Find people without safety goggles at the lab bench", "Which restaurant tables are free", "Alert me when someone on site is not wearing a hi-vis vest"]) ex.appendChild(inst("Chip", "Tone=Default", { Label: e }));
-    c.appendChild(inst("Button", "Style=Secondary, State=Default", { Label: "Update task" }));
-    const s = card("Task summary"); add(f, s, { fillW: true });
-    const h = box("Header", "HORIZONTAL", { gap: 8, cross: "CENTER" }); add(s, h, { fillW: true });
-    h.appendChild(await text("Task summary", "Heading/H3", "ink")); h.appendChild(inst("Badge", "Tone=Sample", { Label: "Sample planner" }));
-    await addText(s, "The model will look for", "Label", "ink-2");
-    const cl = box("Classes", "HORIZONTAL", { gap: 8 }); add(s, cl, { fillW: true });
-    for (const x of ["no_goggles ×", "goggles ×"]) cl.appendChild(inst("Chip", "Tone=Accent", { Label: x }));
-    await addText(s, "Look-alikes it must NOT flag", "Label", "ink-2");
-    const ng = box("Negatives", "HORIZONTAL", { gap: 8 }); add(s, ng, { fillW: true });
-    for (const x of ["sunglasses ×", "face_shield ×"]) ng.appendChild(inst("Chip", "Tone=Negative", { Label: x }));
-    await addText(s, "Alert when: no_goggles is detected · Most important: don't miss any (recall)", "Body/Small", "ink-2", { wrap: true });
-    out.push([f, actions(s, [], [["Looks right → Upload footage", "Primary"]])]);
+    f.counterAxisAlignItems = "CENTER";
+    const c = card("Prompt composer", { w: 690 });
+    add(f, c);
+    await addText(c, "Find people without safety goggles at the lab bench", "Body/Default", "ink");
+    const attachments = box("Attachments and submit", "HORIZONTAL", { gap: 10, cross: "CENTER" });
+    add(c, attachments, { fillW: true });
+    attachments.appendChild(inst("Button", "Style=Secondary, State=Default", { Label: "+ Attach footage" }));
+    await addText(attachments, "lab-bench.mp4", "Body/Small", "muted");
+    spacer(attachments);
+    const next = inst("Button", "Style=Primary, State=Default", { Label: "Create task" });
+    attachments.appendChild(next);
+    out.push([f, next]);
   }
 
   // 2 Upload
   {
     const f = await shell(1, "Upload footage from your camera", "Use footage from the place where the camera will actually run. A few minutes is enough: we pick about 40 varied frames.");
-    const [main, aside] = cols(f);
-    const c = card("Upload"); add(main, c, { fillW: true });
-    await field(c, "Recording name", "session_1");
-    await addText(c, "Each recording is kept together, so training and testing never share footage from the same session.", "Caption", "muted", { wrap: true });
-    const drop = box("Drop zone", "VERTICAL", { gap: 4, pad: [32, 32, 32, 32], fill: "surface", stroke: "control", dash: [8, 6], radius: "lg", cross: "CENTER" });
-    add(c, drop, { fillW: true });
-    await addText(drop, "⇪", "Heading/H2", "ink-2");
-    await addText(drop, "Drop images or a video here", "Body/Strong", "ink");
-    await addText(drop, "or press to choose files · JPG, PNG, MP4, MOV · a few minutes of footage is enough", "Body/Small", "muted");
-    await addText(c, "✓ 36 file(s) added", "Body/Small", "ink");
-    const next = actions(c, [["← Back", "Secondary"]], [["Prepare dataset →", "Primary"]]);
-    const tips = card("Tips", { fill: null, stroke: null }); add(aside, tips, { fillW: true });
-    await addText(tips, "Tips for good footage", "Body/Strong", "ink");
-    await bullets(tips, ["Show the situations you care about and ones you don't (empty scene, look-alikes).", "Vary distance, angle and lighting.", "Keep one recording aside: you'll use new footage to test the model honestly."]);
-    const b = inst("Banner", "Tone=Sample", { Title: "Sample mode", Body: "Files stay in your browser. Auto-labels in the next step are generated samples." });
-    add(aside, b, { fillW: true });
+    f.counterAxisAlignItems = "CENTER";
+    const c = card("Footage composer", { w: 690 });
+    add(f, c);
+    await addText(c, "+ Attach images or video", "Body/Strong", "ink");
+    await addText(c, "lab-bench.mp4  ×", "Body/Small", "muted");
+    const next = actions(c, [["← Change the task", "Secondary"]], [["Upload and label", "Primary"]]);
     out.push([f, next]);
   }
 
@@ -527,13 +522,6 @@ async function screens(page) {
     await addText(d, "36 frames · 31 boxes · 1 checked by you\nno_goggles: 17 · goggles: 14\nRecording: session_1", "Body/Small", "ink-2", { wrap: true });
     const next = inst("Button", "Style=Primary, State=Default", { Label: "Continue to training →" }); add(d, next, { fillW: true });
     add(d, inst("Button", "Style=Secondary, State=Default", { Label: "Save corrections" }), { fillW: true });
-    const coach = card("Data coach", { gap: 12 }); add(aside, coach, { fillW: true });
-    const ch = box("Header", "HORIZONTAL", { gap: 8, cross: "CENTER" }); add(coach, ch, { fillW: true });
-    ch.appendChild(await text("Data coach", "Body/Strong", "ink")); ch.appendChild(inst("Badge", "Tone=Warning", { Label: "Rule-based" }));
-    for (const [ic, t, dsc] of [["!", "Add more footage", "36 frames so far; aim for at least 40 varied frames."], ["!", "Few examples of “goggles”", "14 labelled so far; aim for 15+."], ["i", "Include low-light conditions", "All frames are well lit. Record a short clip in evening light."], ["i", "Capture another angle", "All footage comes from one recording."]]) {
-      await addText(coach, `${ic}  ${t}`, "Body/Small Strong", ic === "!" ? "warning-ink" : "brand-ink", { wrap: true });
-      await addText(coach, dsc, "Body/Small", "ink-2", { wrap: true });
-    }
     out.push([f, next]);
   }
 
@@ -620,28 +608,39 @@ async function screens(page) {
     out.push([f, actions(f, [["← Back", "Secondary"]], [["Deploy this model →", "Primary"]])]);
   }
 
-  // 6 Deploy
+  // Deploy · DashboardSpec example
   {
-    const f = await shell(5, "Run it on your camera", "Live detections from the trained model. The same model is exported to ONNX to run fully offline on a laptop or edge device.");
+    const f = await shell(5, "Detect missing safety goggles in the lab", "Review the latest detections from your lab camera.");
     const [main, aside] = cols(f, 340);
-    const stage = frameMock("Live view", 820, 460, [[180, 110, 160, 300, "brand"], [500, 100, 160, 310, "error"]]);
-    stroke(stage, "error", 4);
-    add(main, stage, { fillW: true });
-    const live = box("Live badges", "HORIZONTAL", { gap: 8 }); stage.appendChild(live); live.x = 16; live.y = 16;
-    live.appendChild(inst("Badge", "Tone=Success", { Label: "LIVE" })); live.appendChild(inst("Badge", "Tone=Info", { Label: "18.8 FPS end-to-end · model 4.5 ms" }));
-    add(main, inst("Banner", "Tone=Error", { Title: "Alert: no_goggles detected", Body: "Critical events are shown with icon, text and a red frame, never colour alone." }), { fillW: true });
-    const ctl = card("Controls", { gap: 12 }); add(main, ctl, { fillW: true });
-    const cr = box("Row", "HORIZONTAL", { gap: 16 }); add(ctl, cr, { fillW: true });
-    const a = box("Alert on", "VERTICAL"); add(cr, a, { grow: true }); a.layoutSizingHorizontal = "FILL"; await field(a, "Alert on", "no_goggles ▾");
-    const b = box("Threshold", "VERTICAL"); add(cr, b, { grow: true }); b.layoutSizingHorizontal = "FILL"; await field(b, "Confidence threshold: 25%", "———●——————");
-    const m = card("Model"); add(aside, m, { fillW: true });
-    await addText(m, "Model", "Body/Strong", "ink");
-    await addText(m, "Version model_sample_real\nBase yolo11n.pt · 30 epochs · trained in 10s\nClasses: no_goggles, goggles\nONNX: /data/runs/…/best.onnx", "Body/Small", "ink-2", { wrap: true });
-    add(m, inst("Verdict", "Verdict=Ready", { Summary: "recall 90% · precision 87% on independent test" }), { fillW: true });
-    const off = card("Offline", { fill: null }); add(aside, off, { fillW: true });
-    await addText(off, "Run offline on a laptop", "Body/Strong", "ink");
-    const code = box("Command", "VERTICAL", { pad: [8, 8, 8, 8], fill: "surface-2", radius: "md" }); add(off, code, { fillW: true });
-    await addText(code, "python tools/webcam_client.py --onnx best.onnx --names no_goggles,goggles", "Mono/Caption", "ink", { wrap: true });
+    const camera = card("Camera preview");
+    add(main, camera, { fillW: true });
+    await addText(camera, "Lab camera", "Heading/H3", "ink");
+    add(camera, frameMock("Sample inference frame", 760, 410, [[170, 90, 170, 260, "brand"]]), { fillW: true });
+    const latest = card("Detection table");
+    add(main, latest, { fillW: true });
+    await addText(latest, "Latest detections", "Heading/H3", "ink");
+    await addText(latest, "Safety goggles missing                    92% confidence", "Body/Small", "ink-2");
+    const count = card("KPI");
+    add(aside, count, { fillW: true });
+    await addText(count, "Goggles missing in this frame", "Heading/H3", "ink");
+    await addText(count, "1", "Heading/H1", "brand-ink");
+    const trend = card("Time series");
+    add(aside, trend, { fillW: true });
+    await addText(trend, "Detections over time", "Heading/H3", "ink");
+    await addText(trend, "Waiting for more inference frames", "Body/Small", "muted");
+    const distribution = card("Class distribution");
+    add(aside, distribution, { fillW: true });
+    await addText(distribution, "Detections by class", "Heading/H3", "ink");
+    await addText(distribution, "Safety goggles missing · 1", "Body/Small", "ink-2");
+    const tools = box("Inference and export", "HORIZONTAL", { gap: 12 });
+    add(f, tools, { fillW: true });
+    tools.appendChild(inst("Button", "Style=Primary, State=Default", { Label: "Run sample inference" }));
+    tools.appendChild(inst("Button", "Style=Secondary, State=Default", { Label: "Export dashboard" }));
+    tools.appendChild(inst("Badge", "Tone=Sample", { Label: "Simulated sample data" }));
+    const refine = card("Dashboard refinement", { w: 700 });
+    add(f, refine);
+    await field(refine, "Refine dashboard", "Put the detection table first");
+    refine.appendChild(inst("Button", "Style=Secondary, State=Default", { Label: "Apply" }));
     out.push([f, null]);
   }
 
