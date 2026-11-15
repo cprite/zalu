@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence, MotionConfig, motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { StoryProgress, Topbar } from "@/components/Shell";
 import { ApiProvider } from "@/lib/api";
@@ -37,7 +37,6 @@ function Journey() {
 
 export default function Page() {
   return (
-    <MotionConfig reducedMotion="user" transition={enter.transition}>
     <ApiProvider>
       <FlowProvider>
         <a href="#main" className="skip">Skip to content</a>
@@ -48,6 +47,5 @@ export default function Page() {
         </div>
       </FlowProvider>
     </ApiProvider>
-    </MotionConfig>
   );
 }
