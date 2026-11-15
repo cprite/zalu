@@ -26,9 +26,17 @@ export function SettingsMenu() {
     const onDown = (e: PointerEvent) => {
       if (!panel.current?.contains(e.target as Node) && !trigger.current?.contains(e.target as Node)) close(false);
     };
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape" && !event.defaultPrevented) close();
+    };
     document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
     const f = requestAnimationFrame(() => panel.current?.querySelector<HTMLElement>('[role="radio"][aria-checked="true"], [role="slider"]')?.focus());
-    return () => { document.removeEventListener("pointerdown", onDown); cancelAnimationFrame(f); };
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+      cancelAnimationFrame(f);
+    };
   }, [open, close]);
 
   return (
@@ -42,7 +50,6 @@ export function SettingsMenu() {
       <AnimatePresence>
         {open && (
           <motion.div ref={panel} id="settings-pop" className="settings-pop" role="dialog" aria-modal="false" aria-labelledby={titleId}
-            onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); close(); } }}
             initial={{ opacity: 0, y: -6 * level().travel, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4 * level().travel, scale: 0.98, transition: EXIT }} transition={t("base")}>
             <div className="settings-head">
