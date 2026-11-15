@@ -6,9 +6,14 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare:export": "node scripts/prepare-dashboard-export.mjs",
+    "predev": "npm run prepare:export",
+    "prebuild": "npm run prepare:export",
+    "pretypecheck": "npm run prepare:export"
   },
   "dependencies": {
+    "fflate": "0.8.2",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

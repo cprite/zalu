@@ -137,6 +137,8 @@ export function createLiveApi(baseUrl: string, token: string): ZaluApi {
     getModel: (id) => call(`/api/models/${id}`),
     createEvaluation: (req) => call("/api/evaluations", json(req)),
     getReport: (id) => call(`/api/reports/${id}`),
+    createDashboard: (prompt, taskId, modelId) => call("/api/dashboards", json({ prompt, task_id: taskId, model_id: modelId })),
+    refineDashboard: (id, instruction) => call(`/api/dashboards/${encodeURIComponent(id)}/refine`, json({ instruction })),
     inference: (modelId, image, opts = {}) => {
       const fd = new FormData();
       fd.append("model_id", modelId);
