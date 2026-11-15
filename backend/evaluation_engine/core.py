@@ -223,9 +223,11 @@ def compare(per_model: dict[str, dict], meta: dict[str, dict], baseline_id: Opti
 
 def select_threshold(
     gt: list[Box], preds: list[Box], images: list[str], classes: list[str],
-    iou_threshold: float = DEFAULT_IOU, candidates: Optional[list[float]] = None,
+    iou_threshold: float = DEFAULT_IOU, candidates: Optional[list[float]] = None, *, split: str,
 ) -> dict:
     """Choose the confidence threshold with the best F1 on the VALIDATION split. Then freeze it for testing."""
+    if split != "val":
+        raise ValueError("threshold selection requires the validation (val) split")
     candidates = candidates or [round(0.05 * k, 2) for k in range(1, 19)]
     curve = []
     for t in candidates:

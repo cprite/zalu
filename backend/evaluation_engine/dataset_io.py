@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Callable, Optional
 
 from backend.evaluation_engine.matching import Box
+from backend.evaluation_engine.yolo import parse_yolo_labels
 
 
 @dataclass
@@ -33,6 +34,7 @@ class TestSet:
     gt: list[Box]
     names: list[str]
     source: str         # "annotations" | "yolo_labels"
+    unreviewed: int = 0
 
 
 def read_bytes(path: str) -> bytes:
@@ -41,7 +43,11 @@ def read_bytes(path: str) -> bytes:
         return p.read_bytes()
     from backend.infrastructure import gpu_client  # remote: the file lives on the GX10
 
-    return gpu_client.stream_file(path).content
+    response = gpu_client.stream_file(path)
+    try:
+        return response.content
+    finally:
+        response.close()
 
 
 def _annotation_set(ds) -> Optional[dict]:
@@ -50,15 +56,18 @@ def _annotation_set(ds) -> Optional[dict]:
         import json
 
         return json.loads(local.read_text())
+    from backend.infrastructure import gpu_client
+
     try:
-        from backend.infrastructure import gpu_client
-
         return gpu_client.post("/datasets/annotations", json={"manifest": ds.model_dump()}, timeout=120)
-    except Exception:  # registered datasets have no Data Engine work dir
-        return None
+    except gpu_client.GPUWorkerError as exc:
+        # Older GX10 workers return 500 for manifests registered without a work directory.
+        if exc.status in (404, 500) and not ds.annotator:
+            return None
+        raise
 
 
-def _image_size(data: bytes) -> tuple[int, int]:
+def image_size(data: bytes) -> tuple[int, int]:
     try:
         from PIL import Image
 
@@ -68,17 +77,30 @@ def _image_size(data: bytes) -> tuple[int, int]:
         import cv2
         import numpy as np
 
-        h, w = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR).shape[:2]
+        frame = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
+        if frame is None:
+            raise ValueError("could not decode evaluation image")
+        h, w = frame.shape[:2]
         return w, h
+    except OSError as exc:
+        raise ValueError("could not decode evaluation image") from exc
 
 
 def load_test_set(ds, reader: Callable[[str], bytes] = read_bytes, annotations: Optional[dict] = None) -> TestSet:
-    """Frames of the 'test' split (falls back to 'val' with a warning upstream) plus pixel-space ground truth."""
-    by_split: dict[str, list] = {}
-    for im in ds.images:
-        by_split.setdefault(im.split, []).append(im)
-    split = "test" if by_split.get("test") else ("val" if by_split.get("val") else next(iter(by_split), "test"))
-    images = by_split.get(split, [])
+    """Load only the final test split."""
+    return load_split(ds, "test", reader=reader, annotations=annotations)
+
+
+def load_split(ds, split: str, *, reader: Callable[[str], bytes] = read_bytes,
+               annotations: Optional[dict] = None) -> TestSet:
+    """Load exactly the requested manifest split, with no implicit fallback."""
+    if split not in ("test", "val"):
+        raise ValueError("evaluation split must be test or val")
+    images = [im for im in ds.images if im.split == split]
+    if not images:
+        raise ValueError(f"dataset {ds.dataset_id} has no '{split}' frame roster")
+    if len({im.image for im in images}) != len(images) or len({im.frame_id for im in images}) != len(images):
+        raise ValueError(f"dataset {ds.dataset_id} has duplicate image paths or frame IDs")
     root = Path(ds.root)
     frames = [TestFrame(im.frame_id, im.image, str(root / im.image), im.session_id, bool(im.synthetic)) for im in images]
     names = list(ds.class_names)
@@ -86,32 +108,41 @@ def load_test_set(ds, reader: Callable[[str], bytes] = read_bytes, annotations: 
     aset = annotations if annotations is not None else _annotation_set(ds)
     gt: list[Box] = []
     if aset:
-        wanted = {f.frame_id: f for f in frames}
-        for a in aset.get("annotations", []):
-            f = wanted.get(a["frame_id"])
-            if f is None or a.get("status") == "rejected":
+        if aset.get("class_names", names) != names:
+            raise ValueError("annotation class order differs from the dataset manifest")
+        by_id = {a["frame_id"]: a for a in aset["annotations"]}
+        if len(by_id) != len(aset["annotations"]):
+            raise ValueError("duplicate frame IDs in the annotation set")
+        kept = []
+        unreviewed = 0
+        for f in frames:
+            a = by_id.get(f.frame_id)
+            if a is None:
+                raise ValueError(f"{f.image}: missing annotation for manifest frame")
+            if a.get("status") == "rejected":
                 continue
-            for b in a.get("boxes", []):
+            if a.get("session_id", f.session_id) != f.session_id or a.get("synthetic", f.synthetic) != f.synthetic:
+                raise ValueError(f"{f.image}: annotation provenance differs from the manifest")
+            kept.append(f)
+            unreviewed += a.get("status") != "reviewed"
+            for b in a["boxes"]:
+                if b["class_name"] not in names:
+                    raise ValueError(f"{f.image}: undeclared class {b['class_name']!r}")
                 gt.append(Box.of(f.image, b["class_name"], b["xyxy"]))
-        frames = [f for f in frames if not any(a["frame_id"] == f.frame_id and a.get("status") == "rejected"
-                                               for a in aset.get("annotations", []))]
-        return TestSet(split, frames, gt, names, "annotations")
+        return TestSet(split, kept, gt, names, "annotations", unreviewed)
 
-    # registered YOLO dataset: normalised "cls cx cy w h" label files next to the images
+    # Registered dataset: ground truth lives in five-column YOLO detection files.
     label_of = {im.frame_id: str(root / im.label) for im in images}
     for f in frames:
+        path = label_of[f.frame_id]
         try:
-            text = reader(label_of[f.frame_id]).decode()
-        except Exception:
-            continue  # no label file = frame with nothing to detect
-        lines = [l.split() for l in text.splitlines() if l.strip()]
-        if not lines:
-            continue
-        w, h = _image_size(reader(f.abs_path))
-        for p in lines:
-            c, cx, cy, bw, bh = int(p[0]), *map(float, p[1:5])
-            gt.append(Box.of(f.image, names[c], [(cx - bw / 2) * w, (cy - bh / 2) * h, (cx + bw / 2) * w, (cy + bh / 2) * h]))
-    return TestSet(split, frames, gt, names, "yolo_labels")
+            text = reader(path).decode("utf-8")
+        except (FileNotFoundError, UnicodeError) as exc:
+            raise ValueError(f"{f.image}: cannot read YOLO labels at {path}") from exc
+        if text.strip():
+            gt.extend(parse_yolo_labels(f.image, text, image_size(reader(f.abs_path)), names, label_path=path))
+    return TestSet(split, frames, gt, names, "yolo_labels",
+                   sum(im.review_status != "reviewed" for im in images))
 
 
 def train_sessions(ds) -> set[str]:
